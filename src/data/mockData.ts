@@ -1,5 +1,15 @@
 // ─── Interfaces ───────────────────────────────────────────────────────────────
 
+export interface CourseResource {
+  id: string
+  title: string           // Display name shown to student
+  filename: string        // Original file name
+  type: 'pdf' | 'ppt' | 'doc' | 'zip' | 'link'
+  uploadedBy: string      // Instructor name
+  uploadedOn: string      // Human-readable date
+  size?: string           // e.g. "2.4 MB"
+}
+
 export interface Course {
   id: string
   abbr: string
@@ -7,15 +17,17 @@ export interface Course {
   code: string
   instructor: string
   color: string
-  files: string[]
+  files: string[]         // Legacy — kept for Dashboard FileChip component
   description: string
   credits: number
   schedule: string
   room: string
-  completion: number     // 0-100
+  completion: number      // 0–100 percentage of modules completed
   moduleCount: number
   completedModules: number
   lastActivity: string
+  zoomLink?: string       // Instructor's recurring Zoom URL for online sessions
+  resources?: CourseResource[]  // Lecture slides, reference files, etc.
 }
 
 export interface RubricCriterion {
@@ -64,13 +76,13 @@ export interface DueItem {
 
 export interface ActivityItem {
   id: string
-  courseId: string
+  courseId?: string       // Optional — college-wide announcements have no course
   title: string
   date: string
   timeRange: string
   type: 'assignment' | 'announcement' | 'grade' | 'resource'
   body: string
-  linkTo?: string
+  linkTo?: string         // Internal route to navigate to on "View details" click
 }
 
 export interface CalendarEvent {
@@ -125,6 +137,14 @@ export const courses: Course[] = [
     credits: 3, schedule: 'Mon / Wed  9:00 AM – 11:00 AM', room: 'SFC B108',
     completion: 72, moduleCount: 12, completedModules: 9,
     lastActivity: '2 days ago',
+    zoomLink: 'https://georgebrown.zoom.us/j/96271830412',
+    resources: [
+      { id: 'r2d-1', title: 'Week 1 – Design Fundamentals Slides', filename: 'W1-Design-Fundamentals.pdf', type: 'pdf', uploadedBy: 'Jaron Stewart', uploadedOn: 'Sep 12', size: '4.2 MB' },
+      { id: 'r2d-2', title: 'Colour Theory Reference Guide', filename: 'Colour-Theory-Guide.pdf', type: 'pdf', uploadedBy: 'Jaron Stewart', uploadedOn: 'Sep 19', size: '2.1 MB' },
+      { id: 'r2d-3', title: 'Typography Systems Deck', filename: 'W4-Typography.ppt', type: 'ppt', uploadedBy: 'Jaron Stewart', uploadedOn: 'Oct 3', size: '6.8 MB' },
+      { id: 'r2d-4', title: 'Brand Identity Template Pack', filename: 'Brand-Templates.zip', type: 'zip', uploadedBy: 'Jaron Stewart', uploadedOn: 'Oct 17', size: '18.4 MB' },
+      { id: 'r2d-5', title: 'Final Project Brief', filename: 'Final-Project-Brief.pdf', type: 'pdf', uploadedBy: 'Jaron Stewart', uploadedOn: 'Dec 1', size: '0.9 MB' },
+    ],
   },
   {
     id: 'IS', abbr: 'IS', name: 'Interactive Systems', code: 'INTR 1002',
@@ -134,6 +154,13 @@ export const courses: Course[] = [
     credits: 3, schedule: 'Tue / Thu  1:00 PM – 3:00 PM', room: 'SFC B112',
     completion: 88, moduleCount: 14, completedModules: 12,
     lastActivity: 'Today',
+    zoomLink: 'https://georgebrown.zoom.us/j/84512093761',
+    resources: [
+      { id: 'ris-1', title: 'HCI Foundations – Lecture Notes', filename: 'W1-HCI-Foundations.pdf', type: 'pdf', uploadedBy: 'Michael Holland', uploadedOn: 'Sep 13', size: '3.1 MB' },
+      { id: 'ris-2', title: 'User Research Methods Overview', filename: 'Research-Methods.pdf', type: 'pdf', uploadedBy: 'Michael Holland', uploadedOn: 'Sep 20', size: '2.7 MB' },
+      { id: 'ris-3', title: 'Figma Prototyping Starter Kit', filename: 'Figma-Starter.zip', type: 'zip', uploadedBy: 'Michael Holland', uploadedOn: 'Oct 11', size: '12.2 MB' },
+      { id: 'ris-4', title: 'Usability Testing Script Template', filename: 'Test-Script-Template.doc', type: 'doc', uploadedBy: 'Michael Holland', uploadedOn: 'Nov 7', size: '0.4 MB' },
+    ],
   },
   {
     id: 'IA', abbr: 'IA', name: 'Information Architecture', code: 'INTR 1006',
@@ -143,6 +170,11 @@ export const courses: Course[] = [
     credits: 2, schedule: 'Fri  9:00 AM – 12:00 PM', room: 'SFC A209',
     completion: 45, moduleCount: 10, completedModules: 4,
     lastActivity: '1 week ago',
+    zoomLink: 'https://georgebrown.zoom.us/j/71038294651',
+    resources: [
+      { id: 'ria-1', title: 'IA Foundations Slides', filename: 'IA-Foundations.pdf', type: 'pdf', uploadedBy: 'A.J. Singh', uploadedOn: 'Sep 16', size: '3.8 MB' },
+      { id: 'ria-2', title: 'Card Sorting Workshop Guide', filename: 'Card-Sorting-Guide.pdf', type: 'pdf', uploadedBy: 'A.J. Singh', uploadedOn: 'Oct 7', size: '1.2 MB' },
+    ],
   },
   {
     id: 'VD', abbr: 'VD', name: 'Visual Design', code: 'INTR 1003',
@@ -152,6 +184,12 @@ export const courses: Course[] = [
     credits: 3, schedule: 'Mon / Wed  12:00 PM – 2:00 PM', room: 'SFC B110',
     completion: 60, moduleCount: 11, completedModules: 7,
     lastActivity: '3 days ago',
+    zoomLink: 'https://georgebrown.zoom.us/j/93847201938',
+    resources: [
+      { id: 'rvd-1', title: 'Grid Systems & Layout Principles', filename: 'Grid-Systems.pdf', type: 'pdf', uploadedBy: 'Xander Messi', uploadedOn: 'Sep 14', size: '5.6 MB' },
+      { id: 'rvd-2', title: 'Campaign Design Inspiration Pack', filename: 'Inspiration-Pack.zip', type: 'zip', uploadedBy: 'Xander Messi', uploadedOn: 'Oct 24', size: '34.1 MB' },
+      { id: 'rvd-3', title: 'Motion & Transition Principles', filename: 'Motion-Principles.pdf', type: 'pdf', uploadedBy: 'Xander Messi', uploadedOn: 'Nov 2', size: '2.9 MB' },
+    ],
   },
   {
     id: 'CE', abbr: 'CE', name: 'College English', code: 'COMM 1001',
@@ -161,6 +199,12 @@ export const courses: Course[] = [
     credits: 3, schedule: 'Tue  9:00 AM – 12:00 PM', room: 'SFC A105',
     completion: 80, moduleCount: 13, completedModules: 10,
     lastActivity: 'Yesterday',
+    zoomLink: 'https://georgebrown.zoom.us/j/82910374652',
+    resources: [
+      { id: 'rce-1', title: 'Academic Writing Style Guide', filename: 'Writing-Style-Guide.pdf', type: 'pdf', uploadedBy: 'Erik Brown', uploadedOn: 'Sep 15', size: '1.8 MB' },
+      { id: 'rce-2', title: 'APA Citation Reference Sheet', filename: 'APA-Reference.pdf', type: 'pdf', uploadedBy: 'Erik Brown', uploadedOn: 'Oct 5', size: '0.6 MB' },
+      { id: 'rce-3', title: 'Week 13 Lecture Notes', filename: 'W13-Notes.pdf', type: 'pdf', uploadedBy: 'Erik Brown', uploadedOn: 'Dec 8', size: '1.1 MB' },
+    ],
   },
   {
     id: 'TD', abbr: 'TD', name: 'Technical Drawing', code: 'INTR 1005',
@@ -170,6 +214,12 @@ export const courses: Course[] = [
     credits: 2, schedule: 'Thu  1:00 PM – 4:00 PM', room: 'SFC C204',
     completion: 97, moduleCount: 9, completedModules: 9,
     lastActivity: 'Today',
+    zoomLink: 'https://georgebrown.zoom.us/j/77614829304',
+    resources: [
+      { id: 'rtd-1', title: 'Orthographic Projection Guide', filename: 'Ortho-Projection.pdf', type: 'pdf', uploadedBy: 'David Kim', uploadedOn: 'Sep 17', size: '3.3 MB' },
+      { id: 'rtd-2', title: 'ASME Y14.5 Dimensioning Standards', filename: 'ASME-Y14.5.pdf', type: 'pdf', uploadedBy: 'David Kim', uploadedOn: 'Oct 6', size: '7.2 MB' },
+      { id: 'rtd-3', title: 'AutoCAD Template Files', filename: 'AutoCAD-Templates.zip', type: 'zip', uploadedBy: 'David Kim', uploadedOn: 'Oct 13', size: '2.4 MB' },
+    ],
   },
 ]
 
@@ -327,6 +377,29 @@ export const activityItems: ActivityItem[] = [
     date: '12th Dec 2022', timeRange: '3 PM – 4 PM', type: 'grade',
     body: 'Your Campaign Layout project has been graded. Score: 30/50. Concept direction is solid but execution needs work. Grid breaks in digital banners and placeholder text in 2 mockups brought down the score.',
     linkTo: '/courses/VD/assignments/asgn-vd-2',
+  },
+
+  // ── College-wide announcements (no courseId — not tied to any specific course) ──
+
+  {
+    id: 'a10', title: 'OSAP Deadline Reminder',
+    date: '5th Dec 2022', timeRange: '9 AM – 10 AM', type: 'announcement',
+    body: 'Reminder from the Financial Aid Office: the deadline to submit your OSAP application for the Winter 2023 semester is December 15th, 2022. Log in to your Ontario.ca account to check your status and upload any outstanding documentation. Late applications cannot be guaranteed funding.',
+  },
+  {
+    id: 'a11', title: 'Campus Closure – Holiday Break',
+    date: '9th Dec 2022', timeRange: '8 AM – 9 AM', type: 'announcement',
+    body: 'George Brown College will be closed for the holiday break from December 23rd, 2022 through January 2nd, 2023. All campus facilities, libraries, and student services will be unavailable during this period. Classes resume Monday, January 9th. Have a safe and restful holiday.',
+  },
+  {
+    id: 'a12', title: 'Spring Graduation Registration Now Open',
+    date: '11th Dec 2022', timeRange: '10 AM – 11 AM', type: 'announcement',
+    body: 'Eligible students in their final semester are invited to register for the Spring 2023 Convocation ceremony. Log in to STU-VIEW and complete the graduation application by January 31st, 2023. For questions about eligibility, contact the Office of the Registrar at registrar@georgebrown.ca.',
+  },
+  {
+    id: 'a13', title: 'Library Extended Hours – Exam Season',
+    date: '6th Dec 2022', timeRange: '7 AM – 8 AM', type: 'announcement',
+    body: 'The Ryerson & Polytechnic Library at the St. James campus will be open extended hours during the December exam period: Monday–Friday 7 AM – 11 PM, Saturday–Sunday 9 AM – 9 PM. Quiet study rooms can be booked through the library portal up to 48 hours in advance.',
   },
 ]
 

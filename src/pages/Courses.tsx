@@ -2,20 +2,11 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { courses, grades, courseModules, getCourse } from '../data/mockData'
 import { ChevronRight, Clock, CheckCircle, Folder, X, BookOpen } from '../components/Icons'
+import { getLetterGrade } from '../utils/grades'  // shared grading scale
 
-// Pre-compute grade map
+// Pre-compute grade map: courseId → percentage (used by both card and slide-out)
 const gradeMap: Record<string, number> = {}
 grades.forEach(g => { gradeMap[g.courseId] = g.percentage })
-
-function getLetterGrade(pct: number) {
-  if (pct >= 90) return { letter: 'A+', color: '#22C55E' }
-  if (pct >= 80) return { letter: 'A',  color: '#22C55E' }
-  if (pct >= 73) return { letter: 'B+', color: '#06B6D4' }
-  if (pct >= 67) return { letter: 'B',  color: '#06B6D4' }
-  if (pct >= 60) return { letter: 'C+', color: '#F97316' }
-  if (pct >= 53) return { letter: 'C',  color: '#F97316' }
-  return { letter: 'D', color: '#EF4444' }
-}
 
 export default function Courses() {
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null)

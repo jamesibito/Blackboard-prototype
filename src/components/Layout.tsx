@@ -14,6 +14,7 @@ export default function Layout() {
         <main key={location.pathname} className="flex-1 px-8 py-7 overflow-y-auto page-enter">
           <Outlet />
         </main>
+        {/* Footer — portfolio attribution + external links to the real products */}
         <footer className="px-8 py-3 text-[11px] text-gray-400 dark:text-gray-600 border-t border-gray-100 dark:border-[#1E2A3F]">
           Redesign concept by{' '}
           <a
@@ -24,7 +25,24 @@ export default function Layout() {
           >
             James Ibitoye
           </a>
-          {' '}· Not affiliated with Blackboard Inc. or George Brown College
+          {' '}· Not affiliated with{' '}
+          <a
+            href="https://blackboard.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-400 dark:text-gray-600 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors"
+          >
+            Blackboard
+          </a>
+          {' '}or{' '}
+          <a
+            href="https://georgebrown.ca"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-400 dark:text-gray-600 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors"
+          >
+            George Brown College
+          </a>
         </footer>
       </div>
     </div>

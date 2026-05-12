@@ -31,10 +31,11 @@ export default function Sidebar() {
         {/* Subtle radial glow in corner */}
         <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-white/[0.06]" />
         <div className="relative z-10 pl-3 flex items-center gap-2.5">
+          {/* Logo displays at natural colours — no filter applied */}
           <img
             src="/gbc-logo.png"
             alt="George Brown College"
-            className="h-9 w-auto brightness-0 invert opacity-95"
+            className="h-9 w-auto"
           />
         </div>
       </div>

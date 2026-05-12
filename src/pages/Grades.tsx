@@ -2,6 +2,10 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, Eye, EyeOff, TrendingUp } from '../components/Icons'
 import { grades, getCourse, getOverallGPA } from '../data/mockData'
+import { getLetterGrade } from '../utils/grades'  // shared scale — edit grades.ts to change
+
+// ─── Circle Progress ───────────────────────────────────────────────────────────
+// SVG ring used on each course card to show the percentage at a glance
 
 function CircleProgress({ percentage, color, size = 56 }: { percentage: number; color: string; size?: number }) {
   const r = (size - 8) / 2
@@ -20,15 +24,7 @@ function CircleProgress({ percentage, color, size = 56 }: { percentage: number; 
   )
 }
 
-function getLetterGrade(pct: number) {
-  if (pct >= 90) return { letter: 'A+', color: '#22C55E' }
-  if (pct >= 80) return { letter: 'A', color: '#22C55E' }
-  if (pct >= 73) return { letter: 'B+', color: '#06B6D4' }
-  if (pct >= 67) return { letter: 'B', color: '#06B6D4' }
-  if (pct >= 60) return { letter: 'C+', color: '#F97316' }
-  if (pct >= 53) return { letter: 'C', color: '#F97316' }
-  return { letter: 'D', color: '#EF4444' }
-}
+// ─── Grades Page ───────────────────────────────────────────────────────────────
 
 export default function Grades() {
   const [expandedId, setExpandedId] = useState<string | null>('2D')
@@ -37,14 +33,14 @@ export default function Grades() {
   const overall = getOverallGPA()
   const { letter: overallLetter, color: overallColor } = getLetterGrade(overall)
 
-  // Sort: highest grade first in the visual, then rest
+  // Sort: highest percentage first in the GPA bar so best performers are leftmost
   const sortedGrades = [...grades].sort((a, b) => b.percentage - a.percentage)
 
   return (
     <div className="max-w-[1200px]">
 
-      {/* Header */}
-      <div className="flex items-center justify-between mb-5">
+      {/* ── Header ── */}
+      <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-[24px] font-bold text-gray-900 dark:text-gray-100 tracking-tight">Grades</h1>
           <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-0.5">Fall 2022 · George Brown College</p>
@@ -69,10 +65,12 @@ export default function Grades() {
         </div>
       </div>
 
-      {/* Overall GPA banner */}
-      <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] p-5 mb-5 flex items-center gap-6">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0"
+      {/* ── Semester GPA banner ── */}
+      <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] p-6 mb-6 flex items-center gap-8">
+
+        {/* Left: overall average + letter */}
+        <div className="flex items-center gap-5 shrink-0">
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center"
             style={{ background: `${overallColor}15` }}>
             <TrendingUp size={24} style={{ color: overallColor }} />
           </div>
@@ -81,7 +79,7 @@ export default function Grades() {
             {hideGrades ? (
               <div className="h-8 w-20 rounded-lg bg-gray-200 dark:bg-[#232d42] mt-1" />
             ) : (
-              <div className="flex items-baseline gap-2 mt-0.5">
+              <div className="flex items-baseline gap-2 mt-1">
                 <span className="text-[32px] font-bold leading-none" style={{ color: overallColor }}>{overall}%</span>
                 <span className="text-[16px] font-bold" style={{ color: overallColor }}>{overallLetter}</span>
               </div>
@@ -89,31 +87,50 @@ export default function Grades() {
           </div>
         </div>
 
-        {/* Per-course mini bars */}
-        <div className="flex-1 grid grid-cols-6 gap-3 ml-4">
+        {/* Divider */}
+        <div className="w-px self-stretch bg-gray-100 dark:bg-[#2D3A52]" />
+
+        {/*
+          Per-course mini bars — each is a Link to its course page.
+          Hover tooltip (title) shows the full course name so the abbreviations
+          are self-explanatory even for first-time viewers.
+        */}
+        <div className="flex-1 grid grid-cols-6 gap-4">
           {sortedGrades.map(g => {
             const course = getCourse(g.courseId)
             const { letter } = getLetterGrade(g.percentage)
             return (
-              <div key={g.courseId} className="flex flex-col items-center gap-1.5">
-                <div className="w-full h-1.5 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+              <Link
+                key={g.courseId}
+                to={`/courses/${g.courseId}`}
+                title={course.name}           // Tooltip shows full course name on hover
+                className="flex flex-col items-center gap-2 group"
+              >
+                {/* Progress bar */}
+                <div className="w-full h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
                   <div
-                    className="h-full rounded-full transition-all duration-500"
+                    className="h-full rounded-full transition-all duration-500 group-hover:opacity-80"
                     style={{ width: hideGrades ? '0%' : `${g.percentage}%`, background: course.color }}
                   />
                 </div>
-                <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400">{course.abbr}</span>
+
+                {/* Abbreviation — underlines on hover to signal it's a link */}
+                <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 group-hover:underline group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors">
+                  {course.abbr}
+                </span>
+
+                {/* Letter grade (hidden when grades are masked) */}
                 {!hideGrades && (
                   <span className="text-[10px] font-semibold" style={{ color: course.color }}>{letter}</span>
                 )}
-              </div>
+              </Link>
             )
           })}
         </div>
       </div>
 
-      {/* Course grade cards */}
-      <div className="grid grid-cols-3 gap-4">
+      {/* ── Course grade cards ── */}
+      <div className="grid grid-cols-3 gap-5">
         {grades.map(g => {
           const course = getCourse(g.courseId)
           const isExpanded = expandedId === g.courseId
@@ -129,31 +146,32 @@ export default function Grades() {
               }`}
               onClick={() => setExpandedId(isExpanded ? null : g.courseId)}
             >
-              {/* Top color strip */}
+              {/* Colour accent strip at top — course colour */}
               <div className="h-1 w-full" style={{ background: course.color }} />
 
-              <div className="p-5">
-                <div className="flex items-start justify-between mb-1">
-                  <div className="flex-1 min-w-0 pr-3">
+              <div className="p-6">
+                {/* Card header: course info + circle ring */}
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1 min-w-0 pr-4">
                     <div className="flex items-center gap-1.5">
-                      <h3 className="font-bold text-[14px] text-gray-900 dark:text-gray-100 truncate">{course.name}</h3>
+                      <h3 className="font-bold text-[15px] text-gray-900 dark:text-gray-100 truncate">{course.name}</h3>
                       <ChevronRight size={13} className={`text-gray-400 shrink-0 transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`} />
                     </div>
-                    <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{course.code}</p>
-                    <p className="text-[11px] text-gray-400 dark:text-gray-500">{course.instructor}</p>
+                    <p className="text-[12px] text-gray-400 dark:text-gray-500 mt-1">{course.code}</p>
+                    <p className="text-[12px] text-gray-400 dark:text-gray-500 mt-0.5">{course.instructor}</p>
                   </div>
                   {hideGrades ? (
-                    <div className="w-12 h-12 rounded-xl bg-gray-100 dark:bg-[#232d42] shrink-0" />
+                    <div className="w-14 h-14 rounded-xl bg-gray-100 dark:bg-[#232d42] shrink-0" />
                   ) : (
-                    <CircleProgress percentage={g.percentage} color={course.color} size={52} />
+                    <CircleProgress percentage={g.percentage} color={course.color} size={56} />
                   )}
                 </div>
 
                 {/* Letter grade badge */}
                 {!hideGrades && (
-                  <div className="mb-3 mt-2">
+                  <div className="mb-4">
                     <span
-                      className="text-[11px] font-bold px-2 py-0.5 rounded-md"
+                      className="text-[12px] font-bold px-2.5 py-1 rounded-lg"
                       style={{ background: `${letterColor}15`, color: letterColor }}
                     >
                       {letter}
@@ -161,57 +179,61 @@ export default function Grades() {
                   </div>
                 )}
 
-                <div className="pt-3 border-t border-gray-50 dark:border-[#2D3A52]">
-                  <h4 className="text-[11px] font-semibold text-gray-400 dark:text-gray-500 mb-2.5 uppercase tracking-wide">
+                {/* Divider + marks list */}
+                <div className="pt-4 border-t border-gray-100 dark:border-[#2D3A52]">
+                  <h4 className="text-[11px] font-semibold text-gray-400 dark:text-gray-500 mb-3 uppercase tracking-wide">
                     Recent marks
                   </h4>
 
                   {isExpanded ? (
-                    <div className="space-y-2">
+                    // Expanded: show real mark rows with progress bars
+                    <div className="space-y-3">
                       {g.marks.map((m, i) => {
                         const pct = Math.round((m.score / m.total) * 100)
                         const inner = (
                           <>
-                            <div className="flex items-center justify-between">
-                              <span className="text-[12px] text-gray-700 dark:text-gray-300 truncate flex-1 mr-3 leading-tight">{m.name}</span>
+                            <div className="flex items-center justify-between mb-1.5">
+                              <span className="text-[12px] text-gray-700 dark:text-gray-300 truncate flex-1 mr-3 leading-snug">{m.name}</span>
                               <span className="text-[12px] font-bold tabular-nums shrink-0" style={{ color: course.color }}>
                                 {hideGrades ? '—' : `${m.score}/${m.total}`}
                               </span>
                             </div>
                             {!hideGrades && (
-                              <div className="h-1 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+                              <div className="h-1.5 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
                                 <div
                                   className="h-full rounded-full"
-                                  style={{ width: `${pct}%`, background: course.color, opacity: 0.6 }}
+                                  style={{ width: `${pct}%`, background: course.color, opacity: 0.65 }}
                                 />
                               </div>
                             )}
                           </>
                         )
+                        // Marks with an assignmentId link through to the assignment detail page
                         return m.assignmentId ? (
                           <Link
                             key={i}
                             to={`/courses/${g.courseId}/assignments/${m.assignmentId}`}
                             onClick={e => e.stopPropagation()}
-                            className="block space-y-1 -mx-1 px-1 py-0.5 rounded-lg hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors"
+                            className="block -mx-2 px-2 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors"
                           >
                             {inner}
                           </Link>
                         ) : (
-                          <div key={i} className="space-y-1">
+                          <div key={i} className="py-1">
                             {inner}
                           </div>
                         )
                       })}
                     </div>
                   ) : (
-                    <div className="space-y-2">
+                    // Collapsed: skeleton bars as a preview
+                    <div className="space-y-3">
                       {[85, 72, 60, 45, 30].map((w, i) => (
                         <div key={i} className="flex items-center gap-2">
                           <div className="h-2 rounded-full bg-gray-100 dark:bg-[#232d42] flex-1">
                             <div className="h-full rounded-full bg-gray-200 dark:bg-[#2D3A52]" style={{ width: `${w}%` }} />
                           </div>
-                          <div className="w-6 h-2 rounded bg-gray-100 dark:bg-[#232d42]" />
+                          <div className="w-8 h-2 rounded bg-gray-100 dark:bg-[#232d42]" />
                         </div>
                       ))}
                     </div>

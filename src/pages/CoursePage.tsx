@@ -2,17 +2,9 @@ import { useParams, Link, useNavigate } from 'react-router-dom'
 import { getCourse, grades, courseModules, assignments, activityItems } from '../data/mockData'
 import { CheckCircle, ChevronRight, FileText, ClipboardList, Award, Megaphone, Folder, BookOpen } from '../components/Icons'
 import Breadcrumbs from '../components/Breadcrumbs'
+import { getLetterGrade } from '../utils/grades'  // shared grading scale
 
-function getLetterGrade(pct: number) {
-  if (pct >= 90) return { letter: 'A+', color: '#22C55E' }
-  if (pct >= 80) return { letter: 'A',  color: '#22C55E' }
-  if (pct >= 73) return { letter: 'B+', color: '#06B6D4' }
-  if (pct >= 67) return { letter: 'B',  color: '#06B6D4' }
-  if (pct >= 60) return { letter: 'C+', color: '#F97316' }
-  if (pct >= 53) return { letter: 'C',  color: '#F97316' }
-  return { letter: 'D', color: '#EF4444' }
-}
-
+// ─── Helper: icon map for activity feed ───────────────────────────────────────
 const typeIcons: Record<string, React.FC<any>> = {
   assignment: ClipboardList,
   grade: Award,
@@ -20,11 +12,24 @@ const typeIcons: Record<string, React.FC<any>> = {
   announcement: Megaphone,
 }
 
+// ─── File type icon labels — used in the Resources section ───────────────────
+// Maps the file type string to a short display label shown in the pill badge
+const fileTypeLabel: Record<string, string> = {
+  pdf:  'PDF',
+  ppt:  'PPT',
+  doc:  'DOC',
+  zip:  'ZIP',
+  link: 'LINK',
+}
+
+// ─── Course Page ──────────────────────────────────────────────────────────────
+
 export default function CoursePage() {
   const { courseId } = useParams<{ courseId: string }>()
   const navigate = useNavigate()
   const course = courseId ? getCourse(courseId) : null
 
+  // Guard: show a friendly error if the courseId doesn't match any course
   if (!course) {
     return (
       <div className="flex items-center justify-center h-[60vh]">
@@ -36,11 +41,12 @@ export default function CoursePage() {
     )
   }
 
-  const courseGrade = grades.find(g => g.courseId === course.id)
-  const lg = courseGrade ? getLetterGrade(courseGrade.percentage) : null
-  const modules = courseModules[course.id] || []
+  const courseGrade     = grades.find(g => g.courseId === course.id)
+  const lg              = courseGrade ? getLetterGrade(courseGrade.percentage) : null
+  const modules         = courseModules[course.id] || []
   const courseAssignments = assignments.filter(a => a.courseId === course.id)
-  const courseActivity = activityItems.filter(a => a.courseId === course.id).slice(0, 4)
+  const courseActivity  = activityItems.filter(a => a.courseId === course.id).slice(0, 4)
+  const resources       = course.resources || []
 
   return (
     <div className="max-w-[1000px]">
@@ -49,10 +55,13 @@ export default function CoursePage() {
         { label: course.name },
       ]} />
 
-      {/* Course Header */}
+      {/* ── Course Header card ── */}
       <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden mb-6">
+        {/* Top colour accent strip */}
         <div className="h-1.5 w-full" style={{ background: course.color }} />
+
         <div className="p-6">
+          {/* Title row */}
           <div className="flex items-start gap-4">
             <div
               className="w-14 h-14 rounded-2xl flex items-center justify-center text-white font-bold text-[18px] shrink-0"
@@ -65,6 +74,7 @@ export default function CoursePage() {
               <p className="text-[13px] text-gray-500 dark:text-gray-400 mt-0.5">{course.code} · {course.instructor}</p>
               <p className="text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed mt-2 max-w-[640px]">{course.description}</p>
             </div>
+            {/* Current grade badge — top-right of the header */}
             {lg && (
               <div className="flex flex-col items-center gap-1 shrink-0">
                 <span className="text-[28px] font-bold leading-none" style={{ color: lg.color }}>{courseGrade!.percentage}%</span>
@@ -78,9 +88,9 @@ export default function CoursePage() {
           {/* Info grid */}
           <div className="grid grid-cols-4 gap-3 mt-5">
             {[
-              { label: 'Schedule', value: course.schedule },
-              { label: 'Room', value: course.room },
-              { label: 'Credits', value: `${course.credits} credit hrs` },
+              { label: 'Schedule',      value: course.schedule },
+              { label: 'Room',          value: course.room },
+              { label: 'Credits',       value: `${course.credits} credit hrs` },
               { label: 'Last Activity', value: course.lastActivity },
             ].map(({ label, value }) => (
               <div key={label} className="bg-gray-50 dark:bg-[#131825] rounded-xl px-3.5 py-3">
@@ -89,6 +99,29 @@ export default function CoursePage() {
               </div>
             ))}
           </div>
+
+          {/*
+            Zoom button — only shown when the instructor has a Zoom link on file.
+            Opens in a new tab so the student stays in Blackboard.
+          */}
+          {course.zoomLink && (
+            <div className="mt-4">
+              <a
+                href={course.zoomLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-[13px] font-semibold transition-opacity hover:opacity-90"
+                style={{ background: course.color }}
+              >
+                {/* Camera icon inline SVG */}
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="23 7 16 12 23 17 23 7" />
+                  <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+                </svg>
+                Join Zoom Session
+              </a>
+            </div>
+          )}
 
           {/* Progress bar */}
           <div className="mt-5">
@@ -104,8 +137,10 @@ export default function CoursePage() {
         </div>
       </div>
 
+      {/* ── Two-column body ── */}
       <div className="grid grid-cols-[1fr_340px] gap-6">
-        {/* Left: Modules & Assignments */}
+
+        {/* Left column: Modules → Assignments → Resources */}
         <div className="space-y-6">
 
           {/* Modules */}
@@ -138,8 +173,8 @@ export default function CoursePage() {
                     </span>
                     <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-md ${
                       m.type === 'assignment' ? 'bg-orange-50 dark:bg-orange-500/10 text-orange-500'
-                      : m.type === 'quiz' ? 'bg-purple-50 dark:bg-purple-500/10 text-purple-500'
-                      : m.type === 'reading' ? 'bg-cyan-50 dark:bg-cyan-500/10 text-cyan-500'
+                      : m.type === 'quiz'     ? 'bg-purple-50 dark:bg-purple-500/10 text-purple-500'
+                      : m.type === 'reading'  ? 'bg-cyan-50 dark:bg-cyan-500/10 text-cyan-500'
                       : 'bg-gray-50 dark:bg-gray-500/10 text-gray-500'
                     }`}>
                       {m.type}
@@ -164,13 +199,13 @@ export default function CoursePage() {
               <div className="divide-y divide-gray-50 dark:divide-[#232d42]">
                 {courseAssignments.map(a => {
                   const statusColors = {
-                    graded: { bg: 'bg-emerald-50 dark:bg-emerald-500/10', text: 'text-emerald-600 dark:text-emerald-400' },
-                    submitted: { bg: 'bg-blue-50 dark:bg-blue-500/10', text: 'text-blue-600 dark:text-blue-400' },
-                    upcoming: { bg: 'bg-amber-50 dark:bg-amber-500/10', text: 'text-amber-600 dark:text-amber-400' },
-                    late: { bg: 'bg-red-50 dark:bg-red-500/10', text: 'text-red-600 dark:text-red-400' },
+                    graded:    { bg: 'bg-emerald-50 dark:bg-emerald-500/10', text: 'text-emerald-600 dark:text-emerald-400' },
+                    submitted: { bg: 'bg-blue-50 dark:bg-blue-500/10',       text: 'text-blue-600 dark:text-blue-400' },
+                    upcoming:  { bg: 'bg-amber-50 dark:bg-amber-500/10',     text: 'text-amber-600 dark:text-amber-400' },
+                    late:      { bg: 'bg-red-50 dark:bg-red-500/10',         text: 'text-red-600 dark:text-red-400' },
                   }
                   const sc = statusColors[a.status]
-                  const totalScore = a.rubric.reduce((sum, r) => sum + (r.score || 0), 0)
+                  const totalScore    = a.rubric.reduce((sum, r) => sum + (r.score || 0), 0)
                   const totalPossible = a.rubric.reduce((sum, r) => sum + r.total, 0)
 
                   return (
@@ -215,9 +250,79 @@ export default function CoursePage() {
               </div>
             )}
           </div>
+
+          {/*
+            Resources section — shows downloadable lecture slides and reference files
+            uploaded by the instructor. Download action is visual-only in this prototype.
+          */}
+          <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden">
+            <div className="px-5 pt-5 pb-3">
+              <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Resources</h2>
+            </div>
+
+            {resources.length > 0 ? (
+              <div className="divide-y divide-gray-50 dark:divide-[#232d42]">
+                {resources.map(r => (
+                  <div
+                    key={r.id}
+                    className="flex items-center gap-4 px-5 py-3.5 hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors group cursor-default"
+                  >
+                    {/* File icon */}
+                    <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                      style={{ background: `${course.color}12` }}>
+                      <FileText size={16} style={{ color: course.color }} />
+                    </div>
+
+                    {/* File info */}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[13px] font-medium text-gray-800 dark:text-gray-200 truncate">{r.title}</p>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        {/* File type badge */}
+                        <span
+                          className="text-[9px] font-bold px-1.5 py-0.5 rounded"
+                          style={{ background: `${course.color}15`, color: course.color }}
+                        >
+                          {fileTypeLabel[r.type] ?? r.type.toUpperCase()}
+                        </span>
+                        <span className="text-[11px] text-gray-400 dark:text-gray-500">{r.filename}</span>
+                        {r.size && (
+                          <>
+                            <span className="text-[11px] text-gray-300 dark:text-gray-600">·</span>
+                            <span className="text-[11px] text-gray-400 dark:text-gray-500">{r.size}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Meta + download button */}
+                    <div className="flex items-center gap-3 shrink-0">
+                      <span className="text-[11px] text-gray-400 dark:text-gray-500">{r.uploadedOn}</span>
+                      {/*
+                        Download button — visual only in prototype.
+                        In a real implementation this would link to the file URL.
+                      */}
+                      <button
+                        className="text-[11px] font-semibold px-3 py-1.5 rounded-lg border transition-colors hover:opacity-80"
+                        style={{ borderColor: course.color, color: course.color }}
+                        onClick={e => e.stopPropagation()}
+                        title={`Download ${r.filename}`}
+                      >
+                        Download
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-10 px-5">
+                <FileText size={28} className="text-gray-300 dark:text-gray-600 mx-auto mb-2" />
+                <p className="text-[13px] text-gray-400 dark:text-gray-500">No resources have been posted yet.</p>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Right sidebar */}
+        {/* Right sidebar: Grades → Activity → Instructor */}
         <div className="space-y-6">
 
           {/* Grades summary */}
@@ -298,7 +403,7 @@ export default function CoursePage() {
             )}
           </div>
 
-          {/* Instructor contact card */}
+          {/* Instructor contact */}
           <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] p-5">
             <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100 mb-3">Instructor</h2>
             <div className="flex items-center gap-3">

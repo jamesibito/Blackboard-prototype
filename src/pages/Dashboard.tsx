@@ -199,14 +199,17 @@ export default function Dashboard() {
             </div>
             <div className="px-5 pb-5 space-y-3.5">
               {activityItems.slice(0, 4).map(a => {
-                const course = getCourse(a.courseId)
+                // courseId is optional — college-wide announcements have no course
+                const course = a.courseId ? getCourse(a.courseId) : undefined
+                const avatarAbbr  = course ? course.abbr  : 'GBC'
+                const avatarColor = course ? course.color : '#1B3F89'
                 return (
                   <Link
                     key={a.id}
                     to="/activity-stream"
                     className="flex items-center gap-3 group cursor-pointer"
                   >
-                    <CourseAvatar abbr={course.abbr} color={course.color} size={36} />
+                    <CourseAvatar abbr={avatarAbbr} color={avatarColor} size={36} />
                     <div className="flex-1 min-w-0">
                       <p className="text-[13px] font-medium text-gray-900 dark:text-gray-100 truncate group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors">
                         {a.title}

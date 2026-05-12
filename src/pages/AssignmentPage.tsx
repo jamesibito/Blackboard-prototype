@@ -2,16 +2,7 @@ import { useParams, Link } from 'react-router-dom'
 import { getCourse, getAssignment } from '../data/mockData'
 import { CheckCircle, Clock, FileText, Download } from '../components/Icons'
 import Breadcrumbs from '../components/Breadcrumbs'
-
-function getLetterGrade(pct: number) {
-  if (pct >= 90) return { letter: 'A+', color: '#22C55E' }
-  if (pct >= 80) return { letter: 'A',  color: '#22C55E' }
-  if (pct >= 73) return { letter: 'B+', color: '#06B6D4' }
-  if (pct >= 67) return { letter: 'B',  color: '#06B6D4' }
-  if (pct >= 60) return { letter: 'C+', color: '#F97316' }
-  if (pct >= 53) return { letter: 'C',  color: '#F97316' }
-  return { letter: 'D', color: '#EF4444' }
-}
+import { getLetterGrade } from '../utils/grades'  // shared grading scale
 
 export default function AssignmentPage() {
   const { courseId, assignmentId } = useParams<{ courseId: string; assignmentId: string }>()
