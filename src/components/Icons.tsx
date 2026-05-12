@@ -1,4 +1,4 @@
-interface P { size?: number; className?: string; strokeWidth?: number }
+interface P { size?: number; className?: string; strokeWidth?: number; style?: React.CSSProperties }
 
 const svg = (children: React.ReactNode, p: P) => (
   <svg width={p.size ?? 20} height={p.size ?? 20} viewBox="0 0 24 24" fill="none"

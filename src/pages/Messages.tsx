@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { messages, getCourse } from '../data/mockData'
 import type { Message } from '../data/mockData'
-import { Mail, Star, Reply, ChevronRight, Inbox } from '../components/Icons'
+import { Mail, Star, Reply, Inbox } from '../components/Icons'
 
 const tagConfig = {
   assignment:    { label: 'Assignment',    color: '#F97316', bg: '#F9731618' },
