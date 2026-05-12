@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { courses, grades, courseModules, getCourse } from '../data/mockData'
 import { ChevronRight, Clock, CheckCircle, Folder, X, BookOpen } from '../components/Icons'
 
@@ -201,12 +202,13 @@ export default function Courses() {
                 )}
               </div>
 
-              <button
-                className="w-full py-2.5 rounded-xl text-[13px] font-semibold text-white transition-opacity hover:opacity-90 active:scale-[0.98]"
+              <Link
+                to={`/courses/${selected.id}`}
+                className="block w-full py-2.5 rounded-xl text-[13px] font-semibold text-white transition-opacity hover:opacity-90 active:scale-[0.98] text-center"
                 style={{ background: selected.color }}
               >
                 Continue Course
-              </button>
+              </Link>
             </div>
           </div>
         )}

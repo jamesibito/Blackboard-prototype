@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
-import { FileText, ClipboardList, Award, Megaphone, ChevronDown, X } from '../components/Icons'
+import { Link } from 'react-router-dom'
+import { FileText, ClipboardList, Award, Megaphone, ChevronDown, X, ArrowRight } from '../components/Icons'
 import { activityItems, courses, getCourse } from '../data/mockData'
 import type { ActivityItem } from '../data/mockData'
 
@@ -180,6 +181,16 @@ export default function ActivityStream() {
                       <div className="px-4 pb-4">
                         <div className="ml-11 p-3.5 rounded-xl bg-gray-50 dark:bg-[#0C0F1A] border border-gray-100 dark:border-[#2D3A52]">
                           <p className="text-[13px] text-gray-700 dark:text-gray-300 leading-relaxed">{item.body}</p>
+                          {item.linkTo && (
+                            <Link
+                              to={item.linkTo}
+                              onClick={e => e.stopPropagation()}
+                              className="inline-flex items-center gap-1.5 mt-3 text-[12px] font-semibold text-[#2563EB] dark:text-[#60A5FA] hover:underline"
+                            >
+                              {item.type === 'grade' ? 'View feedback' : item.type === 'assignment' ? 'View assignment' : 'View details'}
+                              <ArrowRight size={12} />
+                            </Link>
+                          )}
                         </div>
                       </div>
                     )}

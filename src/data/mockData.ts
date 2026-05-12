@@ -18,10 +18,33 @@ export interface Course {
   lastActivity: string
 }
 
+export interface RubricCriterion {
+  name: string
+  weight: number
+  score?: number
+  total: number
+  feedback?: string
+}
+
+export interface Assignment {
+  id: string
+  courseId: string
+  title: string
+  description: string
+  dueDate: string
+  points: number
+  status: 'submitted' | 'graded' | 'upcoming' | 'late'
+  submittedDate?: string
+  rubric: RubricCriterion[]
+  instructions: string[]
+  deliverables: string[]
+}
+
 export interface GradeMark {
   name: string
   score: number
   total: number
+  assignmentId?: string
 }
 
 export interface CourseGrade {
@@ -36,6 +59,7 @@ export interface DueItem {
   title: string
   dueDay: string
   type: 'assignment' | 'quiz' | 'project'
+  assignmentId?: string
 }
 
 export interface ActivityItem {
@@ -46,6 +70,7 @@ export interface ActivityItem {
   timeRange: string
   type: 'assignment' | 'announcement' | 'grade' | 'resource'
   body: string
+  linkTo?: string
 }
 
 export interface CalendarEvent {
@@ -54,6 +79,15 @@ export interface CalendarEvent {
   title: string
   day: number
   color: string
+  type?: 'deadline' | 'class' | 'event'
+}
+
+export interface ClassBlock {
+  courseId: string
+  dayOfWeek: number // 0=Sun, 1=Mon...
+  startHour: number
+  endHour: number
+  room: string
 }
 
 export interface Message {
@@ -180,8 +214,8 @@ export const grades: CourseGrade[] = [
   {
     courseId: '2D', percentage: 75,
     marks: [
-      { name: 'Assignment 5 – Branded Design', score: 18, total: 25 },
-      { name: 'Assignment 4 – Style Guide', score: 20, total: 20 },
+      { name: 'Assignment 5 – Branded Design', score: 18, total: 25, assignmentId: 'asgn-2d-5' },
+      { name: 'Assignment 4 – Style Guide', score: 20, total: 20, assignmentId: 'asgn-2d-4' },
       { name: 'Assignment 3 – Logo Design', score: 15, total: 25 },
       { name: 'Assignment 2 – Brand Ideation', score: 12, total: 20 },
       { name: 'Assignment 1 – Brand Exploration', score: 10, total: 10 },
@@ -191,13 +225,13 @@ export const grades: CourseGrade[] = [
     courseId: 'IA', percentage: 25,
     marks: [
       { name: 'Assignment 2 – Card Sorting Exercise', score: 7, total: 25 },
-      { name: 'Assignment 1 – Sitemap Draft', score: 5, total: 20 },
+      { name: 'Assignment 1 – Sitemap Draft', score: 5, total: 20, assignmentId: 'asgn-ia-1' },
     ],
   },
   {
     courseId: 'VD', percentage: 60,
     marks: [
-      { name: 'Project 2 – Campaign Layout', score: 30, total: 50 },
+      { name: 'Project 2 – Campaign Layout', score: 30, total: 50, assignmentId: 'asgn-vd-2' },
       { name: 'Assignment 3 – Typography Poster', score: 18, total: 25 },
       { name: 'Assignment 2 – Colour Theory Study', score: 14, total: 25 },
     ],
@@ -205,7 +239,7 @@ export const grades: CourseGrade[] = [
   {
     courseId: 'TD', percentage: 97,
     marks: [
-      { name: 'Drawing Set 3 – Mechanical Parts', score: 48, total: 50 },
+      { name: 'Drawing Set 3 – Mechanical Parts', score: 48, total: 50, assignmentId: 'asgn-td-3' },
       { name: 'Drawing Set 2 – Orthographic Views', score: 49, total: 50 },
       { name: 'Drawing Set 1 – Basic Drafting', score: 48, total: 50 },
     ],
@@ -213,7 +247,7 @@ export const grades: CourseGrade[] = [
   {
     courseId: 'CE', percentage: 80,
     marks: [
-      { name: 'Essay 3 – Research Proposal', score: 82, total: 100 },
+      { name: 'Essay 3 – Research Proposal', score: 82, total: 100, assignmentId: 'asgn-ce-3' },
       { name: 'Essay 2 – Comparative Analysis', score: 79, total: 100 },
       { name: 'Essay 1 – Personal Narrative', score: 83, total: 100 },
     ],
@@ -221,9 +255,9 @@ export const grades: CourseGrade[] = [
   {
     courseId: 'IS', percentage: 91,
     marks: [
-      { name: 'Project 3 – Interactive Prototype', score: 47, total: 50 },
+      { name: 'Project 3 – Interactive Prototype', score: 47, total: 50, assignmentId: 'asgn-is-3' },
       { name: 'Project 2 – Wireframe Set', score: 28, total: 30 },
-      { name: 'Assignment 4 – Usability Test Report', score: 18, total: 20 },
+      { name: 'Assignment 4 – Usability Test Report', score: 18, total: 20, assignmentId: 'asgn-is-4' },
       { name: 'Assignment 3 – User Flow Diagrams', score: 19, total: 20 },
       { name: 'Assignment 2 – Persona Development', score: 15, total: 15 },
     ],
@@ -234,7 +268,7 @@ export const grades: CourseGrade[] = [
 
 export const dueSoon: DueItem[] = [
   { id: 'ds1', courseId: 'VD', title: 'User Manual', dueDay: 'WEDNESDAY, DEC 7TH', type: 'assignment' },
-  { id: 'ds2', courseId: 'CE', title: 'Research Proposal', dueDay: 'THURSDAY, DEC 8TH', type: 'assignment' },
+  { id: 'ds2', courseId: 'CE', title: 'Research Proposal', dueDay: 'THURSDAY, DEC 8TH', type: 'assignment', assignmentId: 'asgn-ce-3' },
   { id: 'ds3', courseId: 'TD', title: 'Rendering Pin-up', dueDay: 'FRIDAY, DEC 9TH', type: 'project' },
   { id: 'ds4', courseId: '2D', title: 'Branding Guide', dueDay: 'MONDAY, DEC 12TH', type: 'assignment' },
 ]
@@ -251,16 +285,19 @@ export const activityItems: ActivityItem[] = [
     id: 'a2', courseId: 'IS', title: 'Assignment Posted: Usability Test Report',
     date: '13th Dec 2022', timeRange: '8 AM – 9 AM', type: 'assignment',
     body: 'A new assignment has been posted for Interactive Systems. Complete a 5-participant usability test of your mid-fi prototype and submit a written report (min. 600 words). Due: December 20th at 11:59 PM.',
+    linkTo: '/courses/IS/assignments/asgn-is-4',
   },
   {
     id: 'a3', courseId: 'TD', title: 'Grade Released: Drawing Set 3',
     date: '18th Dec 2022', timeRange: '8 AM – 9 AM', type: 'grade',
     body: 'Your grade for Drawing Set 3 (Mechanical Parts) has been released. You scored 48 out of 50. Excellent drafting precision on the isometric views. See instructor comments attached to your submission.',
+    linkTo: '/courses/TD/assignments/asgn-td-3',
   },
   {
     id: 'a4', courseId: '2D', title: 'Announcement: Final Project Brief',
     date: '23rd Dec 2022', timeRange: '10 AM – 1 PM', type: 'announcement',
     body: 'The final project brief is now live on the course page. You will be designing a full brand identity system for a fictional startup. Deliverables include logo, colour palette, type system, and a one-page brand guide. Submission due January 10th.',
+    linkTo: '/courses/2D',
   },
   {
     id: 'a5', courseId: 'VD', title: 'New Resource: Campaign Layout Examples',
@@ -271,26 +308,253 @@ export const activityItems: ActivityItem[] = [
     id: 'a6', courseId: 'IA', title: 'Grade Released: Sitemap Draft',
     date: '19th Dec 2022', timeRange: '9 AM – 10 AM', type: 'grade',
     body: 'Your grade for Assignment 1 – Sitemap Draft has been posted. Score: 5/20. Please review the feedback carefully and book office hours with A.J. before the next submission.',
+    linkTo: '/courses/IA/assignments/asgn-ia-1',
+  },
+  {
+    id: 'a7', courseId: 'CE', title: 'Grade Released: Research Proposal',
+    date: '15th Dec 2022', timeRange: '10 AM – 11 AM', type: 'grade',
+    body: 'Your Essay 3 – Research Proposal has been graded. Score: 82/100. Strong sources and good mix of academic and industry references. Minor comma splice issues noted.',
+    linkTo: '/courses/CE/assignments/asgn-ce-3',
+  },
+  {
+    id: 'a8', courseId: 'IS', title: 'Reminder: Final Presentation Prep',
+    date: '14th Dec 2022', timeRange: '2 PM – 3 PM', type: 'announcement',
+    body: 'Don\'t forget to prepare your final presentation slides. Each student will have 8 minutes to present their interactive prototype and usability findings. Presentations begin January 5th.',
+    linkTo: '/courses/IS',
+  },
+  {
+    id: 'a9', courseId: 'VD', title: 'Grade Released: Campaign Layout',
+    date: '12th Dec 2022', timeRange: '3 PM – 4 PM', type: 'grade',
+    body: 'Your Campaign Layout project has been graded. Score: 30/50. Concept direction is solid but execution needs work. Grid breaks in digital banners and placeholder text in 2 mockups brought down the score.',
+    linkTo: '/courses/VD/assignments/asgn-vd-2',
   },
 ]
 
 // ─── Calendar Events ───────────────────────────────────────────────────────────
 
 export const calendarEvents: CalendarEvent[] = [
-  { id: 'e1', courseId: 'IS', title: 'Ideation Jam', day: 3, color: '#EC4899' },
-  { id: 'e2', courseId: 'IA', title: 'Wireframes Due', day: 3, color: '#EF4444' },
-  { id: 'e3', courseId: 'CE', title: 'Peer Review', day: 5, color: '#06B6D4' },
-  { id: 'e4', courseId: 'VD', title: 'User Manual Due', day: 7, color: '#8B5CF6' },
-  { id: 'e5', courseId: 'CE', title: 'Research Proposal', day: 8, color: '#06B6D4' },
-  { id: 'e6', courseId: 'TD', title: 'Rendering Pin-up', day: 9, color: '#22C55E' },
-  { id: 'e7', courseId: '2D', title: 'Branding Guide', day: 12, color: '#F97316' },
-  { id: 'e8', courseId: '2D', title: 'Logo Critique', day: 14, color: '#F97316' },
-  { id: 'e9', courseId: '2D', title: 'Branded Design Due', day: 20, color: '#F97316' },
-  { id: 'e10', courseId: 'IS', title: 'Prototypes Due', day: 20, color: '#EC4899' },
-  { id: 'e11', courseId: 'IA', title: 'Final Sitemap', day: 20, color: '#EF4444' },
-  { id: 'e12', courseId: 'VD', title: 'Campaign Layout', day: 20, color: '#8B5CF6' },
-  { id: 'e13', courseId: 'IS', title: 'Prototypes Review', day: 28, color: '#EC4899' },
+  { id: 'e1', courseId: 'IS', title: 'Ideation Jam', day: 3, color: '#EC4899', type: 'event' },
+  { id: 'e2', courseId: 'IA', title: 'Wireframes Due', day: 3, color: '#EF4444', type: 'deadline' },
+  { id: 'e3', courseId: 'CE', title: 'Peer Review', day: 5, color: '#06B6D4', type: 'event' },
+  { id: 'e4', courseId: 'VD', title: 'User Manual Due', day: 7, color: '#8B5CF6', type: 'deadline' },
+  { id: 'e5', courseId: 'CE', title: 'Research Proposal', day: 8, color: '#06B6D4', type: 'deadline' },
+  { id: 'e6', courseId: 'TD', title: 'Rendering Pin-up', day: 9, color: '#22C55E', type: 'deadline' },
+  { id: 'e7', courseId: '2D', title: 'Branding Guide', day: 12, color: '#F97316', type: 'deadline' },
+  { id: 'e8', courseId: '2D', title: 'Logo Critique', day: 14, color: '#F97316', type: 'event' },
+  { id: 'e9', courseId: '2D', title: 'Branded Design Due', day: 20, color: '#F97316', type: 'deadline' },
+  { id: 'e10', courseId: 'IS', title: 'Prototypes Due', day: 20, color: '#EC4899', type: 'deadline' },
+  { id: 'e11', courseId: 'IA', title: 'Final Sitemap', day: 20, color: '#EF4444', type: 'deadline' },
+  { id: 'e12', courseId: 'VD', title: 'Campaign Layout', day: 20, color: '#8B5CF6', type: 'deadline' },
+  { id: 'e13', courseId: 'IS', title: 'Prototypes Review', day: 28, color: '#EC4899', type: 'event' },
 ]
+
+// ─── Class Schedule Blocks ────────────────────────────────────────────────
+
+export const classBlocks: ClassBlock[] = [
+  { courseId: '2D', dayOfWeek: 1, startHour: 9, endHour: 11, room: 'SFC B108' },
+  { courseId: '2D', dayOfWeek: 3, startHour: 9, endHour: 11, room: 'SFC B108' },
+  { courseId: 'IS', dayOfWeek: 2, startHour: 13, endHour: 15, room: 'SFC B112' },
+  { courseId: 'IS', dayOfWeek: 4, startHour: 13, endHour: 15, room: 'SFC B112' },
+  { courseId: 'IA', dayOfWeek: 5, startHour: 9, endHour: 12, room: 'SFC A209' },
+  { courseId: 'VD', dayOfWeek: 1, startHour: 12, endHour: 14, room: 'SFC B110' },
+  { courseId: 'VD', dayOfWeek: 3, startHour: 12, endHour: 14, room: 'SFC B110' },
+  { courseId: 'CE', dayOfWeek: 2, startHour: 9, endHour: 12, room: 'SFC A105' },
+  { courseId: 'TD', dayOfWeek: 4, startHour: 13, endHour: 16, room: 'SFC C204' },
+]
+
+// ─── Assignments ─────────────────────────────────────────────────────────────
+
+export const assignments: Assignment[] = [
+  {
+    id: 'asgn-2d-5',
+    courseId: '2D',
+    title: 'Assignment 5 – Branded Design',
+    description: 'Apply your brand identity system to three real-world applications. Demonstrate consistency across touchpoints while adapting the brand to different contexts and media.',
+    dueDate: 'Dec 20, 2022',
+    points: 25,
+    status: 'graded',
+    submittedDate: 'Dec 18, 2022',
+    rubric: [
+      { name: 'Brand Consistency', weight: 30, score: 7, total: 10, feedback: 'Colour palette applied well, but type weights vary between mockups.' },
+      { name: 'Application Quality', weight: 30, score: 5, total: 10, feedback: 'Mockup layouts felt rushed. Push the brand into more contexts.' },
+      { name: 'Craft & Finish', weight: 20, score: 4, total: 5, feedback: 'Clean files but some alignment issues on the banner.' },
+      { name: 'Concept & Rationale', weight: 20, score: 2, total: 5, feedback: 'Missing written rationale for design choices.' },
+    ],
+    instructions: [
+      'Select 3 application touchpoints from the list: business card, letterhead, social media kit, packaging, digital ad set, signage, or web landing page.',
+      'Apply your brand identity system consistently across all 3 touchpoints.',
+      'Include a brief written rationale (150-200 words) explaining your design decisions.',
+      'Export all deliverables as high-resolution PDFs and provide source Illustrator files.',
+    ],
+    deliverables: ['3 application mockups (PDF)', 'Source files (.ai)', 'Written rationale (PDF)'],
+  },
+  {
+    id: 'asgn-2d-4',
+    courseId: '2D',
+    title: 'Assignment 4 – Style Guide',
+    description: 'Create a comprehensive style guide document for your brand identity, including typography, colour palette, spacing, and usage rules.',
+    dueDate: 'Dec 5, 2022',
+    points: 20,
+    status: 'graded',
+    submittedDate: 'Dec 4, 2022',
+    rubric: [
+      { name: 'Completeness', weight: 40, score: 8, total: 8, feedback: 'All required sections present.' },
+      { name: 'Typography Spec', weight: 20, score: 4, total: 4 },
+      { name: 'Colour Definition', weight: 20, score: 4, total: 4 },
+      { name: 'Layout & Presentation', weight: 20, score: 4, total: 4, feedback: 'Excellent layout. Clean and professional.' },
+    ],
+    instructions: [
+      'Document your full brand system: logo usage, clear space rules, colour palette (with hex/CMYK values), typography hierarchy, and image style.',
+      'Format as a designed document (not just a text doc). The guide itself should demonstrate the brand.',
+      'Minimum 8 pages.',
+    ],
+    deliverables: ['Style guide document (PDF)', 'Source files (.indd or .ai)'],
+  },
+  {
+    id: 'asgn-is-4',
+    courseId: 'IS',
+    title: 'Assignment 4 – Usability Test Report',
+    description: 'Conduct a usability test with 5 participants on your mid-fi prototype and write a detailed report with findings and recommendations.',
+    dueDate: 'Dec 20, 2022',
+    points: 20,
+    status: 'graded',
+    submittedDate: 'Dec 19, 2022',
+    rubric: [
+      { name: 'Methodology', weight: 20, score: 4, total: 4 },
+      { name: 'Participant Recruitment', weight: 15, score: 3, total: 3 },
+      { name: 'Key Findings', weight: 30, score: 5, total: 6, feedback: 'Good severity ratings but could use more detail on edge cases.' },
+      { name: 'Recommendations', weight: 20, score: 4, total: 4 },
+      { name: 'Report Quality', weight: 15, score: 2, total: 3, feedback: 'Some grammatical issues. Proofread next time.' },
+    ],
+    instructions: [
+      'Recruit 5 participants. Include a participant overview table with demographics.',
+      'Prepare a test script with 5 task scenarios.',
+      'Record key observations, errors, and quotes during each session.',
+      'Use severity ratings (Critical, Major, Minor, Cosmetic) for each finding.',
+      'Write actionable recommendations for each finding.',
+    ],
+    deliverables: ['Usability Test Report (PDF)', 'Test script (PDF)', 'Figma prototype link'],
+  },
+  {
+    id: 'asgn-is-3',
+    courseId: 'IS',
+    title: 'Project 3 – Interactive Prototype',
+    description: 'Build an interactive prototype in Figma based on your wireframes and usability findings. Include micro-interactions and realistic user flows.',
+    dueDate: 'Dec 20, 2022',
+    points: 50,
+    status: 'graded',
+    submittedDate: 'Dec 19, 2022',
+    rubric: [
+      { name: 'Interaction Design', weight: 30, score: 14, total: 15, feedback: 'Smooth flows. Great use of smart animate.' },
+      { name: 'Visual Polish', weight: 25, score: 12, total: 12 },
+      { name: 'User Flow Coverage', weight: 25, score: 11, total: 12, feedback: 'Missing error state for form validation.' },
+      { name: 'Presentation', weight: 20, score: 10, total: 11 },
+    ],
+    instructions: [
+      'Build a clickable prototype in Figma with at least 3 complete user flows.',
+      'Include transitions, micro-interactions, and hover states.',
+      'Ensure the prototype is accessible via a public view-only link.',
+    ],
+    deliverables: ['Figma prototype (view-only link)', 'Flow diagram (PDF)'],
+  },
+  {
+    id: 'asgn-vd-2',
+    courseId: 'VD',
+    title: 'Project 2 – Campaign Layout',
+    description: 'Design a multi-channel advertising campaign for a brand of your choice. Create cohesive layouts across print, digital, and social media formats.',
+    dueDate: 'Nov 28, 2022',
+    points: 50,
+    status: 'graded',
+    submittedDate: 'Nov 28, 2022',
+    rubric: [
+      { name: 'Concept Direction', weight: 25, score: 9, total: 12, feedback: 'Solid concept. Visual language is consistent.' },
+      { name: 'Grid & Layout', weight: 25, score: 6, total: 12, feedback: 'Grid breaks in digital banner sizes.' },
+      { name: 'Copy & Content', weight: 25, score: 5, total: 12, feedback: 'Placeholder text in 2 of 5 mockups.' },
+      { name: 'Craft & Finish', weight: 25, score: 10, total: 14, feedback: 'Print version has inconsistent margins.' },
+    ],
+    instructions: [
+      'Choose a real or fictional brand.',
+      'Design campaign layouts for: 1 print ad, 2 digital banner sizes, 1 social media post, and 1 billboard/OOH format.',
+      'All copy must be final — no placeholder text.',
+      'Maintain consistent grid, type, and colour across all formats.',
+    ],
+    deliverables: ['5 layout mockups (PDF)', 'Source files (.ai or .psd)', 'Brand brief (1 page)'],
+  },
+  {
+    id: 'asgn-td-3',
+    courseId: 'TD',
+    title: 'Drawing Set 3 – Mechanical Parts',
+    description: 'Create detailed orthographic and isometric drawings of 3 mechanical assemblies with proper dimensioning and annotation.',
+    dueDate: 'Dec 15, 2022',
+    points: 50,
+    status: 'graded',
+    submittedDate: 'Dec 14, 2022',
+    rubric: [
+      { name: 'Orthographic Accuracy', weight: 30, score: 15, total: 15 },
+      { name: 'Isometric Views', weight: 25, score: 12, total: 12, feedback: 'Excellent precision.' },
+      { name: 'Dimensioning', weight: 25, score: 11, total: 12, feedback: 'Minor leader line overlap on Part C.' },
+      { name: 'Title Block & Standards', weight: 20, score: 10, total: 11 },
+    ],
+    instructions: [
+      'Draw 3 mechanical assemblies using third-angle projection.',
+      'Include isometric views for each assembly.',
+      'Apply ASME Y14.5 dimensioning standards.',
+      'Use proper title blocks, scale notation, and tolerance callouts.',
+    ],
+    deliverables: ['Drawing sheets (PDF, A2 size)', 'AutoCAD source files (.dwg)'],
+  },
+  {
+    id: 'asgn-ia-1',
+    courseId: 'IA',
+    title: 'Assignment 1 – Sitemap Draft',
+    description: 'Create a comprehensive sitemap for a medium-complexity website. Demonstrate information hierarchy and navigation structure.',
+    dueDate: 'Nov 25, 2022',
+    points: 20,
+    status: 'graded',
+    submittedDate: 'Nov 24, 2022',
+    rubric: [
+      { name: 'Hierarchy Depth', weight: 30, score: 1, total: 6, feedback: 'Too shallow — users would hit dead ends.' },
+      { name: 'Navigation Coverage', weight: 30, score: 2, total: 6, feedback: 'Missing "Support" and "About" nodes.' },
+      { name: 'Card Sort Integration', weight: 20, score: 0, total: 4, feedback: 'Card sorting data not referenced at all.' },
+      { name: 'Visual Presentation', weight: 20, score: 2, total: 4 },
+    ],
+    instructions: [
+      'Choose a website with 30+ pages to map.',
+      'Conduct a card sorting exercise with at least 5 participants.',
+      'Create a visual sitemap showing all pages, organized by card sort findings.',
+      'Include at least 2-3 insights from the card sort in your rationale.',
+    ],
+    deliverables: ['Sitemap (PDF or FigJam link)', 'Card sort results summary', 'Written rationale (250 words)'],
+  },
+  {
+    id: 'asgn-ce-3',
+    courseId: 'CE',
+    title: 'Essay 3 – Research Proposal',
+    description: 'Write a formal research proposal on a design-related topic of your choice. Follow academic writing conventions and cite at least 8 sources.',
+    dueDate: 'Dec 8, 2022',
+    points: 100,
+    status: 'graded',
+    submittedDate: 'Dec 8, 2022',
+    rubric: [
+      { name: 'Thesis & Argument', weight: 25, score: 21, total: 25 },
+      { name: 'Research Quality', weight: 25, score: 20, total: 25, feedback: 'Strong sources. Good mix of academic and industry.' },
+      { name: 'Writing Quality', weight: 25, score: 20, total: 25, feedback: 'Minor comma splice issues.' },
+      { name: 'Citations & Format', weight: 25, score: 21, total: 25 },
+    ],
+    instructions: [
+      'Choose a design-related research topic.',
+      'Write a 1500-2000 word research proposal following APA format.',
+      'Include: introduction, literature review, methodology, and expected outcomes.',
+      'Cite at least 8 credible sources.',
+    ],
+    deliverables: ['Research Proposal (Word or PDF)', 'Annotated bibliography'],
+  },
+]
+
+// Helper to get assignment by ID
+export function getAssignment(id: string) {
+  return assignments.find(a => a.id === id)
+}
 
 // ─── Messages ─────────────────────────────────────────────────────────────────
 

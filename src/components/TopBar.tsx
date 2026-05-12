@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Search, Sun, Moon, Bell, ChevronDown, X } from './Icons'
 import { useTheme } from '../context/ThemeContext'
 import { user, courses } from '../data/mockData'
@@ -12,6 +13,7 @@ const notifications = [
 const unreadCount = notifications.filter(n => n.unread).length
 
 export default function TopBar() {
+  const navigate = useNavigate()
   const { theme, toggleTheme } = useTheme()
   const [notifOpen, setNotifOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
@@ -93,7 +95,7 @@ export default function TopBar() {
                   <button
                     key={c.id}
                     className="flex items-center gap-3 w-full px-3 py-2.5 hover:bg-gray-50 dark:hover:bg-[#232d42] transition text-left"
-                    onClick={() => { setSearchQuery(''); setSearchFocused(false) }}
+                    onClick={() => { setSearchQuery(''); setSearchFocused(false); navigate(`/courses/${c.id}`) }}
                   >
                     <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-[11px] font-bold shrink-0"
                       style={{ background: c.color }}>

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, Eye, EyeOff, TrendingUp } from '../components/Icons'
 import { grades, getCourse, getOverallGPA } from '../data/mockData'
 
@@ -169,8 +170,8 @@ export default function Grades() {
                     <div className="space-y-2">
                       {g.marks.map((m, i) => {
                         const pct = Math.round((m.score / m.total) * 100)
-                        return (
-                          <div key={i} className="space-y-1">
+                        const inner = (
+                          <>
                             <div className="flex items-center justify-between">
                               <span className="text-[12px] text-gray-700 dark:text-gray-300 truncate flex-1 mr-3 leading-tight">{m.name}</span>
                               <span className="text-[12px] font-bold tabular-nums shrink-0" style={{ color: course.color }}>
@@ -185,6 +186,20 @@ export default function Grades() {
                                 />
                               </div>
                             )}
+                          </>
+                        )
+                        return m.assignmentId ? (
+                          <Link
+                            key={i}
+                            to={`/courses/${g.courseId}/assignments/${m.assignmentId}`}
+                            onClick={e => e.stopPropagation()}
+                            className="block space-y-1 -mx-1 px-1 py-0.5 rounded-lg hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors"
+                          >
+                            {inner}
+                          </Link>
+                        ) : (
+                          <div key={i} className="space-y-1">
+                            {inner}
                           </div>
                         )
                       })}

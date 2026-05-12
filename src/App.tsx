@@ -6,6 +6,8 @@ import ActivityStream from './pages/ActivityStream'
 import Grades from './pages/Grades'
 import CalendarPage from './pages/CalendarPage'
 import Courses from './pages/Courses'
+import CoursePage from './pages/CoursePage'
+import AssignmentPage from './pages/AssignmentPage'
 import Messages from './pages/Messages'
 
 export default function App() {
@@ -13,12 +15,14 @@ export default function App() {
     <ThemeProvider>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/"                element={<Dashboard />} />
-          <Route path="/courses"         element={<Courses />} />
-          <Route path="/grades"          element={<Grades />} />
-          <Route path="/activity-stream" element={<ActivityStream />} />
-          <Route path="/calendar"        element={<CalendarPage />} />
-          <Route path="/messages"        element={<Messages />} />
+          <Route path="/"                                    element={<Dashboard />} />
+          <Route path="/courses"                             element={<Courses />} />
+          <Route path="/courses/:courseId"                   element={<CoursePage />} />
+          <Route path="/courses/:courseId/assignments/:assignmentId" element={<AssignmentPage />} />
+          <Route path="/grades"                              element={<Grades />} />
+          <Route path="/activity-stream"                     element={<ActivityStream />} />
+          <Route path="/calendar"                            element={<CalendarPage />} />
+          <Route path="/messages"                            element={<Messages />} />
           {/* Stubs for remaining nav items */}
           <Route path="/communities"     element={<Placeholder title="Communities" description="Discussion boards and study groups for your courses." />} />
           <Route path="/resources"       element={<Placeholder title="Resources" description="Library access, writing centre, tutoring, and more." />} />

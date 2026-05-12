@@ -94,7 +94,7 @@ export default function Dashboard() {
             {courses.map(c => (
               <Link
                 key={c.id}
-                to="/courses"
+                to={`/courses/${c.id}`}
                 className="flex items-start gap-3 px-5 py-3.5 hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors cursor-pointer group"
               >
                 <CourseAvatar abbr={c.abbr} color={c.color} size={38} />
@@ -134,9 +134,13 @@ export default function Dashboard() {
             <div className="px-4 pb-4 space-y-2">
               {dueSoon.map(d => {
                 const course = getCourse(d.courseId)
+                const linkTarget = d.assignmentId
+                  ? `/courses/${d.courseId}/assignments/${d.assignmentId}`
+                  : `/courses/${d.courseId}`
                 return (
-                  <div
+                  <Link
                     key={d.id}
+                    to={linkTarget}
                     className="flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-colors
                       bg-gray-50 dark:bg-[#232d42] hover:bg-gray-100 dark:hover:bg-[#2a354d]
                       border-l-[3px]"
@@ -150,7 +154,7 @@ export default function Dashboard() {
                       </div>
                     </div>
                     <div className="w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-600 shrink-0" />
-                  </div>
+                  </Link>
                 )
               })}
             </div>

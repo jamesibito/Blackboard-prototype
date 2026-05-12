@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { ChevronLeft, ChevronRight, Plus } from '../components/Icons'
-import { calendarEvents, getCourse } from '../data/mockData'
+import { ChevronLeft, ChevronRight, Plus, Clock } from '../components/Icons'
+import { calendarEvents, classBlocks, getCourse } from '../data/mockData'
 
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December']
 const DAY_HEADERS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
@@ -39,6 +39,15 @@ export default function CalendarPage() {
     year === 2022 && month === 11 ? calendarEvents.filter(e => e.day === day) : []
 
   const selectedEvents = selectedDay ? getEventsForDay(selectedDay) : []
+
+  // Get class blocks for selected day's day-of-week
+  const getClassesForDay = (day: number) => {
+    if (year !== 2022 || month !== 11) return []
+    const date = new Date(year, month, day)
+    const dow = date.getDay()
+    return classBlocks.filter(b => b.dayOfWeek === dow)
+  }
+  const selectedClasses = selectedDay ? getClassesForDay(selectedDay) : []
 
   return (
     <div className="max-w-[1200px]">
@@ -176,21 +185,51 @@ export default function CalendarPage() {
                     )}
                   </div>
 
-                  {selectedEvents.length > 0 ? (
-                    <div className="space-y-2">
-                      {selectedEvents.map(evt => {
-                        const course = getCourse(evt.courseId)
-                        return (
-                          <div key={evt.id} className="p-3 rounded-xl border" style={{ borderColor: `${evt.color}40`, background: `${evt.color}0A` }}>
-                            <p className="text-[12px] font-semibold" style={{ color: evt.color }}>{evt.title}</p>
-                            <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{course.name}</p>
-                          </div>
-                        )
-                      })}
+                  {/* Class schedule */}
+                  {selectedClasses.length > 0 && (
+                    <div className="mb-3">
+                      <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2">Classes</p>
+                      <div className="space-y-1.5">
+                        {selectedClasses.map((cb, i) => {
+                          const course = getCourse(cb.courseId)
+                          const formatHour = (h: number) => h > 12 ? `${h - 12} PM` : h === 12 ? '12 PM' : `${h} AM`
+                          return (
+                            <div key={i} className="p-2.5 rounded-xl border" style={{ borderColor: `${course.color}30`, background: `${course.color}08` }}>
+                              <p className="text-[11px] font-semibold" style={{ color: course.color }}>{course.name}</p>
+                              <div className="flex items-center gap-1 mt-0.5">
+                                <Clock size={10} className="text-gray-400 dark:text-gray-500" />
+                                <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                                  {formatHour(cb.startHour)} – {formatHour(cb.endHour)} · {cb.room}
+                                </p>
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
                     </div>
-                  ) : (
-                    <p className="text-[12px] text-gray-400 dark:text-gray-500 text-center py-4">No events</p>
                   )}
+
+                  {/* Events */}
+                  {selectedEvents.length > 0 ? (
+                    <div>
+                      {selectedClasses.length > 0 && (
+                        <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2">Events & Deadlines</p>
+                      )}
+                      <div className="space-y-2">
+                        {selectedEvents.map(evt => {
+                          const course = getCourse(evt.courseId)
+                          return (
+                            <div key={evt.id} className="p-3 rounded-xl border" style={{ borderColor: `${evt.color}40`, background: `${evt.color}0A` }}>
+                              <p className="text-[12px] font-semibold" style={{ color: evt.color }}>{evt.title}</p>
+                              <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{course.name}</p>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  ) : selectedClasses.length === 0 ? (
+                    <p className="text-[12px] text-gray-400 dark:text-gray-500 text-center py-4">No events</p>
+                  ) : null}
                 </>
               ) : (
                 <p className="text-[12px] text-gray-400 dark:text-gray-500 text-center py-6">Select a day to see events</p>

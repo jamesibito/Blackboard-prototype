@@ -164,6 +164,37 @@ A running record of intentional design choices, tradeoffs, and rationale. Useful
 
 ---
 
+## v2.1 — Cross-linking & Depth
+
+**Assignment Detail Pages (New):** Full assignment view with instructions, rubric table, deliverables list, submission area, and grade breakdown. Rubric rows show score bars with colour-coded feedback (green ≥80%, orange ≥60%, red <60%). Graded assignments show a large percentage + letter grade card. Submission area shows a file upload zone for upcoming assignments and a "Submitted & Graded" confirmation for completed ones.
+
+**Course Detail Pages (New):** Dedicated `/courses/:id` route with full course header (grade badge, progress bar, info grid), module list with completion states and type badges, assignments list with status pills and scores, right sidebar with grades summary, recent activity, and instructor contact card. Replaces the old inline panel as the primary deep-dive view.
+
+**Breadcrumb Navigation (New Component):** Contextual breadcrumbs on CoursePage and AssignmentPage. Pattern: Courses → Course Name → Assignment Name. Each segment is a link except the current page.
+
+**Cross-linking:** Every dead end in v2.0 now connects somewhere:
+- Dashboard course list → `/courses/:id`
+- Dashboard "Due Soon" items → assignment detail (or course page if no assignment data)
+- Activity Stream items → "View feedback" / "View assignment" links inside expanded cards
+- Grade marks with assignment data → clickable to assignment detail pages
+- Search results → navigate to course detail page
+- "Continue Course" button → course detail page
+- Compose button → opens a compose modal
+
+**Compose Modal (New):** Slide-over modal with To, Course (dropdown), Subject, and Message fields. Includes a "This is a prototype" disclaimer. Triggered by the Compose button on Messages page.
+
+**Class Schedule on Calendar (New):** Calendar side panel now shows class blocks derived from course schedule data. Classes appear under a "Classes" heading when a day is selected, separate from events/deadlines. Shows course name, time range, and room number.
+
+**GBC Logo:** Replaced text-based "George Brown College" header in sidebar with the actual GBC logo image (`/public/gbc-logo.png`), displayed in white using CSS filters (`brightness-0 invert`).
+
+**Footer Update:** Footer now shows "James Ibitoye" as a clickable link to the portfolio website. Opens in a new tab.
+
+**More Activity Items:** Added 3 new activity stream items (CE grade release, IS presentation reminder, VD grade release) for a richer, more realistic stream.
+
+**Spacing Pass:** Increased main content padding differentiation (px-8 py-7), added 0.5 spacing between sidebar nav items for better visual rhythm.
+
+---
+
 ## Tradeoffs & Known Limitations
 
 | Item | Status | Notes |
@@ -172,6 +203,8 @@ A running record of intentional design choices, tradeoffs, and rationale. Useful
 | Week/Day calendar views | Stub | Complex to implement; stubbed gracefully |
 | Communities / Resources / Tools | Stub | Out of scope for portfolio prototype |
 | Reply in Messages | Visual only | Prototype — not functional |
+| Compose modal | Visual only | Form renders, no actual send |
+| File upload in assignment | Visual only | Upload area renders, no actual upload |
 | Module data for 4 courses | Missing | Only 2D and IS have detailed modules |
 | Real authentication | N/A | Prototype only |
 | Mobile responsiveness | Not tested | Desktop-first, matching Figma |

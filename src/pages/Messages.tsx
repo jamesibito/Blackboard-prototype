@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { messages, getCourse } from '../data/mockData'
 import type { Message } from '../data/mockData'
 import { Mail, Star, Reply, Inbox } from '../components/Icons'
+import ComposeModal from '../components/ComposeModal'
 
 const tagConfig = {
   assignment:    { label: 'Assignment',    color: '#F97316', bg: '#F9731618' },
@@ -18,6 +19,7 @@ export default function Messages() {
   const [read, setRead] = useState<Set<string>>(
     new Set(messages.filter(m => m.isRead).map(m => m.id))
   )
+  const [composeOpen, setComposeOpen] = useState(false)
 
   const selected = messages.find(m => m.id === selectedId)!
 
@@ -48,7 +50,10 @@ export default function Messages() {
             {unreadCount > 0 ? `${unreadCount} unread` : 'All caught up'}
           </p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[13px] font-semibold transition-colors">
+        <button
+          onClick={() => setComposeOpen(true)}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[13px] font-semibold transition-colors"
+        >
           <Mail size={14} />
           Compose
         </button>
@@ -219,6 +224,8 @@ export default function Messages() {
           </div>
         </div>
       </div>
+
+      {composeOpen && <ComposeModal onClose={() => setComposeOpen(false)} />}
     </div>
   )
 }

@@ -30,14 +30,17 @@ export default function Sidebar() {
         </div>
         {/* Subtle radial glow in corner */}
         <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-white/[0.06]" />
-        <div className="text-white text-center pl-3 relative z-10">
-          <div className="text-[11px] font-bold tracking-[0.12em] uppercase leading-tight">George Brown</div>
-          <div className="text-[9px] tracking-[0.2em] uppercase opacity-70 mt-0.5">College</div>
+        <div className="relative z-10 pl-3 flex items-center gap-2.5">
+          <img
+            src="/gbc-logo.png"
+            alt="George Brown College"
+            className="h-9 w-auto brightness-0 invert opacity-95"
+          />
         </div>
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 py-3 overflow-y-auto">
+      <nav className="flex-1 py-3 overflow-y-auto space-y-0.5">
         {navItems.map(item => (
           <NavLink
             key={item.to}
