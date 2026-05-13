@@ -2,6 +2,7 @@ import { Outlet, useLocation } from 'react-router-dom'
 import Sidebar from './Sidebar'
 import TopBar from './TopBar'
 import ToastContainer from './ToastContainer'
+import DemoBanner from './DemoBanner'
 
 export default function Layout() {
   const location = useLocation()
@@ -13,6 +14,7 @@ export default function Layout() {
 
       <Sidebar />
       <div className="ml-[220px] flex flex-col min-h-screen">
+        <DemoBanner />
         <TopBar />
         {/* key={pathname} causes remount on route change → triggers page-enter animation */}
         <main
