@@ -44,8 +44,8 @@ export default function Sidebar() {
         </div>
         {/* Subtle corner glow for depth */}
         <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-white/[0.06]" />
-        <div className="relative z-10 pl-3 flex items-center gap-2.5">
-          <img src="/gbc-logo.png" alt="George Brown College" className="h-9 w-auto" />
+        <div className="relative z-10 flex items-center justify-center w-full px-4">
+          <img src="/gbc-logo.png" alt="George Brown College" className="w-full h-auto object-contain" style={{ maxHeight: 52 }} />
         </div>
       </div>
 
