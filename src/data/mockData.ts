@@ -1423,7 +1423,7 @@ export function getNextClass(): {
 
   for (const block of classBlocks) {
     const blockStart = block.dayOfWeek * 24 * 60 + block.startHour * 60
-    if (blockStart <= nowInWeek) continue  // class already started or passed
+    if (blockStart <= nowInWeek) continue
 
     const minutesUntil = blockStart - nowInWeek
     if (!closest || minutesUntil < closest.minutesUntil) {
@@ -1436,4 +1436,57 @@ export function getNextClass(): {
     }
   }
   return closest
+}
+
+/**
+ * getTodayClasses — all class blocks scheduled for the demo day (Wednesday),
+ * each annotated with status relative to 8:45 AM.
+ *   'upcoming' = starts within 3 h  |  'later' = later today  |  'done' = already over
+ */
+export interface TodayClass {
+  course: Course
+  startHour: number
+  endHour: number
+  room: string
+  status: 'upcoming' | 'later' | 'done'
+  minutesUntil: number   // negative if done
+}
+
+export function getTodayClasses(): TodayClass[] {
+  const DEMO_DOW = 3
+  const DEMO_MIN = 8 * 60 + 45   // 8:45 AM
+
+  return classBlocks
+    .filter(b => b.dayOfWeek === DEMO_DOW)
+    .map(b => {
+      const startMin = b.startHour * 60
+      const endMin   = b.endHour   * 60
+      const minutesUntil = startMin - DEMO_MIN
+      let status: TodayClass['status']
+      if (DEMO_MIN >= endMin)      status = 'done'
+      else if (minutesUntil <= 180) status = 'upcoming'   // within 3 h
+      else                          status = 'later'
+      return {
+        course: courses.find(c => c.id === b.courseId)!,
+        startHour: b.startHour,
+        endHour: b.endHour,
+        room: b.room,
+        status,
+        minutesUntil,
+      }
+    })
+    .sort((a, b) => a.startHour - b.startHour)
+}
+
+/**
+ * getSemesterStats — four at-a-glance numbers for the stats strip.
+ */
+export function getSemesterStats() {
+  const avgGrade         = getOverallGPA()
+  const submittedCount   = assignments.filter(a => a.status === 'submitted' || a.status === 'graded').length
+  const modulesComplete  = courses.reduce((s, c) => s + c.completedModules, 0)
+  const modulesTotal     = courses.reduce((s, c) => s + c.moduleCount, 0)
+  // Demo "today" is Dec 14; winter break starts Dec 23
+  const daysToBreak      = 23 - 14
+  return { avgGrade, submittedCount, modulesComplete, modulesTotal, daysToBreak }
 }
