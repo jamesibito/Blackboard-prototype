@@ -129,6 +129,12 @@ export default function Grades() {
         </div>
       </div>
 
+      {/* ── Expand hint ── */}
+      <p className="text-[11px] text-gray-400 dark:text-gray-500 mb-4 flex items-center gap-1">
+        <Eye size={12} />
+        <span>Click any card to expand full mark breakdown · Use the eye icon above to hide all grades</span>
+      </p>
+
       {/* ── Course grade cards ── */}
       <div className="grid grid-cols-3 gap-5">
         {grades.map(g => {

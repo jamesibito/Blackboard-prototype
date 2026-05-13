@@ -10,6 +10,7 @@ import CoursePage from './pages/CoursePage'
 import AssignmentPage from './pages/AssignmentPage'
 import Messages from './pages/Messages'
 import Notifications from './pages/Notifications'
+import Resources from './pages/Resources'
 
 export default function App() {
   return (
@@ -27,7 +28,7 @@ export default function App() {
           <Route path="/notifications"                       element={<Notifications />} />
           {/* Stubs for remaining nav items */}
           <Route path="/communities"     element={<Placeholder title="Communities" description="Discussion boards and study groups for your courses." />} />
-          <Route path="/resources"       element={<Placeholder title="Resources" description="Library access, writing centre, tutoring, and more." />} />
+          <Route path="/resources"       element={<Resources />} />
           <Route path="/tools"           element={<Placeholder title="Tools" description="Turnitin, Zoom, Office 365, and other integrated tools." />} />
         </Route>
       </Routes>
