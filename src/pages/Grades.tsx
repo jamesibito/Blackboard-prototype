@@ -205,64 +205,63 @@ export default function Grades() {
               }`}
               onClick={() => setExpandedId(isExpanded ? null : g.courseId)}
             >
-              <div className="h-1 w-full" style={{ background: course.color }} />
+              {/* Thin colour stripe */}
+              <div className="h-0.5 w-full" style={{ background: course.color }} />
 
-              <div className="p-6">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1 min-w-0 pr-4">
+              <div className="p-4">
+                {/* Course header row */}
+                <div className="flex items-center justify-between gap-3 mb-3">
+                  <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5">
-                      <h3 className="font-bold text-[15px] text-gray-900 dark:text-gray-100 truncate">{course.name}</h3>
-                      <ChevronRight size={13} className={`text-gray-400 shrink-0 transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`} />
+                      <h3 className="font-bold text-[14px] text-gray-900 dark:text-gray-100 truncate">{course.name}</h3>
+                      <ChevronRight size={12} className={`text-gray-400 shrink-0 transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`} />
                     </div>
-                    <p className="text-[12px] text-gray-400 dark:text-gray-500 mt-1">{course.code}</p>
-                    <p className="text-[12px] text-gray-400 dark:text-gray-500 mt-0.5">{course.instructor}</p>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <p className="text-[11px] text-gray-400 dark:text-gray-500">{course.code}</p>
+                      {!hideGrades && (
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: `${letterColor}15`, color: letterColor }}>
+                          {letter}
+                        </span>
+                      )}
+                    </div>
                   </div>
                   {hideGrades ? (
-                    <div className="w-14 h-14 rounded-xl bg-gray-100 dark:bg-[#232d42] shrink-0" />
+                    <div className="w-11 h-11 rounded-xl bg-gray-100 dark:bg-[#232d42] shrink-0" />
                   ) : (
-                    <CircleProgress percentage={g.percentage} color={course.color} size={56} />
+                    <CircleProgress percentage={g.percentage} color={course.color} size={44} />
                   )}
                 </div>
 
-                {!hideGrades && (
-                  <div className="mb-4">
-                    <span className="text-[12px] font-bold px-2.5 py-1 rounded-lg" style={{ background: `${letterColor}15`, color: letterColor }}>
-                      {letter}
-                    </span>
-                  </div>
-                )}
-
-                <div className="pt-4 border-t border-gray-100 dark:border-[#2D3A52]">
-                  <h4 className="text-[11px] font-semibold text-gray-400 dark:text-gray-500 mb-3 uppercase tracking-wide">
-                    {isFall ? 'Recent marks' : 'Final marks'}
-                  </h4>
-
+                {/* Marks section */}
+                <div className="pt-3 border-t border-gray-100 dark:border-[#2D3A52]">
                   {isExpanded ? (
-                    <div className="space-y-3">
+                    <div className="space-y-2.5">
+                      <h4 className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2">
+                        {isFall ? 'Recent marks' : 'Final marks'}
+                      </h4>
                       {g.marks.map((m, i) => {
                         const pct = Math.round((m.score / m.total) * 100)
                         const inner = (
                           <>
-                            <div className="flex items-center justify-between mb-1.5">
-                              <span className="text-[12px] text-gray-700 dark:text-gray-300 truncate flex-1 mr-3 leading-snug">{m.name}</span>
-                              <span className="text-[12px] font-bold tabular-nums shrink-0" style={{ color: course.color }}>
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-[11.5px] text-gray-700 dark:text-gray-300 truncate flex-1 mr-3 leading-snug">{m.name}</span>
+                              <span className="text-[11.5px] font-bold tabular-nums shrink-0" style={{ color: course.color }}>
                                 {hideGrades ? '—' : `${m.score}/${m.total}`}
                               </span>
                             </div>
                             {!hideGrades && (
-                              <div className="h-1.5 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+                              <div className="h-1 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
                                 <div className="h-full rounded-full" style={{ width: `${pct}%`, background: course.color, opacity: 0.65 }} />
                               </div>
                             )}
                           </>
                         )
-                        // Fall 2022 marks can link to assignment pages; Winter 2022 cannot
                         return (isFall && m.assignmentId) ? (
                           <Link
                             key={i}
                             to={`/courses/${g.courseId}/assignments/${m.assignmentId}`}
                             onClick={e => e.stopPropagation()}
-                            className="block -mx-2 px-2 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors"
+                            className="block -mx-1.5 px-1.5 py-1.5 rounded-lg hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors"
                           >
                             {inner}
                           </Link>
@@ -272,16 +271,9 @@ export default function Grades() {
                       })}
                     </div>
                   ) : (
-                    <div className="space-y-3">
-                      {[85, 72, 60, 45, 30].slice(0, g.marks.length).map((w, i) => (
-                        <div key={i} className="flex items-center gap-2">
-                          <div className="h-2 rounded-full bg-gray-100 dark:bg-[#232d42] flex-1">
-                            <div className="h-full rounded-full bg-gray-200 dark:bg-[#2D3A52]" style={{ width: `${w}%` }} />
-                          </div>
-                          <div className="w-8 h-2 rounded bg-gray-100 dark:bg-[#232d42]" />
-                        </div>
-                      ))}
-                    </div>
+                    <p className="text-[11px] text-gray-400 dark:text-gray-500">
+                      {g.marks.length} mark{g.marks.length !== 1 ? 's' : ''} · tap to expand
+                    </p>
                   )}
                 </div>
               </div>

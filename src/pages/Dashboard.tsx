@@ -93,6 +93,7 @@ export default function Dashboard() {
                         ? `${nextClass.minutesUntil} min`
                         : `${Math.round(nextClass.minutesUntil / 60)}h`}
                     </strong>
+                    <span className="text-blue-200"> · {nextClass.room}</span>
                   </span>
                 </Link>
               )}
@@ -672,22 +673,25 @@ function DeadlineTimeline() {
   const sorted = [...dueSoon].sort((a, b) => parseDayNum(a.dueDay) - parseDayNum(b.dueDay))
 
   return (
-    <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] px-5 py-4">
-      <div className="flex items-center justify-between mb-4">
+    <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] px-5 py-3">
+      {/* Header with divider */}
+      <div className="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-[#2D3A52]">
         <h2 className="font-semibold text-[14px] text-gray-900 dark:text-gray-100">Upcoming Deadlines</h2>
         <Link to="/calendar" className="text-[12px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline">
           Open calendar
         </Link>
       </div>
 
-      <div className="relative pt-2">
-        <div className="absolute left-0 right-0 top-[26px] h-px bg-gray-100 dark:bg-[#2D3A52]" />
-        <div className="flex items-start justify-between pb-1">
+      {/* Timeline — mx-4 keeps nodes away from card edges */}
+      <div className="relative pt-3 mx-4">
+        <div className="absolute left-0 right-0 top-[29px] h-px bg-gray-100 dark:bg-[#2D3A52]" />
+        <div className="flex items-start justify-between pb-2">
+
           {/* Today marker */}
-          <div className="flex flex-col items-center gap-1.5 shrink-0">
-            <div className="w-4 h-4 rounded-full bg-[#2563EB] ring-4 ring-[#2563EB]/20 relative z-10" />
-            <span className="text-[10px] font-bold text-[#2563EB] dark:text-[#60A5FA] uppercase tracking-wide">Today</span>
-            <span className="text-[10px] text-gray-400">Dec {TODAY_DAY}</span>
+          <div className="flex flex-col items-center gap-1 shrink-0">
+            <div className="w-3.5 h-3.5 rounded-full bg-[#2563EB] ring-[3px] ring-[#2563EB]/20 relative z-10" />
+            <span className="text-[9px] font-bold text-[#2563EB] dark:text-[#60A5FA] uppercase tracking-wide mt-0.5">Today</span>
+            <span className="text-[9px] text-gray-400">Dec {TODAY_DAY}</span>
           </div>
 
           {sorted.map(d => {
@@ -699,22 +703,21 @@ function DeadlineTimeline() {
             const daysOut    = dayNum - TODAY_DAY
 
             return (
-              <Link key={d.id} to={linkTarget} className="flex flex-col items-center gap-1.5 shrink-0 group">
+              <Link key={d.id} to={linkTarget} className="flex flex-col items-center gap-1 shrink-0 group">
                 <div
-                  className="w-4 h-4 rounded-full relative z-10 ring-2 transition-all group-hover:scale-110"
-                  style={{ background: course.color, outline: `3px solid ${course.color}30`, outlineOffset: '2px' }}
+                  className="w-3.5 h-3.5 rounded-full relative z-10 transition-transform group-hover:scale-110"
+                  style={{ background: course.color, boxShadow: `0 0 0 3px ${course.color}25` }}
                 />
                 <span
-                  className="text-[11px] font-semibold text-gray-800 dark:text-gray-200 group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors text-center max-w-[84px] leading-tight"
-                  style={{ minHeight: 30, display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}
+                  className="text-[10.5px] font-semibold text-gray-800 dark:text-gray-200 group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors text-center max-w-[80px] leading-tight mt-0.5"
+                  style={{ minHeight: 28, display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}
                 >
                   {d.title}
                 </span>
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded" style={{ background: `${course.color}18`, color: course.color }}>
+                <span className="text-[9px] font-bold px-1.5 py-0.5 rounded" style={{ background: `${course.color}18`, color: course.color }}>
                   {course.abbr}
                 </span>
-                <span className="text-[10px] text-gray-400 dark:text-gray-500">Dec {dayNum}</span>
-                <span className="text-[9px] text-gray-400 dark:text-gray-500">in {daysOut}d</span>
+                <span className="text-[9px] text-gray-400 dark:text-gray-500 tabular-nums">Dec {dayNum} · {daysOut}d</span>
               </Link>
             )
           })}
