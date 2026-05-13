@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ChevronRight, FileText, ImageIcon, Clock, CheckCircle, TrendingUp } from '../components/Icons'
+import { ChevronRight, Clock, CheckCircle, TrendingUp, MessageCircle } from '../components/Icons'
 import { courses, dueSoon, grades, activityItems, getCourse, getOverallGPA, getNextClass } from '../data/mockData'
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -29,16 +29,6 @@ function CircleProgress({ percentage, color, size = 48 }: { percentage: number; 
       </svg>
       <span className="absolute text-[10px] font-bold tabular-nums" style={{ color }}>{percentage}%</span>
     </div>
-  )
-}
-
-function FileChip({ name }: { name: string }) {
-  const isImage = name.match(/\.(jpg|png|gif)$/i)
-  return (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] bg-gray-100 dark:bg-[#232d42] text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-[#2D3A52] font-medium">
-      {isImage ? <ImageIcon size={10} /> : <FileText size={10} />}
-      {name}
-    </span>
   )
 }
 
@@ -170,14 +160,18 @@ export default function Dashboard() {
                     <span className="text-[11px] text-gray-400 dark:text-gray-500 shrink-0">{c.instructor.split(' ')[1]}</span>
                   </div>
                   <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{c.code}</p>
-                  {c.files.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mt-1.5">
-                      {c.files.slice(0, 2).map(f => <FileChip key={f} name={f} />)}
-                      {c.files.length > 2 && (
-                        <span className="text-[11px] text-gray-400 dark:text-gray-500">+{c.files.length - 2} more</span>
-                      )}
+                  {/* Completion bar + resource count */}
+                  <div className="mt-2 flex items-center gap-2">
+                    <div className="flex-1 h-1 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                      <div className="h-full rounded-full" style={{ width: `${c.completion}%`, background: c.color }} />
                     </div>
-                  )}
+                    <span className="text-[10px] text-gray-400 dark:text-gray-500 shrink-0 tabular-nums">{c.completion}%</span>
+                    {c.resources && c.resources.length > 0 && (
+                      <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-gray-100 dark:bg-[#232d42] text-gray-500 dark:text-gray-400 shrink-0 font-medium">
+                        {c.resources.length} files
+                      </span>
+                    )}
+                  </div>
                 </div>
               </Link>
             ))}
@@ -217,7 +211,12 @@ export default function Dashboard() {
                         <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase tracking-wide font-medium">{d.dueDay}</p>
                       </div>
                     </div>
-                    <div className="w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-600 shrink-0" />
+                    <div
+                      className="px-2 py-0.5 rounded-lg text-[10px] font-bold text-white shrink-0"
+                      style={{ background: course.color }}
+                    >
+                      {course.abbr}
+                    </div>
                   </Link>
                 )
               })}
@@ -292,27 +291,21 @@ export default function Dashboard() {
       </div>
 
       {/* Bottom row: Quick stats */}
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid grid-cols-2 gap-5">
         <StatCard
           label="Assignments Completed"
-          value="12"
+          value="12 / 18"
           sub="this semester"
           icon={<CheckCircle size={18} className="text-emerald-500" />}
           accent="#22C55E"
         />
         <StatCard
-          label="Upcoming Deadlines"
-          value={String(dueSoon.length)}
-          sub="in the next 7 days"
-          icon={<Clock size={18} className="text-amber-500" />}
-          accent="#F59E0B"
-        />
-        <StatCard
-          label="Semester Average"
-          value={`${overallGPA}%`}
-          sub="across all courses"
-          icon={<TrendingUp size={18} className="text-[#2563EB]" />}
+          label="Unread Messages"
+          value="2"
+          sub="new in your inbox"
+          icon={<MessageCircle size={18} className="text-[#2563EB]" />}
           accent="#2563EB"
+          linkTo="/messages"
         />
       </div>
     </div>
@@ -451,11 +444,11 @@ function MiniCalendar() {
 
 // ─── Stat Card ────────────────────────────────────────────────────────────────
 
-function StatCard({ label, value, sub, icon, accent }: {
-  label: string; value: string; sub: string; icon: React.ReactNode; accent: string
+function StatCard({ label, value, sub, icon, accent, linkTo }: {
+  label: string; value: string; sub: string; icon: React.ReactNode; accent: string; linkTo?: string
 }) {
-  return (
-    <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] px-5 py-4 flex items-center gap-4">
+  const inner = (
+    <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] px-5 py-4 flex items-center gap-4 transition-shadow hover:shadow-sm">
       <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
         style={{ background: `${accent}15` }}>
         {icon}
@@ -467,4 +460,5 @@ function StatCard({ label, value, sub, icon, accent }: {
       </div>
     </div>
   )
+  return linkTo ? <Link to={linkTo}>{inner}</Link> : inner
 }

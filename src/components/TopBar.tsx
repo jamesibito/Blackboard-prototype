@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Search, Sun, Moon, Bell, ChevronDown, X } from './Icons'
 import { useTheme } from '../context/ThemeContext'
-import { user, courses, notifications, getCourse } from '../data/mockData'
+import { user, courses, assignments, activityItems, notifications, getCourse } from '../data/mockData'
 
 // Colours to show in the notification dot for each type
 const typeColors: Record<string, string> = {
@@ -51,13 +51,27 @@ export default function TopBar() {
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [])
 
-  const searchResults = searchQuery.length > 1
+  const q = searchQuery.toLowerCase()
+  const courseResults = searchQuery.length > 1
     ? courses.filter(c =>
-        c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.instructor.toLowerCase().includes(searchQuery.toLowerCase())
+        c.name.toLowerCase().includes(q) ||
+        c.code.toLowerCase().includes(q) ||
+        c.instructor.toLowerCase().includes(q)
       )
     : []
+  const assignmentResults = searchQuery.length > 1
+    ? assignments.filter(a =>
+        a.title.toLowerCase().includes(q) ||
+        a.description.toLowerCase().includes(q)
+      ).slice(0, 4)
+    : []
+  const activityResults = searchQuery.length > 1
+    ? activityItems.filter(a =>
+        a.title.toLowerCase().includes(q) ||
+        a.body.toLowerCase().includes(q)
+      ).slice(0, 3)
+    : []
+  const hasResults = courseResults.length > 0 || assignmentResults.length > 0 || activityResults.length > 0
 
   return (
     <header className="h-[64px] flex items-center justify-between px-6 bg-white dark:bg-[#131825] border-b border-gray-100 dark:border-[#1E2A3F] shrink-0 relative z-20">
@@ -89,28 +103,91 @@ export default function TopBar() {
 
         {/* Search dropdown */}
         {searchFocused && searchQuery.length > 1 && (
-          <div className="absolute top-[calc(100%+6px)] left-0 w-full bg-white dark:bg-[#1A2236] border border-gray-200 dark:border-[#2D3A52] rounded-xl shadow-lg overflow-hidden z-50">
-            {searchResults.length > 0 ? (
+          <div className="absolute top-[calc(100%+6px)] left-0 w-full bg-white dark:bg-[#1A2236] border border-gray-200 dark:border-[#2D3A52] rounded-xl shadow-lg overflow-hidden z-50 max-h-[420px] overflow-y-auto">
+            {hasResults ? (
               <>
-                <div className="px-3 py-2 text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">
-                  Courses
-                </div>
-                {searchResults.map(c => (
-                  <button
-                    key={c.id}
-                    className="flex items-center gap-3 w-full px-3 py-2.5 hover:bg-gray-50 dark:hover:bg-[#232d42] transition text-left"
-                    onClick={() => { setSearchQuery(''); setSearchFocused(false); navigate(`/courses/${c.id}`) }}
-                  >
-                    <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-[11px] font-bold shrink-0"
-                      style={{ background: c.color }}>
-                      {c.abbr}
+                {/* Courses */}
+                {courseResults.length > 0 && (
+                  <>
+                    <div className="px-3 pt-2.5 pb-1 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+                      Courses
                     </div>
-                    <div>
-                      <p className="text-[13px] font-medium text-gray-900 dark:text-gray-100">{c.name}</p>
-                      <p className="text-[11px] text-gray-400 dark:text-gray-500">{c.code} · {c.instructor}</p>
+                    {courseResults.map(c => (
+                      <button
+                        key={c.id}
+                        className="flex items-center gap-3 w-full px-3 py-2.5 hover:bg-gray-50 dark:hover:bg-[#232d42] transition text-left"
+                        onClick={() => { setSearchQuery(''); setSearchFocused(false); navigate(`/courses/${c.id}`) }}
+                      >
+                        <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-[11px] font-bold shrink-0"
+                          style={{ background: c.color }}>
+                          {c.abbr}
+                        </div>
+                        <div>
+                          <p className="text-[13px] font-medium text-gray-900 dark:text-gray-100">{c.name}</p>
+                          <p className="text-[11px] text-gray-400 dark:text-gray-500">{c.code} · {c.instructor}</p>
+                        </div>
+                      </button>
+                    ))}
+                  </>
+                )}
+
+                {/* Assignments */}
+                {assignmentResults.length > 0 && (
+                  <>
+                    <div className={`px-3 pb-1 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider ${courseResults.length > 0 ? 'pt-2 border-t border-gray-100 dark:border-[#2D3A52]' : 'pt-2.5'}`}>
+                      Assignments
                     </div>
-                  </button>
-                ))}
+                    {assignmentResults.map(a => {
+                      const course = getCourse(a.courseId)
+                      return (
+                        <button
+                          key={a.id}
+                          className="flex items-center gap-3 w-full px-3 py-2.5 hover:bg-gray-50 dark:hover:bg-[#232d42] transition text-left"
+                          onClick={() => { setSearchQuery(''); setSearchFocused(false); navigate(`/courses/${a.courseId}/assignments/${a.id}`) }}
+                        >
+                          <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-[11px] font-bold shrink-0"
+                            style={{ background: course.color }}>
+                            {course.abbr}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-[13px] font-medium text-gray-900 dark:text-gray-100 truncate">{a.title}</p>
+                            <p className="text-[11px] text-gray-400 dark:text-gray-500 truncate">{course.name} · Due {a.dueDate}</p>
+                          </div>
+                        </button>
+                      )
+                    })}
+                  </>
+                )}
+
+                {/* Activity stream */}
+                {activityResults.length > 0 && (
+                  <>
+                    <div className={`px-3 pb-1 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider ${(courseResults.length > 0 || assignmentResults.length > 0) ? 'pt-2 border-t border-gray-100 dark:border-[#2D3A52]' : 'pt-2.5'}`}>
+                      Activity Stream
+                    </div>
+                    {activityResults.map(a => {
+                      const course = a.courseId ? getCourse(a.courseId) : undefined
+                      return (
+                        <button
+                          key={a.id}
+                          className="flex items-center gap-3 w-full px-3 py-2.5 hover:bg-gray-50 dark:hover:bg-[#232d42] transition text-left"
+                          onClick={() => { setSearchQuery(''); setSearchFocused(false); navigate('/activity-stream') }}
+                        >
+                          <div
+                            className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-[11px] font-bold shrink-0"
+                            style={{ background: course ? course.color : '#1B3F89' }}
+                          >
+                            {course ? course.abbr : 'GBC'}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-[13px] font-medium text-gray-900 dark:text-gray-100 truncate">{a.title}</p>
+                            <p className="text-[11px] text-gray-400 dark:text-gray-500">{a.date}</p>
+                          </div>
+                        </button>
+                      )
+                    })}
+                  </>
+                )}
               </>
             ) : (
               <div className="px-4 py-5 text-center text-[13px] text-gray-400 dark:text-gray-500">

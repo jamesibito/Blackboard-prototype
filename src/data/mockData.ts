@@ -244,7 +244,7 @@ export const courses: Course[] = [
     files: [],
     description: 'Orthographic projection, isometric drawing, and dimensional annotation. Students use manual and digital drafting tools to produce technical documentation.',
     credits: 2, schedule: 'Thu  1:00 PM – 4:00 PM', room: 'SFC C204',
-    completion: 97, moduleCount: 9, completedModules: 9,
+    completion: 97, moduleCount: 9, completedModules: 8,
     lastActivity: 'Today',
     zoomLink: 'https://georgebrown.zoom.us/j/77614829304',
     resources: [
@@ -348,11 +348,13 @@ export const grades: CourseGrade[] = [
 
 // ─── Due Soon ─────────────────────────────────────────────────────────────────
 
+// Due dates are all after the demo "today" of Dec 14, 2022 so the deadline
+// timeline and Due Soon widget show upcoming (not past) items.
 export const dueSoon: DueItem[] = [
-  { id: 'ds1', courseId: 'VD', title: 'User Manual', dueDay: 'WEDNESDAY, DEC 7TH', type: 'assignment' },
-  { id: 'ds2', courseId: 'CE', title: 'Research Proposal', dueDay: 'THURSDAY, DEC 8TH', type: 'assignment', assignmentId: 'asgn-ce-3' },
-  { id: 'ds3', courseId: 'TD', title: 'Rendering Pin-up', dueDay: 'FRIDAY, DEC 9TH', type: 'project' },
-  { id: 'ds4', courseId: '2D', title: 'Branding Guide', dueDay: 'MONDAY, DEC 12TH', type: 'assignment' },
+  { id: 'ds1', courseId: 'IS', title: 'Final Presentation',  dueDay: 'THURSDAY, DEC 15TH',  type: 'assignment' },
+  { id: 'ds2', courseId: 'VD', title: 'User Manual Revision', dueDay: 'FRIDAY, DEC 16TH',    type: 'assignment' },
+  { id: 'ds3', courseId: 'IA', title: 'Final Sitemap',        dueDay: 'TUESDAY, DEC 20TH',   type: 'project' },
+  { id: 'ds4', courseId: '2D', title: 'Final Project Brief',  dueDay: 'WEDNESDAY, DEC 21ST', type: 'assignment' },
 ]
 
 // ─── Activity Stream ───────────────────────────────────────────────────────────
@@ -412,6 +414,7 @@ export const activityItems: ActivityItem[] = [
   },
 
   // ── College-wide announcements (no courseId — not tied to any specific course) ──
+  // Includes school admin notices AND campus events like competitions, seminars, career fairs.
 
   {
     id: 'a10', title: 'OSAP Deadline Reminder',
@@ -432,6 +435,21 @@ export const activityItems: ActivityItem[] = [
     id: 'a13', title: 'Library Extended Hours – Exam Season',
     date: '6th Dec 2022', timeRange: '7 AM – 8 AM', type: 'announcement',
     body: 'The Ryerson & Polytechnic Library at the St. James campus will be open extended hours during the December exam period: Monday–Friday 7 AM – 11 PM, Saturday–Sunday 9 AM – 9 PM. Quiet study rooms can be booked through the library portal up to 48 hours in advance.',
+  },
+  {
+    id: 'a14', title: 'GBC Design Hackathon 2023 – Registration Open',
+    date: '13th Dec 2022', timeRange: '12 PM – 1 PM', type: 'announcement',
+    body: 'George Brown\'s annual 48-hour Design Hackathon returns January 20–22, 2023. Teams of 2–4 students tackle a real brief from a local non-profit partner. Prizes include industry mentorship, portfolio features, and $500 in design software credits. Register by January 10th via the Student Life portal. All programs welcome.',
+  },
+  {
+    id: 'a15', title: 'Winter Career Fair – On-Campus Recruiting',
+    date: '10th Dec 2022', timeRange: '9 AM – 10 AM', type: 'announcement',
+    body: 'The Winter 2023 Career Fair will be held February 2nd in the Student Centre Atrium, 10 AM – 4 PM. Over 40 design, tech, and media studios will be recruiting for co-op, internship, and full-time positions. Bring printed portfolios and business cards. Register at georgebrown.ca/careerfair to receive a pre-event studio list.',
+  },
+  {
+    id: 'a16', title: 'UX Research Seminar Series – Session 2',
+    date: '7th Dec 2022', timeRange: '3 PM – 4 PM', type: 'announcement',
+    body: 'The Centre for Arts, Design & Information Technology is hosting its second UX Research Seminar on January 18th, 5:30–7:30 PM in room D301. Guest speaker: Maya Osei, Senior UX Researcher at Shopify, presenting "Mixed Methods in Practice: When to Qual, When to Quant." Free for all GBC students. RSVP via Eventbrite.',
   },
 ]
 
