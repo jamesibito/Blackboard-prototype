@@ -10,11 +10,11 @@
 
 Blackboard is the LMS used by most Canadian colleges and universities — including George Brown, where I attend. Students live inside it for every class, every deadline, every grade. But the actual product is dense, slow, and reactive: it tells you what's already happened instead of helping you decide what to do next.
 
-This prototype reimagines what that experience could feel like for **Kevin H.**, a Year 1 Semester 2 design student trying to wrap up his Fall 2022 term. The goal wasn't to redesign every screen — it was to redesign the screens a student actually *uses*: dashboard, course pages, assignments, grades, messages, and the calendar.
+This prototype reimagines what that experience could feel like for **Kevin H.**, a 2nd-year design student (Year 2, Semester 1) trying to wrap up his Fall 2022 term. The goal wasn't to redesign every screen — it was to redesign the screens a student actually *uses*: dashboard, course pages, assignments, grades, messages, and the calendar.
 
 ## The student persona
 
-**Kevin H.** — Year 1 Semester 2, Interaction Design program, George Brown College
+**Kevin H.** — Year 2, Semester 1, Interaction Design program, George Brown College
 - 6 active Fall 2022 courses (2D Visualization, Interactive Systems, Information Architecture, Visual Design, College English, Technical Drawing)
 - Demo "today" pinned to **Wednesday, December 14, 2022 at 8:45 AM**, the week before finals
 - Submission history across 8 assignments, real instructor feedback threads, grade breakdowns
@@ -113,4 +113,4 @@ Full history lives on the branches at `github.com/jamesibito/Blackboard-prototyp
 
 This is a **student portfolio project**. It is **not affiliated with Blackboard** (or its parent Anthology), **George Brown College**, or any of the third-party tools referenced inside the demo (Turnitin, Zoom, Figma, etc.). All logos and trademarks belong to their respective owners. Any teacher names, student names, and grades are entirely fictional.
 
-Built by [James Ibitoye](https://jamesibitoye.framer.website) · `planet.lade@gmail.com`
+Built by [James Ibitoye](https://jamesibitoye.framer.website)

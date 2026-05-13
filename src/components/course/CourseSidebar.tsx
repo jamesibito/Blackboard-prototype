@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import type { Course, CourseGrade, ActivityItem } from '../../data/mockData'
 import type { LetterGrade } from '../../utils/grades'
-import { FileText, ClipboardList, Award, Megaphone } from '../Icons'
+import { FileText, ClipboardList, Award, Megaphone, Download } from '../Icons'
 
 interface Props {
   course: Course
@@ -82,8 +82,16 @@ export default function CourseSidebar({ course, courseGrade, lg, courseActivity 
       {/* Syllabus */}
       {course.syllabus && (
         <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden">
-          <div className="px-5 pt-5 pb-3">
-            <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Grading</h2>
+          <div className="px-5 pt-5 pb-3 flex items-center justify-between">
+            <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Syllabus</h2>
+            <button
+              onClick={() => window.alert('Syllabus PDF would open here in a production build.')}
+              className="flex items-center gap-1 text-[11px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline"
+              aria-label="Download course syllabus PDF"
+            >
+              <Download size={11} aria-hidden="true" />
+              PDF
+            </button>
           </div>
           <div className="px-5 pb-4 space-y-2">
             {course.syllabus.weights.map((w, i) => (

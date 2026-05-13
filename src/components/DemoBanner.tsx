@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { X } from './Icons'
+import { X, Info } from './Icons'
 
 // localStorage key — bump if the banner copy changes meaningfully
 const DISMISS_KEY = 'gbc-bb-demo-banner-dismissed-v1'
@@ -40,7 +40,7 @@ export default function DemoBanner() {
     >
       <div className="px-6 py-2.5 flex items-center justify-between gap-4 max-w-[1440px] mx-auto">
         <div className="flex items-start gap-3 flex-1 min-w-0">
-          <span className="text-[16px] leading-none shrink-0 mt-0.5" aria-hidden="true">👋</span>
+          <Info size={15} className="shrink-0 mt-0.5 text-blue-200" aria-hidden="true" />
           <p className="text-[12px] leading-snug">
             <strong className="font-semibold">This is a UX redesign prototype.</strong>
             {' '}

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { ChevronRight, Clock, TrendingUp } from '../components/Icons'
 import {
   courses, dueSoon, grades, activityItems, assignments,
-  getCourse, getOverallGPA, getNextClass, getTodayClasses, getSemesterStats,
+  getCourse, getOverallGPA, getNextClass, getTodayClasses,
 } from '../data/mockData'
 import { Skeleton, SkeletonText, SkeletonAvatar, SkeletonCard } from '../components/Skeleton'
 
@@ -55,68 +55,66 @@ export default function Dashboard() {
   return (
     <div className="space-y-5 max-w-[1200px]">
 
-      {/* ── Welcome Banner ── */}
-      <div className="relative bg-gradient-to-br from-[#1B3F89] via-[#1E4DA0] to-[#2563EB] rounded-2xl p-7 text-white overflow-hidden">
-        {/* Decorative circles */}
-        <div className="absolute -right-10 -top-10 w-48 h-48 rounded-full bg-white/[0.06] pointer-events-none" />
-        <div className="absolute right-20 -bottom-16 w-56 h-56 rounded-full bg-white/[0.04] pointer-events-none" />
-        <div className="absolute right-48 top-3 w-14 h-14 rounded-full bg-white/[0.07] pointer-events-none" />
-        <div className="absolute left-1/2 -bottom-8 w-32 h-32 rounded-full bg-white/[0.03] pointer-events-none" />
+      {/* ── Top row: Welcome Banner + Today's Schedule ── */}
+      <div className="flex gap-5 items-stretch">
 
-        <div className="relative z-10">
-          <h1 className="text-[26px] font-bold mb-1.5 tracking-tight">Welcome back, Kevin 👋</h1>
-          <p className="text-blue-100 text-[14px] leading-relaxed max-w-[440px]">
-            You have <span className="font-semibold text-white">{dueSoon.length}</span> assignments due this week.
-            Check the Activity Stream to stay on track.
-          </p>
+        {/* Welcome Banner — fills remaining width */}
+        <div className="relative flex-1 bg-gradient-to-br from-[#1B3F89] via-[#1E4DA0] to-[#2563EB] rounded-2xl p-6 text-white overflow-hidden min-w-0">
+          {/* Decorative circles */}
+          <div className="absolute -right-8 -top-8 w-40 h-40 rounded-full bg-white/[0.06] pointer-events-none" />
+          <div className="absolute right-16 -bottom-12 w-44 h-44 rounded-full bg-white/[0.04] pointer-events-none" />
+          <div className="absolute right-36 top-3 w-10 h-10 rounded-full bg-white/[0.07] pointer-events-none" />
 
-          {/* Row: overall average + next-class countdown + activity link */}
-          <div className="flex items-center gap-5 mt-4 flex-wrap">
-            <div className="flex items-center gap-1.5">
-              <TrendingUp size={14} className="text-blue-200" />
-              <span className="text-[13px] text-blue-100">Overall average: <strong className="text-white">{overallGPA}%</strong></span>
+          <div className="relative z-10 flex flex-col h-full">
+            <h1 className="text-[24px] font-bold mb-1.5 tracking-tight">Welcome back, Kevin</h1>
+            <p className="text-blue-100 text-[13.5px] leading-relaxed">
+              You have <span className="font-semibold text-white">{dueSoon.length}</span> assignments due soon.
+              Stay on top with the activity stream.
+            </p>
+
+            {/* Stats row */}
+            <div className="flex items-center gap-4 mt-4 flex-wrap">
+              <div className="flex items-center gap-1.5">
+                <TrendingUp size={13} className="text-blue-200" />
+                <span className="text-[12.5px] text-blue-100">Average: <strong className="text-white">{overallGPA}%</strong></span>
+              </div>
+
+              {nextClass && (
+                <Link
+                  to={`/courses/${nextClass.course.id}`}
+                  className="flex items-center gap-1.5 text-[12.5px] text-blue-100 hover:text-white transition-colors group"
+                >
+                  <Clock size={12} className="text-blue-300" />
+                  <span>
+                    <strong className="text-white group-hover:underline">{nextClass.course.abbr}</strong>
+                    {' '}in{' '}
+                    <strong className="text-white">
+                      {nextClass.minutesUntil < 60
+                        ? `${nextClass.minutesUntil} min`
+                        : `${Math.round(nextClass.minutesUntil / 60)}h`}
+                    </strong>
+                  </span>
+                </Link>
+              )}
             </div>
 
-            {nextClass && (
-              <Link
-                to={`/courses/${nextClass.course.id}`}
-                className="flex items-center gap-1.5 text-[13px] text-blue-100 hover:text-white transition-colors group"
-              >
-                <Clock size={13} className="text-blue-300" />
-                <span>
-                  Next class:{' '}
-                  <strong className="text-white group-hover:underline">{nextClass.course.name}</strong>
-                  {' '}in{' '}
-                  <strong className="text-white">
-                    {nextClass.minutesUntil < 60
-                      ? `${nextClass.minutesUntil} min`
-                      : `${Math.round(nextClass.minutesUntil / 60)}h`}
-                  </strong>
-                  {' '}· {nextClass.room}
-                </span>
-              </Link>
-            )}
-
-            <Link
-              to="/activity-stream"
-              className="flex items-center gap-1 text-[13px] font-semibold text-white/90 hover:text-white transition-colors ml-auto"
-            >
-              View activity <ChevronRight size={14} />
-            </Link>
+            {/* Priority card — inline at bottom of banner */}
+            <div className="mt-auto pt-4">
+              <PriorityCard compact />
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* ── Semester Stats strip ── */}
-      <SemesterStats />
+        {/* Today's Schedule — fixed width sidebar */}
+        <div className="w-[280px] shrink-0">
+          <TodaySchedule />
+        </div>
+      </div>
 
       {/* ── Deadline Timeline ── */}
       <DeadlineTimeline />
 
-      {/* ── Smart Priority Card ── */}
-      <PriorityCard />
-
-      {/* ── Main grid: Courses | Due Soon + Grades | Today + Calendar + Activity ── */}
+      {/* ── Main grid: Courses | Due Soon + Grades | Calendar + Activity ── */}
       <div className="grid grid-cols-[1fr_minmax(260px,0.65fr)_minmax(280px,0.75fr)] gap-5">
 
         {/* Courses */}
@@ -230,9 +228,8 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Right column: Today's Schedule + Mini Calendar + Activity */}
+        {/* Right column: Mini Calendar + Activity */}
         <div className="space-y-5">
-          <TodaySchedule />
           <MiniCalendar />
 
           {/* Activity Stream preview */}
@@ -281,30 +278,41 @@ function DashboardSkeleton() {
   return (
     <div className="space-y-5 max-w-[1200px]">
 
-      {/* Banner */}
-      <div className="bg-gray-200 dark:bg-[#1A2236] rounded-2xl p-7 animate-pulse">
-        <Skeleton className="h-7 w-56 mb-3" />
-        <Skeleton className="h-4 w-80 mb-6" />
-        <div className="flex gap-5">
-          <Skeleton className="h-4 w-36" />
-          <Skeleton className="h-4 w-48" />
+      {/* Top row: Banner + Today */}
+      <div className="flex gap-5">
+        <div className="flex-1 bg-gray-200 dark:bg-[#1A2236] rounded-2xl p-6 animate-pulse">
+          <Skeleton className="h-7 w-48 mb-3" />
+          <Skeleton className="h-4 w-72 mb-5" />
+          <div className="flex gap-4">
+            <Skeleton className="h-3.5 w-28" />
+            <Skeleton className="h-3.5 w-36" />
+          </div>
+          <div className="mt-4 pt-4">
+            <Skeleton className="h-10 w-full rounded-xl" />
+          </div>
         </div>
-      </div>
-
-      {/* Stats strip */}
-      <div className="grid grid-cols-4 gap-3">
-        {[...Array(4)].map((_, i) => (
-          <SkeletonCard key={i} className="px-4 py-3.5">
-            <div className="flex items-center gap-3">
-              <Skeleton className="w-8 h-8 rounded-xl shrink-0" />
-              <div className="flex-1 space-y-2">
-                <Skeleton className="h-2.5 w-16" />
-                <Skeleton className="h-5 w-12" />
-                <Skeleton className="h-2 w-24" />
+        {/* Today skeleton */}
+        <div className="w-[280px] shrink-0">
+          <SkeletonCard className="h-full">
+            <div className="flex items-center justify-between px-5 pt-5 pb-3">
+              <div className="space-y-1">
+                <Skeleton className="h-4 w-12" />
+                <Skeleton className="h-3 w-20" />
               </div>
+              <Skeleton className="h-3.5 w-20" />
             </div>
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="flex items-center gap-3 px-5 py-3 border-t border-gray-50 dark:border-[#232d42]">
+                <Skeleton className="w-2.5 h-2.5 rounded-full shrink-0" />
+                <div className="flex-1 space-y-1.5">
+                  <Skeleton className="h-3.5 w-32" />
+                  <Skeleton className="h-2.5 w-24" />
+                </div>
+                <Skeleton className="h-4 w-14 rounded-full" />
+              </div>
+            ))}
           </SkeletonCard>
-        ))}
+        </div>
       </div>
 
       {/* Deadline timeline */}
@@ -322,19 +330,6 @@ function DashboardSkeleton() {
               <Skeleton className="h-3 w-12" />
             </div>
           ))}
-        </div>
-      </SkeletonCard>
-
-      {/* Priority card */}
-      <SkeletonCard className="px-4 py-3.5">
-        <div className="flex items-center gap-3.5">
-          <Skeleton className="w-9 h-9 rounded-xl shrink-0" />
-          <div className="flex-1 space-y-2">
-            <Skeleton className="h-3 w-24" />
-            <Skeleton className="h-5 w-64" />
-            <Skeleton className="h-3 w-40" />
-          </div>
-          <Skeleton className="w-4 h-4 rounded shrink-0" />
         </div>
       </SkeletonCard>
 
@@ -398,26 +393,6 @@ function DashboardSkeleton() {
 
         {/* Right col */}
         <div className="space-y-5">
-          {/* Today */}
-          <SkeletonCard>
-            <div className="flex items-center justify-between px-5 pt-5 pb-3">
-              <div className="space-y-1">
-                <Skeleton className="h-4 w-12" />
-                <Skeleton className="h-3 w-20" />
-              </div>
-              <Skeleton className="h-3.5 w-20" />
-            </div>
-            {[...Array(2)].map((_, i) => (
-              <div key={i} className="flex items-center gap-3 px-5 py-3 border-t border-gray-50 dark:border-[#232d42]">
-                <Skeleton className="w-2.5 h-2.5 rounded-full shrink-0" />
-                <div className="flex-1 space-y-1.5">
-                  <Skeleton className="h-3.5 w-36" />
-                  <Skeleton className="h-2.5 w-28" />
-                </div>
-                <Skeleton className="h-4 w-14 rounded-full" />
-              </div>
-            ))}
-          </SkeletonCard>
           {/* Calendar */}
           <SkeletonCard className="p-5">
             <div className="flex items-center justify-between mb-4">
@@ -454,95 +429,39 @@ function DashboardSkeleton() {
   )
 }
 
-// ─── Semester Stats ───────────────────────────────────────────────────────────
-// Four quick-stat chips between the welcome banner and deadline timeline.
-
-function SemesterStats() {
-  const { avgGrade, submittedCount, modulesComplete, modulesTotal, daysToBreak } = getSemesterStats()
-
-  const stats = [
-    {
-      label: 'Semester avg',
-      value: `${avgGrade}%`,
-      sub: 'across 6 courses',
-      color: avgGrade >= 80 ? '#22C55E' : avgGrade >= 60 ? '#F97316' : '#EF4444',
-      icon: (
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /><polyline points="17 6 23 6 23 12" />
-        </svg>
-      ),
-    },
-    {
-      label: 'Submitted',
-      value: String(submittedCount),
-      sub: 'assignments handed in',
-      color: '#2563EB',
-      icon: (
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="20 6 9 17 4 12" />
-        </svg>
-      ),
-    },
-    {
-      label: 'Modules done',
-      value: `${modulesComplete}/${modulesTotal}`,
-      sub: 'across all courses',
-      color: '#8B5CF6',
-      icon: (
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-        </svg>
-      ),
-    },
-    {
-      label: 'Break in',
-      value: `${daysToBreak}d`,
-      sub: 'Winter break Dec 23',
-      color: '#06B6D4',
-      icon: (
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
-        </svg>
-      ),
-    },
-  ]
-
-  return (
-    <div className="grid grid-cols-4 gap-3">
-      {stats.map(s => (
-        <div
-          key={s.label}
-          className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] px-4 py-3.5 flex items-center gap-3"
-        >
-          <div
-            className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"
-            style={{ background: `${s.color}15`, color: s.color }}
-          >
-            {s.icon}
-          </div>
-          <div className="min-w-0">
-            <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide leading-none mb-1">{s.label}</p>
-            <p className="text-[18px] font-bold leading-none tabular-nums" style={{ color: s.color }}>{s.value}</p>
-            <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1 leading-tight">{s.sub}</p>
-          </div>
-        </div>
-      ))}
-    </div>
-  )
-}
 
 // ─── Smart Priority Card ──────────────────────────────────────────────────────
 // Surfaces the single most urgent item: tomorrow's deadline > unread grade >
-// almost-complete course. Returns null if nothing notable.
+// almost-complete course. In compact mode renders inline inside the welcome banner.
 
-function PriorityCard() {
+function PriorityCard({ compact = false }: { compact?: boolean }) {
   // Priority 1: assignment due tomorrow (Dec 15)
   const tomorrow = dueSoon.find(d => d.dueDay.includes('DEC 15'))
+
   if (tomorrow) {
     const course = getCourse(tomorrow.courseId)
     const linkTarget = tomorrow.assignmentId
       ? `/courses/${tomorrow.courseId}/assignments/${tomorrow.assignmentId}`
       : `/courses/${tomorrow.courseId}`
+
+    if (compact) {
+      return (
+        <Link
+          to={linkTarget}
+          className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 transition-colors group border border-white/20"
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-red-300 shrink-0">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+          <div className="flex-1 min-w-0">
+            <span className="text-[10px] font-bold uppercase tracking-wide text-red-300">Due tomorrow</span>
+            <p className="text-[12.5px] font-semibold text-white truncate">{tomorrow.title}</p>
+          </div>
+          <ChevronRight size={13} className="text-white/50 group-hover:text-white/80 shrink-0 transition-colors" />
+        </Link>
+      )
+    }
+
     return (
       <Link
         to={linkTarget}
@@ -550,7 +469,6 @@ function PriorityCard() {
         style={{ background: '#EF444408', borderColor: '#EF444430' }}
       >
         <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 bg-red-50 dark:bg-red-500/10 text-red-500">
-          {/* Bell icon */}
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" />
           </svg>
@@ -558,10 +476,7 @@ function PriorityCard() {
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
             <span className="text-[10px] font-bold uppercase tracking-wide text-red-500 dark:text-red-400">Due tomorrow</span>
-            <span
-              className="text-[10px] font-bold px-1.5 py-0.5 rounded text-white"
-              style={{ background: course.color }}
-            >
+            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded text-white" style={{ background: course.color }}>
               {course.abbr}
             </span>
           </div>
@@ -579,9 +494,29 @@ function PriorityCard() {
   const unreadGrade = assignments.find(a => a.status === 'graded')
   if (unreadGrade) {
     const course = getCourse(unreadGrade.courseId)
+    const gradeLink = `/courses/${unreadGrade.courseId}/assignments/${unreadGrade.id}`
+
+    if (compact) {
+      return (
+        <Link
+          to={gradeLink}
+          className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 transition-colors group border border-white/20"
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-300 shrink-0">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          <div className="flex-1 min-w-0">
+            <span className="text-[10px] font-bold uppercase tracking-wide text-emerald-300">New grade posted</span>
+            <p className="text-[12.5px] font-semibold text-white truncate">{unreadGrade.title}</p>
+          </div>
+          <ChevronRight size={13} className="text-white/50 group-hover:text-white/80 shrink-0 transition-colors" />
+        </Link>
+      )
+    }
+
     return (
       <Link
-        to={`/courses/${unreadGrade.courseId}/assignments/${unreadGrade.id}`}
+        to={gradeLink}
         className="flex items-center gap-3.5 px-4 py-3.5 rounded-xl border transition-all hover:shadow-sm group"
         style={{ background: '#22C55E08', borderColor: '#22C55E30' }}
       >
@@ -606,14 +541,40 @@ function PriorityCard() {
   const nudgeCourse = courses
     .filter(c => c.completion >= 85 && c.completion < 100)
     .sort((a, b) => b.completion - a.completion)[0]
+
   if (nudgeCourse) {
+    if (compact) {
+      return (
+        <Link
+          to={`/courses/${nudgeCourse.id}`}
+          className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 transition-colors group border border-white/20"
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-blue-200 shrink-0">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+          </svg>
+          <div className="flex-1 min-w-0">
+            <span className="text-[10px] font-bold uppercase tracking-wide text-blue-200">Almost complete</span>
+            <p className="text-[12.5px] font-semibold text-white truncate">{nudgeCourse.name} — {nudgeCourse.completion}%</p>
+          </div>
+          <ChevronRight size={13} className="text-white/50 group-hover:text-white/80 shrink-0 transition-colors" />
+        </Link>
+      )
+    }
+
     return (
       <Link
         to={`/courses/${nudgeCourse.id}`}
         className="flex items-center gap-3 px-4 py-3 rounded-xl border transition-all hover:shadow-sm group"
         style={{ background: `${nudgeCourse.color}0D`, borderColor: `${nudgeCourse.color}40` }}
       >
-        <div className="text-[24px]">🎓</div>
+        <div
+          className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+          style={{ background: `${nudgeCourse.color}20`, color: nudgeCourse.color }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+          </svg>
+        </div>
         <div className="flex-1 min-w-0">
           <p className="text-[14px] font-semibold text-gray-900 dark:text-gray-100">
             Almost there! <span style={{ color: nudgeCourse.color }}>{nudgeCourse.name}</span> is {nudgeCourse.completion}% complete.

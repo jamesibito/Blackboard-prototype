@@ -600,7 +600,7 @@ export const activityItems: ActivityItem[] = [
   {
     id: 'a1', courseId: 'CE', title: 'Lecture Notes Posted',
     date: '8th – 10th Dec 2022', timeRange: '8 AM – 9 AM', type: 'resource',
-    body: 'Professor Brown has posted the Week 13 lecture notes covering comma splices, run-on sentences, and thesis statement revision strategies. Review before Tuesday\'s workshop session.',
+    body: 'Erik Brown has posted the Week 13 lecture notes covering comma splices, run-on sentences, and thesis statement revision strategies. Review before Tuesday\'s workshop session.',
   },
   {
     id: 'a2', courseId: 'IS', title: 'Assignment Posted: Usability Test Report',
@@ -610,30 +610,30 @@ export const activityItems: ActivityItem[] = [
   },
   {
     id: 'a3', courseId: 'TD', title: 'Grade Released: Drawing Set 3',
-    date: '18th Dec 2022', timeRange: '8 AM – 9 AM', type: 'grade',
+    date: '12th Dec 2022', timeRange: '8 AM – 9 AM', type: 'grade',
     body: 'Your grade for Drawing Set 3 (Mechanical Parts) has been released. You scored 48 out of 50. Excellent drafting precision on the isometric views. See instructor comments attached to your submission.',
     linkTo: '/courses/TD/assignments/asgn-td-3',
   },
   {
     id: 'a4', courseId: '2D', title: 'Announcement: Final Project Brief',
-    date: '23rd Dec 2022', timeRange: '10 AM – 1 PM', type: 'announcement',
+    date: '1st Dec 2022', timeRange: '10 AM – 1 PM', type: 'announcement',
     body: 'The final project brief is now live on the course page. You will be designing a full brand identity system for a fictional startup. Deliverables include logo, colour palette, type system, and a one-page brand guide. Submission due January 10th.',
     linkTo: '/courses/2D',
   },
   {
     id: 'a5', courseId: 'VD', title: 'New Resource: Campaign Layout Examples',
-    date: '20th Dec 2022', timeRange: '2 PM – 3 PM', type: 'resource',
+    date: '11th Dec 2022', timeRange: '2 PM – 3 PM', type: 'resource',
     body: 'Xander has shared a curated gallery of campaign layout examples from Behance. Review the visual hierarchy techniques used across the examples and bring notes to the next critique session.',
   },
   {
     id: 'a6', courseId: 'IA', title: 'Grade Released: Sitemap Draft',
-    date: '19th Dec 2022', timeRange: '9 AM – 10 AM', type: 'grade',
+    date: '3rd Dec 2022', timeRange: '9 AM – 10 AM', type: 'grade',
     body: 'Your grade for Assignment 1 – Sitemap Draft has been posted. Score: 5/20. Please review the feedback carefully and book office hours with A.J. before the next submission.',
     linkTo: '/courses/IA/assignments/asgn-ia-1',
   },
   {
     id: 'a7', courseId: 'CE', title: 'Grade Released: Research Proposal',
-    date: '15th Dec 2022', timeRange: '10 AM – 11 AM', type: 'grade',
+    date: '14th Dec 2022', timeRange: '10 AM – 11 AM', type: 'grade',
     body: 'Your Essay 3 – Research Proposal has been graded. Score: 82/100. Strong sources and good mix of academic and industry references. Minor comma splice issues noted.',
     linkTo: '/courses/CE/assignments/asgn-ce-3',
   },
@@ -661,7 +661,7 @@ export const activityItems: ActivityItem[] = [
   {
     id: 'a11', title: 'Campus Closure – Holiday Break',
     date: '9th Dec 2022', timeRange: '8 AM – 9 AM', type: 'announcement',
-    body: 'George Brown College will be closed for the holiday break from December 23rd, 2022 through January 2nd, 2023. All campus facilities, libraries, and student services will be unavailable during this period. Classes resume Monday, January 9th. Have a safe and restful holiday.',
+    body: 'George Brown College will be closed for the holiday break from December 23rd, 2022 through January 8th, 2023. All campus facilities, libraries, and student services will be unavailable during this period. Classes resume Monday, January 9th. Have a safe and restful holiday.',
   },
   {
     id: 'a12', title: 'Spring Graduation Registration Now Open',
@@ -671,7 +671,7 @@ export const activityItems: ActivityItem[] = [
   {
     id: 'a13', title: 'Library Extended Hours – Exam Season',
     date: '6th Dec 2022', timeRange: '7 AM – 8 AM', type: 'announcement',
-    body: 'The Ryerson & Polytechnic Library at the St. James campus will be open extended hours during the December exam period: Monday–Friday 7 AM – 11 PM, Saturday–Sunday 9 AM – 9 PM. Quiet study rooms can be booked through the library portal up to 48 hours in advance.',
+    body: 'The St. James Campus Library will be open extended hours during the December exam period: Monday–Friday 7 AM – 11 PM, Saturday–Sunday 9 AM – 9 PM. Quiet study rooms can be booked through the library portal up to 48 hours in advance.',
   },
   {
     id: 'a14', title: 'GBC Design Hackathon 2023 – Registration Open',
@@ -902,7 +902,7 @@ export const assignments: Assignment[] = [
     deliverables: ['Sitemap (PDF or FigJam link)', 'Card sort results summary', 'Written rationale (250 words)'],
     feedbackThread: [
       { id: 'f1', author: 'A.J. Singh', authorType: 'instructor', authorInitials: 'AJ', date: 'Nov 28', body: 'Kevin, I want to give you honest feedback here: this sitemap needs significant revision before it reflects a workable IA. The top-level navigation is missing core nodes — Support and About aren\'t there at all — and the depth doesn\'t go past two levels in most branches, which means users would dead-end on important content. The bigger concern is that the card sort data you collected doesn\'t appear anywhere in the map or the rationale. Card sorting should be driving your groupings, not just sitting in a spreadsheet. Please book office hours before Assignment 2 so we can work through this together.' },
-      { id: 'f2', author: 'Kevin H.', authorType: 'student', authorInitials: 'KH', date: 'Nov 29', body: 'Hi Professor Singh, I\'ve booked the Thursday 2 PM slot. I\'ll be honest — I wasn\'t sure how to translate the card sort clusters into the sitemap structure. Is there anything I should read or review beforehand so I come in prepared?' },
+      { id: 'f2', author: 'Kevin H.', authorType: 'student', authorInitials: 'KH', date: 'Nov 29', body: 'Hi A.J., I\'ve booked the Thursday 2 PM slot. I\'ll be honest — I wasn\'t sure how to translate the card sort clusters into the sitemap structure. Is there anything I should read or review beforehand so I come in prepared?' },
       { id: 'f3', author: 'A.J. Singh', authorType: 'instructor', authorInitials: 'AJ', date: 'Nov 29', body: 'Good that you booked in. Read chapters 4 and 5 of Rosenfeld & Morville — specifically the section on navigation systems and the three-level rule. And if you can, bring a rough revised hierarchy on paper or in FigJam. Even a messy draft gives us something concrete to work from.' },
     ],
   },
@@ -945,7 +945,7 @@ export const notifications: Notification[] = [
   { id: 'n1', title: 'Assignment 5 – Branded Design graded', body: 'Your grade has been posted. Score: 18/25 (72%). Review the rubric feedback from Jaron Stewart.', time: '2 hours ago', timeGroup: 'today', type: 'grade', courseId: '2D', unread: true, linkTo: '/courses/2D/assignments/asgn-2d-5' },
   { id: 'n2', title: 'New resource: Figma Prototyping Starter Kit', body: 'Michael Holland posted a new resource to Interactive Systems. Download it from the course page.', time: '5 hours ago', timeGroup: 'today', type: 'resource', courseId: 'IS', unread: true, linkTo: '/courses/IS' },
   // ── This Week ──
-  { id: 'n3', title: 'Reminder: Research Proposal due tomorrow', body: 'Essay 3 – Research Proposal is due Dec 8 at 11:59 PM. Review your draft before submission.', time: 'Yesterday at 3 PM', timeGroup: 'this-week', type: 'assignment', courseId: 'CE', unread: false, linkTo: '/courses/CE/assignments/asgn-ce-3' },
+  { id: 'n3', title: 'Reminder: Final Presentation due tomorrow', body: 'Your Interactive Systems Final Presentation is due Dec 15. Slides must be shared as a view-only Figma link by 11:59 PM.', time: 'Yesterday at 3 PM', timeGroup: 'this-week', type: 'assignment', courseId: 'IS', unread: false, linkTo: '/courses/IS' },
   { id: 'n4', title: 'Drawing Set 3 graded — 48/50', body: 'David Kim has released your grade for Drawing Set 3 – Mechanical Parts. Excellent drafting precision!', time: '2 days ago', timeGroup: 'this-week', type: 'grade', courseId: 'TD', unread: false, linkTo: '/courses/TD/assignments/asgn-td-3' },
   { id: 'n5', title: 'OSAP deadline approaching', body: 'Your OSAP application deadline for Winter 2023 is December 15th. Log in to Ontario.ca to check your status.', time: '3 days ago', timeGroup: 'this-week', type: 'announcement', unread: false },
   // ── Earlier ──
@@ -1048,9 +1048,9 @@ Good luck!
     preview: 'Please note that George Brown College will be closed from December 24th...',
     body: `Dear Students,
 
-Please note that George Brown College will be closed from December 24th, 2022 through January 2nd, 2023 for the winter break.
+Please note that George Brown College will be closed from December 23rd, 2022 through January 8th, 2023 for the winter break.
 
-Classes resume on January 3rd, 2023. Your course schedules for the Winter 2023 semester are now available in Blackboard. Please review your timetable carefully for any room or time changes.
+Classes resume on Monday, January 9th, 2023. Your course schedules for the Winter 2023 semester are now available in Blackboard. Please review your timetable carefully for any room or time changes.
 
 Financial aid and OSAP information for the winter semester will be emailed separately. If you have questions, contact the Registrar's Office at registrar@georgebrown.ca.
 
@@ -1293,7 +1293,7 @@ export const tools: ToolItem[] = [
   // ── Assessment ──
   {
     id: 'turnitin', name: 'Turnitin', abbr: 'TII',
-    description: 'Originality checking and peer review for written assignments. Required for College English and Information Architecture submissions.',
+    description: 'Originality checking and peer review for written assignments. Required for Interactive Systems, College English, and Information Architecture submissions.',
     category: 'assessment', status: 'active', color: '#0077B6',
     url: 'https://turnitin.com',
     linkedCourses: ['IS', 'CE', 'IA'],
