@@ -338,9 +338,9 @@ function DeadlineTimeline() {
       </div>
 
       {/* Scrollable horizontal track */}
-      <div className="relative overflow-x-auto">
+      <div className="relative overflow-x-auto pt-2">
         {/* Connector line */}
-        <div className="absolute left-0 right-0 top-[18px] h-px bg-gray-100 dark:bg-[#2D3A52]" />
+        <div className="absolute left-0 right-0 top-[26px] h-px bg-gray-100 dark:bg-[#2D3A52]" />
 
         <div className="flex items-start gap-8 pb-1 min-w-max">
           {/* "Today" marker */}
