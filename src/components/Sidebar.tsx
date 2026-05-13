@@ -23,9 +23,7 @@ const navItems = [
 
 // ─── Sidebar ──────────────────────────────────────────────────────────────────
 // The sidebar is ALWAYS dark regardless of the page's light/dark mode.
-// Design rationale: a permanently dark sidebar creates stronger visual hierarchy
-// between the navigation chrome and the content area, similar to Linear/Notion.
-// The dark surface also ensures the GBC navy logo header blends seamlessly.
+// The logo header uses a white background so the logo image blends flush — no floating-image effect.
 
 export default function Sidebar() {
   const navigate = useNavigate()
@@ -33,20 +31,9 @@ export default function Sidebar() {
   return (
     <aside className="fixed left-0 top-0 bottom-0 w-[220px] bg-[#131825] border-r border-[#1E2A3F] flex flex-col z-30">
 
-      {/* GBC Logo Header — navy background complements the sidebar's dark surface */}
-      <div className="h-[72px] flex items-center justify-center border-b border-[#1E2A3F] bg-[#1B3F89] relative overflow-hidden shrink-0">
-        {/* GBC four-colour identity stripe on the left edge */}
-        <div className="absolute left-0 top-0 bottom-0 w-[5px] flex flex-col">
-          <div className="flex-1 bg-[#E53935]" />
-          <div className="flex-1 bg-[#FDD835]" />
-          <div className="flex-1 bg-[#1E88E5]" />
-          <div className="flex-1 bg-[#43A047]" />
-        </div>
-        {/* Subtle corner glow for depth */}
-        <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-white/[0.06]" />
-        <div className="relative z-10 flex items-center justify-center w-full px-4">
-          <img src="/gbc-logo.png" alt="George Brown College" className="w-full h-auto object-contain" style={{ maxHeight: 52 }} />
-        </div>
+      {/* GBC Logo Header — white background so the logo sits flush, no floating-image effect */}
+      <div className="flex items-center justify-center border-b border-[#1E2A3F] bg-white shrink-0 px-5 py-4">
+        <img src="/gbc-logo.png" alt="George Brown Polytechnic" className="w-full h-auto object-contain" />
       </div>
 
       {/* Nav links */}
