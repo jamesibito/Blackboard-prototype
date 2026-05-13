@@ -3,28 +3,46 @@
 ## Project
 React 19 + TypeScript + Tailwind CSS v4 + Vite. Portfolio prototype of a Blackboard LMS redesign for George Brown College. Student persona: Kevin H. (Fall 2022).
 
+## Versioning
+
+This project uses semantic versioning: **vMAJOR.MINOR.PATCH**
+
+| Bump | When to use |
+|------|-------------|
+| PATCH (x.x.**1**) | Bug fixes, visual tweaks, copy changes — nothing new |
+| MINOR (x.**1**.0) | New feature, new page, or meaningful new capability |
+| MAJOR (**1**.0.0) | Complete redesign of a section or structural overhaul |
+
+**Current version: v2.5.0** — update this line every time a version merges to main.
+
+Before starting any task, determine the correct next version number and use it everywhere (branch name, commit message, and summary to the user).
+
 ## Git Workflow — ALWAYS follow this
 
 ### Before writing any code
-1. Check the current branch: `git branch --show-current`
-2. If already on `main`, create a feature branch: `git checkout -b <descriptive-name>`
-   - Name format: `feat/short-description`, `fix/short-description`, `polish/short-description`
-   - Examples: `feat/grade-detail-view`, `fix/logo-sizing`, `polish/dashboard-layout`
-3. Never commit directly to `main`
+1. Run `git branch --show-current` — confirm you're on `main` (or the right base)
+2. Determine the next version number (see table above)
+3. Create a branch: `git checkout -b v<next-version>`
+   - Examples: `git checkout -b v2.5.1`, `git checkout -b v2.6.0`, `git checkout -b v3.0.0`
+4. **Never commit directly to `main`**
 
 ### While working
 - Commit logically grouped changes as you go — don't batch everything into one giant commit
-- Use clear commit messages: what changed and why, not just what files were touched
+- Prefix commit messages with the version: `feat(v2.6.0): ...` / `fix(v2.5.1): ...`
 
 ### After finishing a task
-1. Run `npm run build` — fix any TypeScript errors before presenting work
-2. Tell the user: what branch you're on, what changed, and a short plain-English summary
-3. **Stop here and wait for approval** — do not merge to main
+1. Run `npm run build` — fix all TypeScript errors before presenting work
+2. Tell the user:
+   - What version branch you're on (e.g. "ready on branch `v2.6.0`")
+   - A plain-English bullet list of what changed
+3. **Stop and wait for approval — do not merge to main**
 
-### Merging to main
-- Only merge after the user explicitly says they're happy (e.g. "looks good", "ship it", "merge it")
-- Then: `git checkout main && git merge <branch> --no-edit && git push origin main`
-- Then: `git push origin <branch>` so the branch is also visible on GitHub
+### Merging to main (only after user approves)
+1. `git checkout main`
+2. `git merge v<version> --no-edit`
+3. `git push origin main`
+4. `git push origin v<version>` — keeps the branch visible on GitHub as a snapshot
+5. Update the **Current version** line in this file
 
 ## Code standards
 - TypeScript strict — fix all `error TS6133` unused import errors before presenting
