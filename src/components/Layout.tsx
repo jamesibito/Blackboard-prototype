@@ -8,11 +8,19 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen bg-[#E8EBF0] dark:bg-[#0C0F1A] transition-colors duration-200">
+      {/* Skip-to-content link — appears on Tab focus, jumps past sidebar */}
+      <a href="#main-content" className="skip-link">Skip to main content</a>
+
       <Sidebar />
       <div className="ml-[220px] flex flex-col min-h-screen">
         <TopBar />
         {/* key={pathname} causes remount on route change → triggers page-enter animation */}
-        <main key={location.pathname} className="flex-1 px-8 py-7 overflow-y-auto page-enter">
+        <main
+          id="main-content"
+          key={location.pathname}
+          tabIndex={-1}
+          className="flex-1 px-8 py-7 overflow-y-auto page-enter focus:outline-none"
+        >
           <Outlet />
         </main>
         {/* Footer — portfolio attribution + external links to the real products */}

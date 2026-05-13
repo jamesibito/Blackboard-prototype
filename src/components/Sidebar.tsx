@@ -29,7 +29,7 @@ export default function Sidebar() {
   const navigate = useNavigate()
 
   return (
-    <aside className="fixed left-0 top-0 bottom-0 w-[220px] bg-[#131825] border-r border-[#1E2A3F] flex flex-col z-30">
+    <aside aria-label="Primary" className="fixed left-0 top-0 bottom-0 w-[220px] bg-[#131825] border-r border-[#1E2A3F] flex flex-col z-30">
 
       {/* GBC Logo Header — navy background, logo inverted to white */}
       <div className="h-[72px] flex items-center justify-center border-b border-[#1E2A3F] bg-[#1B3F89] relative overflow-hidden shrink-0">
@@ -54,7 +54,7 @@ export default function Sidebar() {
       </div>
 
       {/* Nav links */}
-      <nav className="flex-1 py-3 overflow-y-auto space-y-0.5">
+      <nav aria-label="Main navigation" className="flex-1 py-3 overflow-y-auto space-y-0.5">
         {navItems.map(item => (
           <NavLink
             key={item.to}
@@ -81,7 +81,10 @@ export default function Sidebar() {
                 />
                 <span className="truncate">{item.label}</span>
                 {item.badge ? (
-                  <span className="ml-auto bg-[#2563EB] text-white text-[10px] font-bold min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center">
+                  <span
+                    className="ml-auto bg-[#2563EB] text-white text-[10px] font-bold min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center"
+                    aria-label={`${item.badge} unread`}
+                  >
                     {item.badge}
                   </span>
                 ) : null}

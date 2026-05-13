@@ -77,22 +77,27 @@ export default function TopBar() {
     <header className="h-[64px] flex items-center justify-between px-6 bg-[#E8EBF0] dark:bg-[#131825] border-b border-[#D4D8E0] dark:border-[#1E2A3F] shrink-0 relative z-20">
 
       {/* Search */}
-      <div ref={searchRef} className="relative w-[380px]">
-        <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 pointer-events-none" />
+      <div ref={searchRef} role="search" className="relative w-[380px]">
+        <label htmlFor="global-search" className="sr-only">Search courses, resources, and activities</label>
+        <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 pointer-events-none" aria-hidden="true" />
         <input
+          id="global-search"
           type="text"
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
           onFocus={() => setSearchFocused(true)}
           placeholder="Search courses, resources, activities…"
+          aria-controls="global-search-results"
+          aria-expanded={searchFocused && searchQuery.length > 1}
           className="w-full h-[40px] pl-10 pr-20 rounded-lg bg-white dark:bg-[#1A2236] border border-gray-300 dark:border-[#2D3A52] text-[13px] text-gray-800 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB]/50 dark:focus:border-[#60A5FA]/30 transition-all duration-150"
         />
         {searchQuery ? (
           <button
             onClick={() => setSearchQuery('')}
+            aria-label="Clear search"
             className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition"
           >
-            <X size={14} />
+            <X size={14} aria-hidden="true" />
           </button>
         ) : (
           <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden sm:flex items-center gap-0.5 text-[10px] text-gray-400 dark:text-gray-500 font-medium">
@@ -103,7 +108,7 @@ export default function TopBar() {
 
         {/* Search dropdown */}
         {searchFocused && searchQuery.length > 1 && (
-          <div className="absolute top-[calc(100%+6px)] left-0 w-full bg-white dark:bg-[#1A2236] border border-gray-200 dark:border-[#2D3A52] rounded-xl shadow-lg overflow-hidden z-50 max-h-[420px] overflow-y-auto">
+          <div id="global-search-results" role="listbox" className="absolute top-[calc(100%+6px)] left-0 w-full bg-white dark:bg-[#1A2236] border border-gray-200 dark:border-[#2D3A52] rounded-xl shadow-lg overflow-hidden z-50 max-h-[420px] overflow-y-auto">
             {hasResults ? (
               <>
                 {/* Courses */}
@@ -206,14 +211,15 @@ export default function TopBar() {
           onClick={toggleTheme}
           className="flex items-center gap-2 px-2.5 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#1A2236] transition-colors duration-150"
           title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-          aria-label="Toggle theme"
+          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+          aria-pressed={theme === 'dark'}
         >
-          <Sun size={15} className={theme === 'light' ? 'text-amber-500' : 'text-gray-400'} />
+          <Sun size={15} aria-hidden="true" className={theme === 'light' ? 'text-amber-500' : 'text-gray-400'} />
           {/* Toggle track */}
           <div className="relative w-9 h-5 rounded-full bg-gray-300 dark:bg-[#2563EB] transition-colors duration-200 mx-0.5">
             <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-all duration-200 ${theme === 'dark' ? 'left-[18px]' : 'left-0.5'}`} />
           </div>
-          <Moon size={15} className={theme === 'dark' ? 'text-[#60A5FA]' : 'text-gray-400'} />
+          <Moon size={15} aria-hidden="true" className={theme === 'dark' ? 'text-[#60A5FA]' : 'text-gray-400'} />
         </button>
 
         {/* Divider */}
@@ -224,11 +230,13 @@ export default function TopBar() {
           <button
             onClick={() => { setNotifOpen(o => !o); setProfileOpen(false) }}
             className="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#1A2236] transition-colors duration-150"
-            aria-label="Notifications"
+            aria-label={unreadCount > 0 ? `Notifications, ${unreadCount} unread` : 'Notifications'}
+            aria-expanded={notifOpen}
+            aria-haspopup="menu"
           >
-            <Bell size={19} className="text-gray-700 dark:text-gray-400" />
+            <Bell size={19} aria-hidden="true" className="text-gray-700 dark:text-gray-400" />
             {unreadCount > 0 && (
-              <span className="absolute top-1.5 right-1.5 min-w-[8px] h-2 bg-red-500 rounded-full" />
+              <span aria-hidden="true" className="absolute top-1.5 right-1.5 min-w-[8px] h-2 bg-red-500 rounded-full" />
             )}
           </button>
 
@@ -290,8 +298,12 @@ export default function TopBar() {
           <button
             onClick={() => { setProfileOpen(o => !o); setNotifOpen(false) }}
             className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-[#1A2236] transition-colors duration-150"
+            aria-label={`Account menu for ${user.displayName}`}
+            aria-expanded={profileOpen}
+            aria-haspopup="menu"
           >
             <div
+              aria-hidden="true"
               className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[11px] font-bold shrink-0"
               style={{ background: user.avatarColor }}
             >
@@ -300,7 +312,7 @@ export default function TopBar() {
             <span className="text-[13px] font-medium text-gray-700 dark:text-gray-200 hidden sm:block">
               {user.displayName}
             </span>
-            <ChevronDown size={13} className={`text-gray-400 transition-transform duration-150 ${profileOpen ? 'rotate-180' : ''}`} />
+            <ChevronDown size={13} aria-hidden="true" className={`text-gray-400 transition-transform duration-150 ${profileOpen ? 'rotate-180' : ''}`} />
           </button>
 
           {profileOpen && (
