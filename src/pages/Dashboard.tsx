@@ -1,9 +1,11 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronRight, Clock, TrendingUp } from '../components/Icons'
 import {
   courses, dueSoon, grades, activityItems, assignments,
   getCourse, getOverallGPA, getNextClass, getTodayClasses, getSemesterStats,
 } from '../data/mockData'
+import { Skeleton, SkeletonText, SkeletonAvatar, SkeletonCard } from '../components/Skeleton'
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -40,6 +42,15 @@ function CircleProgress({ percentage, color, size = 48 }: { percentage: number; 
 export default function Dashboard() {
   const overallGPA = getOverallGPA()
   const nextClass  = getNextClass()
+
+  // Simulate a brief loading state so the skeleton is visible on first paint.
+  const [loading, setLoading] = useState(true)
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1400)
+    return () => clearTimeout(t)
+  }, [])
+
+  if (loading) return <DashboardSkeleton />
 
   return (
     <div className="space-y-5 max-w-[1200px]">
@@ -259,6 +270,186 @@ export default function Dashboard() {
         </div>
       </div>
 
+    </div>
+  )
+}
+
+// ─── Dashboard Skeleton ───────────────────────────────────────────────────────
+// Mirrors the real Dashboard layout exactly — shown for ~1.4s on first load.
+
+function DashboardSkeleton() {
+  return (
+    <div className="space-y-5 max-w-[1200px]">
+
+      {/* Banner */}
+      <div className="bg-gray-200 dark:bg-[#1A2236] rounded-2xl p-7 animate-pulse">
+        <Skeleton className="h-7 w-56 mb-3" />
+        <Skeleton className="h-4 w-80 mb-6" />
+        <div className="flex gap-5">
+          <Skeleton className="h-4 w-36" />
+          <Skeleton className="h-4 w-48" />
+        </div>
+      </div>
+
+      {/* Stats strip */}
+      <div className="grid grid-cols-4 gap-3">
+        {[...Array(4)].map((_, i) => (
+          <SkeletonCard key={i} className="px-4 py-3.5">
+            <div className="flex items-center gap-3">
+              <Skeleton className="w-8 h-8 rounded-xl shrink-0" />
+              <div className="flex-1 space-y-2">
+                <Skeleton className="h-2.5 w-16" />
+                <Skeleton className="h-5 w-12" />
+                <Skeleton className="h-2 w-24" />
+              </div>
+            </div>
+          </SkeletonCard>
+        ))}
+      </div>
+
+      {/* Deadline timeline */}
+      <SkeletonCard className="px-5 py-4">
+        <div className="flex items-center justify-between mb-4">
+          <Skeleton className="h-4 w-40" />
+          <Skeleton className="h-3.5 w-24" />
+        </div>
+        <div className="flex items-start justify-between pt-2 pb-1">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="flex flex-col items-center gap-2">
+              <Skeleton className="w-4 h-4 rounded-full" />
+              <Skeleton className="h-3 w-16" />
+              <Skeleton className="h-3 w-8" />
+              <Skeleton className="h-3 w-12" />
+            </div>
+          ))}
+        </div>
+      </SkeletonCard>
+
+      {/* Priority card */}
+      <SkeletonCard className="px-4 py-3.5">
+        <div className="flex items-center gap-3.5">
+          <Skeleton className="w-9 h-9 rounded-xl shrink-0" />
+          <div className="flex-1 space-y-2">
+            <Skeleton className="h-3 w-24" />
+            <Skeleton className="h-5 w-64" />
+            <Skeleton className="h-3 w-40" />
+          </div>
+          <Skeleton className="w-4 h-4 rounded shrink-0" />
+        </div>
+      </SkeletonCard>
+
+      {/* Main 3-col grid */}
+      <div className="grid grid-cols-[1fr_minmax(260px,0.65fr)_minmax(280px,0.75fr)] gap-5">
+
+        {/* Courses */}
+        <SkeletonCard>
+          <div className="flex items-center justify-between px-5 pt-5 pb-3">
+            <Skeleton className="h-4 w-20" />
+            <Skeleton className="h-3.5 w-14" />
+          </div>
+          <div className="divide-y divide-gray-50 dark:divide-[#232d42]">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="flex items-start gap-3 px-5 py-3.5">
+                <SkeletonAvatar size={38} />
+                <div className="flex-1 space-y-2">
+                  <Skeleton className="h-3.5 w-40" />
+                  <Skeleton className="h-2.5 w-20" />
+                  <Skeleton className="h-1.5 w-full rounded-full mt-1" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </SkeletonCard>
+
+        {/* Middle col */}
+        <div className="space-y-5">
+          <SkeletonCard>
+            <div className="flex items-center justify-between px-5 pt-5 pb-3">
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-3.5 w-16" />
+            </div>
+            <div className="px-4 pb-4 space-y-2">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 dark:bg-[#232d42]">
+                  <div className="flex-1 space-y-1.5">
+                    <Skeleton className="h-3.5 w-32" />
+                    <Skeleton className="h-2.5 w-24" />
+                  </div>
+                  <Skeleton className="h-5 w-8 rounded-lg" />
+                </div>
+              ))}
+            </div>
+          </SkeletonCard>
+          <SkeletonCard>
+            <div className="flex items-center justify-between px-5 pt-5 pb-3">
+              <Skeleton className="h-4 w-16" />
+              <Skeleton className="h-3.5 w-14" />
+            </div>
+            <div className="px-5 pb-5 space-y-3.5">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="flex items-center justify-between gap-3">
+                  <SkeletonText lines={2} className="flex-1" />
+                  <Skeleton className="w-11 h-11 rounded-full shrink-0" />
+                </div>
+              ))}
+            </div>
+          </SkeletonCard>
+        </div>
+
+        {/* Right col */}
+        <div className="space-y-5">
+          {/* Today */}
+          <SkeletonCard>
+            <div className="flex items-center justify-between px-5 pt-5 pb-3">
+              <div className="space-y-1">
+                <Skeleton className="h-4 w-12" />
+                <Skeleton className="h-3 w-20" />
+              </div>
+              <Skeleton className="h-3.5 w-20" />
+            </div>
+            {[...Array(2)].map((_, i) => (
+              <div key={i} className="flex items-center gap-3 px-5 py-3 border-t border-gray-50 dark:border-[#232d42]">
+                <Skeleton className="w-2.5 h-2.5 rounded-full shrink-0" />
+                <div className="flex-1 space-y-1.5">
+                  <Skeleton className="h-3.5 w-36" />
+                  <Skeleton className="h-2.5 w-28" />
+                </div>
+                <Skeleton className="h-4 w-14 rounded-full" />
+              </div>
+            ))}
+          </SkeletonCard>
+          {/* Calendar */}
+          <SkeletonCard className="p-5">
+            <div className="flex items-center justify-between mb-4">
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-3.5 w-16" />
+            </div>
+            <div className="grid grid-cols-7 gap-y-2 gap-x-1">
+              {[...Array(35)].map((_, i) => (
+                <Skeleton key={i} className="w-6 h-6 rounded-full mx-auto" />
+              ))}
+            </div>
+          </SkeletonCard>
+          {/* Activity */}
+          <SkeletonCard>
+            <div className="flex items-center justify-between px-5 pt-5 pb-3">
+              <Skeleton className="h-4 w-28" />
+              <Skeleton className="h-3.5 w-12" />
+            </div>
+            <div className="px-5 pb-5 space-y-3.5">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <SkeletonAvatar size={36} />
+                  <div className="flex-1 space-y-1.5">
+                    <Skeleton className="h-3.5 w-40" />
+                    <Skeleton className="h-2.5 w-24" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </SkeletonCard>
+        </div>
+      </div>
     </div>
   )
 }

@@ -180,16 +180,39 @@ export default function Notifications() {
           )
         })}
 
-        {/* Empty state when a filter has no matches */}
-        {filtered.length === 0 && (
-          <div className="text-center py-16 text-gray-400 dark:text-gray-500">
-            <p className="text-[15px] font-medium">No {typeFilter.toLowerCase()} notifications</p>
+        {/* Empty state — filter returned no results */}
+        {filtered.length === 0 && typeFilter !== 'All' && (
+          <div className="flex flex-col items-center justify-center py-20 px-6">
+            <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-[#232d42] flex items-center justify-center mb-4">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 dark:text-gray-500">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" />
+              </svg>
+            </div>
+            <p className="text-[15px] font-semibold text-gray-700 dark:text-gray-300">No {typeFilter.toLowerCase()} notifications</p>
+            <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-1 text-center max-w-[240px]">
+              Nothing here right now. Check back later or broaden your filter.
+            </p>
             <button
               onClick={() => setTypeFilter('All')}
-              className="mt-2 text-[13px] text-[#2563EB] dark:text-[#60A5FA] hover:underline"
+              className="mt-4 px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[13px] font-semibold transition-colors"
             >
-              Clear filter
+              Show all notifications
             </button>
+          </div>
+        )}
+
+        {/* All-clear state — "All" filter selected but everything is read */}
+        {filtered.length === 0 && typeFilter === 'All' && (
+          <div className="flex flex-col items-center justify-center py-20 px-6">
+            <div className="w-16 h-16 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center mb-4">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22C55E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </div>
+            <p className="text-[15px] font-semibold text-gray-700 dark:text-gray-300">You're all caught up</p>
+            <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-1 text-center max-w-[240px]">
+              No new notifications. We'll let you know when something needs your attention.
+            </p>
           </div>
         )}
       </div>

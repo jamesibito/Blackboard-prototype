@@ -22,13 +22,26 @@ export default function CoursePage() {
   const { courseId } = useParams<{ courseId: string }>()
   const course = courseId ? getCourse(courseId) : null
 
-  // Guard: show a friendly error if the courseId doesn't match any course
+  // Guard: polished 404 state if the courseId doesn't match any course
   if (!course) {
     return (
       <div className="flex items-center justify-center h-[60vh]">
-        <div className="text-center">
-          <h1 className="text-[20px] font-bold text-gray-900 dark:text-gray-100 mb-2">Course not found</h1>
-          <Link to="/courses" className="text-[13px] text-[#2563EB] dark:text-[#60A5FA] hover:underline">Back to Courses</Link>
+        <div className="text-center max-w-[320px] mx-auto">
+          <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-[#1A2236] border border-gray-100 dark:border-[#2D3A52] flex items-center justify-center mx-auto mb-5">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 dark:text-gray-500">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+            </svg>
+          </div>
+          <h1 className="text-[18px] font-bold text-gray-900 dark:text-gray-100 mb-2">Course not found</h1>
+          <p className="text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed mb-5">
+            This course doesn't exist or you may not be enrolled. Head back to your course list.
+          </p>
+          <Link
+            to="/courses"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[13px] font-semibold transition-colors"
+          >
+            Back to Courses
+          </Link>
         </div>
       </div>
     )

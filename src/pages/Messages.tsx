@@ -165,7 +165,18 @@ export default function Messages() {
           </div>
         </div>
 
-        {/* Message detail */}
+        {/* Message detail — empty state when nothing is selected */}
+        {!selected ? (
+          <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] flex flex-col items-center justify-center">
+            <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-[#232d42] flex items-center justify-center mb-4">
+              <Mail size={26} className="text-gray-400 dark:text-gray-500" />
+            </div>
+            <p className="text-[15px] font-semibold text-gray-700 dark:text-gray-300">No message selected</p>
+            <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-1 text-center max-w-[220px]">
+              Choose a message from your inbox to read it here.
+            </p>
+          </div>
+        ) : (
         <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden flex flex-col">
 
           {/* Detail header */}
@@ -267,6 +278,7 @@ export default function Messages() {
             <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1.5">⌘ + Enter to send</p>
           </div>
         </div>
+        )}
       </div>
 
       {composeOpen && <ComposeModal onClose={() => setComposeOpen(false)} />}
