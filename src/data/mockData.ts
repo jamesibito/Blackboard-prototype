@@ -27,6 +27,8 @@ export interface Course {
   completedModules: number
   lastActivity: string
   zoomLink?: string       // Instructor's recurring Zoom URL for online sessions
+  officeHours?: string    // e.g. "Thu 2:00–4:00 PM, SFC A209 or by appointment"
+  syllabus?: CourseSyllabus
   resources?: CourseResource[]  // Lecture slides, reference files, etc.
 }
 
@@ -155,7 +157,28 @@ export interface CourseModule {
   title: string
   itemCount: number
   completed: boolean
-  type: 'lecture' | 'assignment' | 'reading' | 'quiz'
+  type: 'lecture' | 'assignment' | 'reading' | 'quiz' | 'video' | 'discussion'
+}
+
+export interface SyllabusWeight {
+  category: string
+  weight: number
+  description?: string
+}
+
+export interface CourseSyllabus {
+  weights: SyllabusWeight[]
+  policies: string[]
+}
+
+export interface Announcement {
+  id: string
+  courseId: string
+  title: string
+  body: string
+  date: string
+  isPinned: boolean
+  author: string
 }
 
 // ─── Courses ──────────────────────────────────────────────────────────────────
@@ -170,6 +193,19 @@ export const courses: Course[] = [
     completion: 72, moduleCount: 12, completedModules: 9,
     lastActivity: '2 days ago',
     zoomLink: 'https://georgebrown.zoom.us/j/96271830412',
+    officeHours: 'Mon 2:00–4:00 PM · SFC B108 (or by appointment)',
+    syllabus: {
+      weights: [
+        { category: 'Assignments 1–5', weight: 50, description: 'Weekly studio assignments' },
+        { category: 'Final Project', weight: 30, description: 'Full brand identity system' },
+        { category: 'Critique Participation', weight: 20, description: 'In-class feedback and peer reviews' },
+      ],
+      policies: [
+        'Late submissions lose 10% per calendar day',
+        'Attendance required for all critique sessions',
+        'Source files must be submitted alongside PDFs',
+      ],
+    },
     resources: [
       { id: 'r2d-1', title: 'Week 1 – Design Fundamentals Slides', filename: 'W1-Design-Fundamentals.pdf', type: 'pdf', uploadedBy: 'Jaron Stewart', uploadedOn: 'Sep 12', size: '4.2 MB' },
       { id: 'r2d-2', title: 'Colour Theory Reference Guide', filename: 'Colour-Theory-Guide.pdf', type: 'pdf', uploadedBy: 'Jaron Stewart', uploadedOn: 'Sep 19', size: '2.1 MB' },
@@ -187,6 +223,19 @@ export const courses: Course[] = [
     completion: 88, moduleCount: 14, completedModules: 12,
     lastActivity: 'Today',
     zoomLink: 'https://georgebrown.zoom.us/j/84512093761',
+    officeHours: 'Wed 3:00–5:00 PM · Online via Zoom (book via email)',
+    syllabus: {
+      weights: [
+        { category: 'Assignments (4)', weight: 40, description: 'Research, personas, flows, usability report' },
+        { category: 'Projects (3)', weight: 45, description: 'Wireframe set, interactive prototype, final presentation' },
+        { category: 'Participation', weight: 15, description: 'In-class critiques and discussion' },
+      ],
+      policies: [
+        'Late work accepted up to 48 hours with a 15% penalty',
+        'All Figma files must be shared as view-only links before submission',
+        'Peer critique participation is mandatory — two absences maximum',
+      ],
+    },
     resources: [
       { id: 'ris-1', title: 'HCI Foundations – Lecture Notes', filename: 'W1-HCI-Foundations.pdf', type: 'pdf', uploadedBy: 'Michael Holland', uploadedOn: 'Sep 13', size: '3.1 MB' },
       { id: 'ris-2', title: 'User Research Methods Overview', filename: 'Research-Methods.pdf', type: 'pdf', uploadedBy: 'Michael Holland', uploadedOn: 'Sep 20', size: '2.7 MB' },
@@ -203,6 +252,19 @@ export const courses: Course[] = [
     completion: 45, moduleCount: 10, completedModules: 4,
     lastActivity: '1 week ago',
     zoomLink: 'https://georgebrown.zoom.us/j/71038294651',
+    officeHours: 'Thu 2:00–4:00 PM · SFC A209 (walk-ins welcome)',
+    syllabus: {
+      weights: [
+        { category: 'Assignments (3)', weight: 60, description: 'Sitemap, card sort, navigation audit' },
+        { category: 'Final Sitemap Project', weight: 30, description: 'Full IA deliverable with rationale' },
+        { category: 'Participation', weight: 10, description: 'Workshop exercises and peer feedback' },
+      ],
+      policies: [
+        'Late submissions accepted with 10% deduction per day (max 3 days)',
+        'Card sort data must include minimum 5 participants',
+        'All deliverables must be submitted as PDF or FigJam links',
+      ],
+    },
     resources: [
       { id: 'ria-1', title: 'IA Foundations Slides', filename: 'IA-Foundations.pdf', type: 'pdf', uploadedBy: 'A.J. Singh', uploadedOn: 'Sep 16', size: '3.8 MB' },
       { id: 'ria-2', title: 'Card Sorting Workshop Guide', filename: 'Card-Sorting-Guide.pdf', type: 'pdf', uploadedBy: 'A.J. Singh', uploadedOn: 'Oct 7', size: '1.2 MB' },
@@ -217,6 +279,19 @@ export const courses: Course[] = [
     completion: 60, moduleCount: 11, completedModules: 7,
     lastActivity: '3 days ago',
     zoomLink: 'https://georgebrown.zoom.us/j/93847201938',
+    officeHours: 'Tue 11:00 AM–1:00 PM · SFC B110 (or by appointment)',
+    syllabus: {
+      weights: [
+        { category: 'Assignments (3)', weight: 35, description: 'Typography poster, colour study, design audit' },
+        { category: 'Projects (2)', weight: 50, description: 'Campaign layout and final design system' },
+        { category: 'Participation', weight: 15, description: 'Critique sessions and peer feedback' },
+      ],
+      policies: [
+        'No late work accepted without prior written approval',
+        'All final files must include source files (.ai or .psd)',
+        'Placeholder copy is not acceptable in any final submission',
+      ],
+    },
     resources: [
       { id: 'rvd-1', title: 'Grid Systems & Layout Principles', filename: 'Grid-Systems.pdf', type: 'pdf', uploadedBy: 'Xander Messi', uploadedOn: 'Sep 14', size: '5.6 MB' },
       { id: 'rvd-2', title: 'Campaign Design Inspiration Pack', filename: 'Inspiration-Pack.zip', type: 'zip', uploadedBy: 'Xander Messi', uploadedOn: 'Oct 24', size: '34.1 MB' },
@@ -232,6 +307,19 @@ export const courses: Course[] = [
     completion: 80, moduleCount: 13, completedModules: 10,
     lastActivity: 'Yesterday',
     zoomLink: 'https://georgebrown.zoom.us/j/82910374652',
+    officeHours: 'Mon & Wed 10:00–11:00 AM · SFC A105',
+    syllabus: {
+      weights: [
+        { category: 'Essays (3)', weight: 75, description: 'Personal narrative, comparative analysis, research proposal' },
+        { category: 'Workshop Participation', weight: 15, description: 'In-class writing exercises and peer workshops' },
+        { category: 'Peer Reviews (2)', weight: 10, description: 'Written feedback on classmates\' drafts' },
+      ],
+      policies: [
+        'Essays submitted after the deadline receive a letter-grade deduction per day',
+        'Academic integrity policy strictly enforced — all essays run through Turnitin',
+        'APA 7th edition format required for all citations',
+      ],
+    },
     resources: [
       { id: 'rce-1', title: 'Academic Writing Style Guide', filename: 'Writing-Style-Guide.pdf', type: 'pdf', uploadedBy: 'Erik Brown', uploadedOn: 'Sep 15', size: '1.8 MB' },
       { id: 'rce-2', title: 'APA Citation Reference Sheet', filename: 'APA-Reference.pdf', type: 'pdf', uploadedBy: 'Erik Brown', uploadedOn: 'Oct 5', size: '0.6 MB' },
@@ -247,6 +335,19 @@ export const courses: Course[] = [
     completion: 97, moduleCount: 9, completedModules: 8,
     lastActivity: 'Today',
     zoomLink: 'https://georgebrown.zoom.us/j/77614829304',
+    officeHours: 'Thu 12:00–1:00 PM · SFC C204 (or by appointment)',
+    syllabus: {
+      weights: [
+        { category: 'Drawing Sets (3)', weight: 75, description: 'Basic drafting, orthographic views, mechanical parts' },
+        { category: 'Final Drawing Submission', weight: 20, description: 'Complete assembly drawing package' },
+        { category: 'In-Class Exercises', weight: 5, description: 'Weekly drawing drills and pin-ups' },
+      ],
+      policies: [
+        'All drawings must meet ASME Y14.5 standards to receive full marks',
+        'Late submissions accepted within 24 hours with a 20% deduction',
+        'AutoCAD source files (.dwg) required alongside all PDF submissions',
+      ],
+    },
     resources: [
       { id: 'rtd-1', title: 'Orthographic Projection Guide', filename: 'Ortho-Projection.pdf', type: 'pdf', uploadedBy: 'David Kim', uploadedOn: 'Sep 17', size: '3.3 MB' },
       { id: 'rtd-2', title: 'ASME Y14.5 Dimensioning Standards', filename: 'ASME-Y14.5.pdf', type: 'pdf', uploadedBy: 'David Kim', uploadedOn: 'Oct 6', size: '7.2 MB' },
@@ -288,7 +389,143 @@ export const courseModules: Record<string, CourseModule[]> = {
     { id: 'm13', title: 'Project 3 – Interactive Prototype', itemCount: 1, completed: false, type: 'assignment' },
     { id: 'm14', title: 'Final Presentation Prep', itemCount: 2, completed: false, type: 'assignment' },
   ],
+  'IA': [
+    { id: 'm1', title: 'Week 1 – What Is Information Architecture?', itemCount: 3, completed: true,  type: 'lecture' },
+    { id: 'm2', title: 'Week 2 – Mental Models & User Needs',         itemCount: 2, completed: true,  type: 'reading' },
+    { id: 'm3', title: 'Week 3 – Card Sorting Methods',               itemCount: 4, completed: true,  type: 'video' },
+    { id: 'm4', title: 'Assignment 1 – Sitemap Draft',                itemCount: 1, completed: true,  type: 'assignment' },
+    { id: 'm5', title: 'Week 4 – Navigation Patterns',                itemCount: 3, completed: false, type: 'lecture' },
+    { id: 'm6', title: 'Week 5 – Taxonomy & Labelling Systems',       itemCount: 3, completed: false, type: 'reading' },
+    { id: 'm7', title: 'Discussion – Card Sort Findings Debrief',     itemCount: 1, completed: false, type: 'discussion' },
+    { id: 'm8', title: 'Assignment 2 – Card Sorting Exercise',        itemCount: 2, completed: false, type: 'assignment' },
+    { id: 'm9', title: 'Week 6 – Content Strategy & Metadata',        itemCount: 3, completed: false, type: 'lecture' },
+    { id: 'm10', title: 'Final Sitemap Project',                      itemCount: 2, completed: false, type: 'assignment' },
+  ],
+  'VD': [
+    { id: 'm1', title: 'Week 1 – Visual Principles & Composition',   itemCount: 4, completed: true,  type: 'lecture' },
+    { id: 'm2', title: 'Week 2 – Grid Systems',                      itemCount: 3, completed: true,  type: 'lecture' },
+    { id: 'm3', title: 'Assignment 2 – Colour Theory Study',         itemCount: 1, completed: true,  type: 'assignment' },
+    { id: 'm4', title: 'Week 3 – Typography in Visual Design',       itemCount: 3, completed: true,  type: 'reading' },
+    { id: 'm5', title: 'Assignment 3 – Typography Poster',           itemCount: 1, completed: true,  type: 'assignment' },
+    { id: 'm6', title: 'Week 4 – Design Systems & Component Logic',  itemCount: 4, completed: true,  type: 'lecture' },
+    { id: 'm7', title: 'Design Audit Video – Industry Examples',     itemCount: 2, completed: true,  type: 'video' },
+    { id: 'm8', title: 'Project 2 – Campaign Layout',                itemCount: 3, completed: true,  type: 'assignment' },
+    { id: 'm9', title: 'Week 5 – Motion & Transition Principles',    itemCount: 3, completed: false, type: 'lecture' },
+    { id: 'm10', title: 'Discussion – Campaign Critique',            itemCount: 1, completed: false, type: 'discussion' },
+    { id: 'm11', title: 'Final Design System Project',               itemCount: 2, completed: false, type: 'assignment' },
+  ],
+  'CE': [
+    { id: 'm1',  title: 'Week 1 – Academic Writing Fundamentals',    itemCount: 3, completed: true,  type: 'lecture' },
+    { id: 'm2',  title: 'Week 2 – Paragraph Structure & Argument',   itemCount: 2, completed: true,  type: 'reading' },
+    { id: 'm3',  title: 'Essay 1 – Personal Narrative',              itemCount: 1, completed: true,  type: 'assignment' },
+    { id: 'm4',  title: 'Week 3 – Research Skills & Source Eval',    itemCount: 4, completed: true,  type: 'lecture' },
+    { id: 'm5',  title: 'Workshop – Peer Review Process',            itemCount: 1, completed: true,  type: 'discussion' },
+    { id: 'm6',  title: 'Week 4 – APA Citations & Formatting',       itemCount: 3, completed: true,  type: 'video' },
+    { id: 'm7',  title: 'Essay 2 – Comparative Analysis',            itemCount: 1, completed: true,  type: 'assignment' },
+    { id: 'm8',  title: 'Week 5 – Writing for Design Portfolios',    itemCount: 3, completed: true,  type: 'lecture' },
+    { id: 'm9',  title: 'Week 6 – Research Proposals',               itemCount: 4, completed: true,  type: 'lecture' },
+    { id: 'm10', title: 'Peer Review 2 – Research Proposal Drafts',  itemCount: 1, completed: true,  type: 'discussion' },
+    { id: 'm11', title: 'Essay 3 – Research Proposal',               itemCount: 1, completed: false, type: 'assignment' },
+    { id: 'm12', title: 'Week 7 – Revision Strategies',              itemCount: 3, completed: false, type: 'reading' },
+    { id: 'm13', title: 'Final Portfolio Writing Workshop',           itemCount: 2, completed: false, type: 'discussion' },
+  ],
+  'TD': [
+    { id: 'm1', title: 'Week 1 – Drawing Standards & Title Blocks',  itemCount: 3, completed: true,  type: 'lecture' },
+    { id: 'm2', title: 'Week 2 – Orthographic Projection',           itemCount: 4, completed: true,  type: 'lecture' },
+    { id: 'm3', title: 'Drawing Set 1 – Basic Drafting',             itemCount: 2, completed: true,  type: 'assignment' },
+    { id: 'm4', title: 'Week 3 – Dimensioning & Tolerancing',        itemCount: 3, completed: true,  type: 'reading' },
+    { id: 'm5', title: 'ASME Standards Video Reference',             itemCount: 1, completed: true,  type: 'video' },
+    { id: 'm6', title: 'Drawing Set 2 – Orthographic Views',         itemCount: 2, completed: true,  type: 'assignment' },
+    { id: 'm7', title: 'Week 4 – Isometric & Sectional Views',       itemCount: 3, completed: true,  type: 'lecture' },
+    { id: 'm8', title: 'Drawing Set 3 – Mechanical Parts',           itemCount: 2, completed: true,  type: 'assignment' },
+    { id: 'm9', title: 'Final Drawing Submission',                   itemCount: 2, completed: false, type: 'assignment' },
+  ],
 }
+
+// ─── Course Announcements ─────────────────────────────────────────────────────
+// Pinned announcements appear first; recent announcements follow.
+// Used by the CoursePage Announcements section.
+
+export const courseAnnouncements: Announcement[] = [
+  // 2D Visualization
+  {
+    id: 'ann-2d-1', courseId: '2D', isPinned: true,
+    author: 'Jaron Stewart', date: 'Dec 1, 2022',
+    title: 'Final Project Brief is Live',
+    body: 'The final project brief is now posted on the course page. You will be designing a complete brand identity system — logo, type system, colour palette, and a one-page brand guide — for a fictional startup of your choice. Start early; this is 30% of your grade. Submission due January 10th.',
+  },
+  {
+    id: 'ann-2d-2', courseId: '2D', isPinned: false,
+    author: 'Jaron Stewart', date: 'Dec 12, 2022',
+    title: 'In-Class Logo Critique – Wednesday Dec 14',
+    body: 'We\'ll be running a round-robin logo critique this Wednesday. Bring your logo at three iterations minimum — printed or displayed on your laptop. Come ready to give and receive specific, actionable feedback.',
+  },
+  // Interactive Systems
+  {
+    id: 'ann-is-1', courseId: 'IS', isPinned: true,
+    author: 'Michael Holland', date: 'Dec 5, 2022',
+    title: 'Final Presentations – January 5th',
+    body: 'Final presentations begin Thursday, January 5th. Each student has 8 minutes to present their interactive prototype and key usability findings, followed by 4 minutes of Q&A. Presentation order will be posted one week in advance. Attendance is mandatory for the full session.',
+  },
+  {
+    id: 'ann-is-2', courseId: 'IS', isPinned: false,
+    author: 'Michael Holland', date: 'Dec 13, 2022',
+    title: 'Project 3 Feedback Posted in Figma',
+    body: 'I\'ve added inline comments to everyone\'s Project 3 Figma files. Review the feedback before your final presentation — several recurring issues around error states and loading behaviour that should be addressed if time permits.',
+  },
+  // Information Architecture
+  {
+    id: 'ann-ia-1', courseId: 'IA', isPinned: true,
+    author: 'A.J. Singh', date: 'Nov 28, 2022',
+    title: 'Grades Posted – Assignment 1 Sitemap Draft',
+    body: 'Grades for Assignment 1 are now available. Several submissions were missing secondary navigation levels and card sort references. If your grade is below 50%, please book office hours before submitting Assignment 2. The revision window for Assignment 1 closes December 20th.',
+  },
+  {
+    id: 'ann-ia-2', courseId: 'IA', isPinned: false,
+    author: 'A.J. Singh', date: 'Dec 9, 2022',
+    title: 'Final Sitemap – Clarification on Depth Requirements',
+    body: 'A few questions came in about the final sitemap depth. Your IA should include at minimum three levels (primary, secondary, tertiary). All utility pages (Login, 404, Search Results) must appear as nodes. Include a brief written rationale alongside the visual sitemap.',
+  },
+  // Visual Design
+  {
+    id: 'ann-vd-1', courseId: 'VD', isPinned: true,
+    author: 'Xander Messi', date: 'Dec 1, 2022',
+    title: 'Campaign Layout Rubric Feedback Available',
+    body: 'Detailed rubric comments for Project 2 are now attached to your submissions. Key takeaways across the class: (1) grid consistency is critical across formats, (2) all copy must be final before submission, (3) print and digital margins are different — check your specs. Use this feedback for the final project.',
+  },
+  {
+    id: 'ann-vd-2', courseId: 'VD', isPinned: false,
+    author: 'Xander Messi', date: 'Dec 10, 2022',
+    title: 'User Manual Revision Due Friday Dec 16',
+    body: 'The User Manual Revision is due this Friday at 11:59 PM. This is your last graded deliverable before the final. Include a brief design rationale (150–200 words) explaining your layout and typographic choices.',
+  },
+  // College English
+  {
+    id: 'ann-ce-1', courseId: 'CE', isPinned: true,
+    author: 'Erik Brown', date: 'Dec 6, 2022',
+    title: 'Voluntary APA Workshop – Friday Dec 16, SFC A105',
+    body: 'I\'m running a voluntary APA 7th edition workshop this Friday from 11 AM – 12:30 PM in SFC A105. We\'ll work through citation formats, in-text references, and reference list formatting. Attendance is optional but strongly recommended if you lost marks on citations in Essay 2. Pizza provided.',
+  },
+  {
+    id: 'ann-ce-2', courseId: 'CE', isPinned: false,
+    author: 'Erik Brown', date: 'Dec 8, 2022',
+    title: 'Week 13 Lecture Notes Posted',
+    body: 'Lecture notes from today\'s session on revision strategies are now in the Resources tab. Key topics: comma splices, run-on sentences, and thesis statement sharpening. These are common issues in Essay 2 — apply these fixes in your Research Proposal.',
+  },
+  // Technical Drawing
+  {
+    id: 'ann-td-1', courseId: 'TD', isPinned: true,
+    author: 'David Kim', date: 'Dec 14, 2022',
+    title: 'Drawing Set 3 Graded – Strong Semester!',
+    body: 'Drawing Set 3 grades are released. The class average was 45.5/50 — well done. A few notes: watch leader line overlaps on complex assemblies (Part C was a common issue), and confirm your title block is fully populated. See you Thursday for the final submission guidelines.',
+  },
+  {
+    id: 'ann-td-2', courseId: 'TD', isPinned: false,
+    author: 'David Kim', date: 'Dec 12, 2022',
+    title: 'Final Drawing Submission – Format Requirements',
+    body: 'The final drawing package must include: (1) PDF export at A2 paper size, (2) AutoCAD source files (.dwg), and (3) a completed title block with your name, student ID, scale, and date. Submit both files together in a single ZIP. Due date: January 12th, 2023.',
+  },
+]
 
 // ─── Grades ───────────────────────────────────────────────────────────────────
 
@@ -1059,7 +1296,7 @@ export const tools: ToolItem[] = [
     description: 'Originality checking and peer review for written assignments. Required for College English and Information Architecture submissions.',
     category: 'assessment', status: 'active', color: '#0077B6',
     url: 'https://turnitin.com',
-    linkedCourses: ['is', 'ce', 'ia'],
+    linkedCourses: ['IS', 'CE', 'IA'],
   },
   {
     id: 'respondus', name: 'Respondus LockDown Browser', abbr: 'RLB',
@@ -1080,14 +1317,14 @@ export const tools: ToolItem[] = [
     description: 'Photoshop, Illustrator, InDesign, After Effects, and the full CC suite. Subsidised student licence — complete account setup to activate.',
     category: 'productivity', status: 'setup-required', color: '#FA0F00',
     url: 'https://adobe.com/creativecloud',
-    linkedCourses: ['2d', 'vd', 'ia', 'is'],
+    linkedCourses: ['2D', 'VD', 'IA', 'IS'],
   },
   {
     id: 'figma', name: 'Figma', abbr: 'FIG',
     description: 'Collaborative UI design and prototyping. Used for wireframes, component libraries, and interactive mockups across design courses.',
     category: 'productivity', status: 'active', color: '#F24E1E',
     url: 'https://figma.com',
-    linkedCourses: ['ia', 'vd', '2d', 'is'],
+    linkedCourses: ['IA', 'VD', '2D', 'IS'],
   },
   {
     id: 'microsoft365', name: 'Microsoft 365', abbr: 'M365',
@@ -1100,7 +1337,7 @@ export const tools: ToolItem[] = [
     description: 'AI writing assistant for grammar, clarity, and citation suggestions. Connect your account to unlock the Premium tier included in your tuition.',
     category: 'productivity', status: 'setup-required', color: '#15C39A',
     url: 'https://grammarly.com',
-    linkedCourses: ['ce', 'is', 'ia'],
+    linkedCourses: ['CE', 'IS', 'IA'],
   },
   // ── Library & Research ──
   {
@@ -1127,14 +1364,14 @@ export const tools: ToolItem[] = [
     description: 'Print, scan, and large-format plot. Bring your design files for presentation boards, technical drawings, and mounted portfolio pieces.',
     category: 'campus', status: 'active', color: '#6366F1',
     url: 'https://georgebrown.ca/services/print',
-    linkedCourses: ['2d', 'vd', 'ia', 'td'],
+    linkedCourses: ['2D', 'VD', 'IA', 'TD'],
   },
   {
     id: 'tech-lab', name: 'Tech Lab Rentals', abbr: 'TLR',
     description: 'Borrow cameras, drawing tablets, VR headsets, tripods, microphones, gaming consoles, and other equipment from the campus tech lab.',
     category: 'campus', status: 'active', color: '#8B5CF6',
     url: 'https://georgebrown.ca/services/tech-lab',
-    linkedCourses: ['vd', '2d', 'is'],
+    linkedCourses: ['VD', '2D', 'IS'],
   },
 ]
 
