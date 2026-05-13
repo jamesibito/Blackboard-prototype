@@ -751,9 +751,9 @@ export const assignments: Assignment[] = [
       { id: 'sub-2d5-1', submittedDate: 'Dec 18, 2022 at 11:42 PM', files: ['BrandedDesign-Final.pdf', 'Source-Files.zip'] },
     ],
     feedbackThread: [
-      { id: 'f1', author: 'Jaron Stewart', authorType: 'instructor', authorInitials: 'JS', date: 'Dec 19', body: 'Good work overall, Kevin. Your logo mark is strong and the colour palette feels intentional. Where you lost points was in application — the mockup layouts felt rushed and the missing written rationale hurt your concept score. For the final project, please make sure to include a rationale document.' },
-      { id: 'f2', author: 'Kevin H.',      authorType: 'student',    authorInitials: 'KH', date: 'Dec 19', body: 'Thanks for the detailed feedback. Would it be possible to resubmit the rationale document for partial credit on the concept criterion, or is the grade final?' },
-      { id: 'f3', author: 'Jaron Stewart', authorType: 'instructor', authorInitials: 'JS', date: 'Dec 20', body: 'The grade is final for this submission, but I appreciate the follow-up. Focus on the rationale for your final project — it carries more weight there. Book office hours if you want to talk through the direction before you start.' },
+      { id: 'f1', author: 'Jaron Stewart', authorType: 'instructor', authorInitials: 'JS', date: 'Dec 19', body: 'Good work overall, Kevin. The logo mark is holding up well — the proportions are solid and the palette feels considered. The main drag on your score was the application section. The mockup layouts looked like first passes rather than finished pieces, and the missing written rationale took your concept criterion from a 4 to a 2. Going into the final project, the rationale carries even more weight, so don\'t skip it.' },
+      { id: 'f2', author: 'Kevin H.',      authorType: 'student',    authorInitials: 'KH', date: 'Dec 19', body: 'Thanks Jaron, really helpful. Is there any chance I can resubmit the rationale document for partial credit on the concept criterion, or is the grade locked at this point?' },
+      { id: 'f3', author: 'Jaron Stewart', authorType: 'instructor', authorInitials: 'JS', date: 'Dec 20', body: 'Grade\'s locked — that\'s the policy for completed submissions, and I need to be consistent across the class. That said, the feedback stands and I\'d rather you take it into the final than stress about this one. Book office hours if you want to talk through where to take the brand before you build out the final applications.' },
     ],
   },
   {
@@ -806,8 +806,8 @@ export const assignments: Assignment[] = [
       { id: 'sub-is4-1', submittedDate: 'Dec 19, 2022 at 10:15 PM', files: ['Usability-Test-Report.pdf', 'Test-Script.pdf'] },
     ],
     feedbackThread: [
-      { id: 'f1', author: 'Michael Holland', authorType: 'instructor', authorInitials: 'MH', date: 'Dec 20', body: 'Solid methodology section and good severity ratings, Kevin. The main gap is detail in the key findings — some of the edge cases observed in sessions 3 and 4 weren\'t captured. Proofread next time; there are a few run-on sentences in the recommendations.' },
-      { id: 'f2', author: 'Kevin H.',        authorType: 'student',    authorInitials: 'KH', date: 'Dec 21', body: 'Noted — I\'ll make sure to capture edge cases more thoroughly in the final usability round. Thanks for the feedback!' },
+      { id: 'f1', author: 'Michael Holland', authorType: 'instructor', authorInitials: 'MH', date: 'Dec 20', body: 'Solid report overall — methodology section is clean, your task scenarios were realistic, and the severity ratings show you understand triage. The gap that cost you the most was depth in Key Findings. Sessions 3 and 4 surfaced some interesting edge cases around the form validation flow that didn\'t make it into the report. As a rule: if a participant struggled with something twice, it\'s a finding. Also tighten up the recommendations section before the final — a few run-on sentences in there.' },
+      { id: 'f2', author: 'Kevin H.',        authorType: 'student',    authorInitials: 'KH', date: 'Dec 21', body: 'That makes sense — I remember those moments in sessions 3 and 4 but wasn\'t sure if they were significant enough to include. Good to know the threshold. I\'ll be more aggressive about capturing edge cases in the final round and will proofread the recommendations before submitting. Thanks!' },
     ],
   },
   {
@@ -901,9 +901,9 @@ export const assignments: Assignment[] = [
     ],
     deliverables: ['Sitemap (PDF or FigJam link)', 'Card sort results summary', 'Written rationale (250 words)'],
     feedbackThread: [
-      { id: 'f1', author: 'A.J. Singh', authorType: 'instructor', authorInitials: 'AJ', date: 'Nov 28', body: 'The sitemap is missing secondary and tertiary navigation levels — users would hit dead ends on key content. The card sorting data isn\'t referenced anywhere. Please book office hours before the next assignment so we can address these structural issues together.' },
-      { id: 'f2', author: 'Kevin H.', authorType: 'student', authorInitials: 'KH', date: 'Nov 29', body: 'Hi Professor Singh, I\'ve booked office hours for Thursday at 2 PM. Is there any reading I should review beforehand to prepare?' },
-      { id: 'f3', author: 'A.J. Singh', authorType: 'instructor', authorInitials: 'AJ', date: 'Nov 29', body: 'Chapter 4–5 of Rosenfeld & Morville would be a good starting point. Bring a revised rough draft of the hierarchy if you can.' },
+      { id: 'f1', author: 'A.J. Singh', authorType: 'instructor', authorInitials: 'AJ', date: 'Nov 28', body: 'Kevin, I want to give you honest feedback here: this sitemap needs significant revision before it reflects a workable IA. The top-level navigation is missing core nodes — Support and About aren\'t there at all — and the depth doesn\'t go past two levels in most branches, which means users would dead-end on important content. The bigger concern is that the card sort data you collected doesn\'t appear anywhere in the map or the rationale. Card sorting should be driving your groupings, not just sitting in a spreadsheet. Please book office hours before Assignment 2 so we can work through this together.' },
+      { id: 'f2', author: 'Kevin H.', authorType: 'student', authorInitials: 'KH', date: 'Nov 29', body: 'Hi Professor Singh, I\'ve booked the Thursday 2 PM slot. I\'ll be honest — I wasn\'t sure how to translate the card sort clusters into the sitemap structure. Is there anything I should read or review beforehand so I come in prepared?' },
+      { id: 'f3', author: 'A.J. Singh', authorType: 'instructor', authorInitials: 'AJ', date: 'Nov 29', body: 'Good that you booked in. Read chapters 4 and 5 of Rosenfeld & Morville — specifically the section on navigation systems and the three-level rule. And if you can, bring a rough revised hierarchy on paper or in FigJam. Even a messy draft gives us something concrete to work from.' },
     ],
   },
   {
