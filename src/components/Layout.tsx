@@ -7,7 +7,7 @@ export default function Layout() {
   const location = useLocation()
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0C0F1A] transition-colors duration-200">
+    <div className="min-h-screen bg-[#E8EBF0] dark:bg-[#0C0F1A] transition-colors duration-200">
       <Sidebar />
       <div className="ml-[220px] flex flex-col min-h-screen">
         <TopBar />

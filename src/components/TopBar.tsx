@@ -74,7 +74,7 @@ export default function TopBar() {
   const hasResults = courseResults.length > 0 || assignmentResults.length > 0 || activityResults.length > 0
 
   return (
-    <header className="h-[64px] flex items-center justify-between px-6 bg-white dark:bg-[#131825] border-b border-gray-100 dark:border-[#1E2A3F] shrink-0 relative z-20">
+    <header className="h-[64px] flex items-center justify-between px-6 bg-[#E8EBF0] dark:bg-[#131825] border-b border-[#D4D8E0] dark:border-[#1E2A3F] shrink-0 relative z-20">
 
       {/* Search */}
       <div ref={searchRef} className="relative w-[380px]">

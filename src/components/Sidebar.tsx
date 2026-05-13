@@ -23,7 +23,7 @@ const navItems = [
 
 // ─── Sidebar ──────────────────────────────────────────────────────────────────
 // The sidebar is ALWAYS dark regardless of the page's light/dark mode.
-// The logo header uses a white background so the logo image blends flush — no floating-image effect.
+// Logo header uses GBC navy + brightness/invert filter to render the logo white.
 
 export default function Sidebar() {
   const navigate = useNavigate()
@@ -31,9 +31,23 @@ export default function Sidebar() {
   return (
     <aside className="fixed left-0 top-0 bottom-0 w-[220px] bg-[#131825] border-r border-[#1E2A3F] flex flex-col z-30">
 
-      {/* GBC Logo Header — white background so the logo sits flush, no floating-image effect */}
-      <div className="flex items-center justify-center border-b border-[#1E2A3F] bg-white shrink-0 px-5 py-4">
-        <img src="/gbc-logo.png" alt="George Brown Polytechnic" className="w-full h-auto object-contain" />
+      {/* GBC Logo Header — navy background, logo inverted to white */}
+      <div className="h-[72px] flex items-center justify-center border-b border-[#1E2A3F] bg-[#1B3F89] relative overflow-hidden shrink-0">
+        {/* GBC four-colour identity stripe */}
+        <div className="absolute left-0 top-0 bottom-0 w-[5px] flex flex-col">
+          <div className="flex-1 bg-[#E53935]" />
+          <div className="flex-1 bg-[#FDD835]" />
+          <div className="flex-1 bg-[#1E88E5]" />
+          <div className="flex-1 bg-[#43A047]" />
+        </div>
+        <div className="relative z-10 pl-2 pr-4 flex items-center">
+          <img
+            src="/gbc-logo.png"
+            alt="George Brown Polytechnic"
+            className="h-10 w-auto object-contain"
+            style={{ filter: 'brightness(0) invert(1)' }}
+          />
+        </div>
       </div>
 
       {/* Nav links */}
