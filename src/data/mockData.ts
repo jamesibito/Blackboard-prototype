@@ -38,6 +38,23 @@ export interface RubricCriterion {
   feedback?: string
 }
 
+// A single message in the instructor/student feedback thread on an assignment
+export interface FeedbackMessage {
+  id: string
+  author: string
+  authorType: 'instructor' | 'student'
+  authorInitials: string
+  body: string
+  date: string
+}
+
+// One file-submission attempt (students may submit multiple times)
+export interface SubmissionAttempt {
+  id: string
+  submittedDate: string  // Human-readable: "Dec 18, 2022 at 11:42 PM"
+  files: string[]        // File names submitted
+}
+
 export interface Assignment {
   id: string
   courseId: string
@@ -50,6 +67,21 @@ export interface Assignment {
   rubric: RubricCriterion[]
   instructions: string[]
   deliverables: string[]
+  feedbackThread?: FeedbackMessage[]    // Instructor ↔ student comment thread
+  previousSubmissions?: SubmissionAttempt[]  // Submission history log
+}
+
+// A single item in the notification centre
+export interface Notification {
+  id: string
+  title: string
+  body: string
+  time: string          // Human-readable relative time: "2 hours ago", "Dec 5"
+  timeGroup: 'today' | 'this-week' | 'earlier'
+  type: 'grade' | 'assignment' | 'announcement' | 'resource'
+  courseId?: string     // Optional — college-wide notifications have no course
+  unread: boolean
+  linkTo?: string       // Internal route for "View" action
 }
 
 export interface GradeMark {
@@ -460,6 +492,14 @@ export const assignments: Assignment[] = [
       'Export all deliverables as high-resolution PDFs and provide source Illustrator files.',
     ],
     deliverables: ['3 application mockups (PDF)', 'Source files (.ai)', 'Written rationale (PDF)'],
+    previousSubmissions: [
+      { id: 'sub-2d5-1', submittedDate: 'Dec 18, 2022 at 11:42 PM', files: ['BrandedDesign-Final.pdf', 'Source-Files.zip'] },
+    ],
+    feedbackThread: [
+      { id: 'f1', author: 'Jaron Stewart', authorType: 'instructor', authorInitials: 'JS', date: 'Dec 19', body: 'Good work overall, Kevin. Your logo mark is strong and the colour palette feels intentional. Where you lost points was in application — the mockup layouts felt rushed and the missing written rationale hurt your concept score. For the final project, please make sure to include a rationale document.' },
+      { id: 'f2', author: 'Kevin H.',      authorType: 'student',    authorInitials: 'KH', date: 'Dec 19', body: 'Thanks for the detailed feedback. Would it be possible to resubmit the rationale document for partial credit on the concept criterion, or is the grade final?' },
+      { id: 'f3', author: 'Jaron Stewart', authorType: 'instructor', authorInitials: 'JS', date: 'Dec 20', body: 'The grade is final for this submission, but I appreciate the follow-up. Focus on the rationale for your final project — it carries more weight there. Book office hours if you want to talk through the direction before you start.' },
+    ],
   },
   {
     id: 'asgn-2d-4',
@@ -507,6 +547,13 @@ export const assignments: Assignment[] = [
       'Write actionable recommendations for each finding.',
     ],
     deliverables: ['Usability Test Report (PDF)', 'Test script (PDF)', 'Figma prototype link'],
+    previousSubmissions: [
+      { id: 'sub-is4-1', submittedDate: 'Dec 19, 2022 at 10:15 PM', files: ['Usability-Test-Report.pdf', 'Test-Script.pdf'] },
+    ],
+    feedbackThread: [
+      { id: 'f1', author: 'Michael Holland', authorType: 'instructor', authorInitials: 'MH', date: 'Dec 20', body: 'Solid methodology section and good severity ratings, Kevin. The main gap is detail in the key findings — some of the edge cases observed in sessions 3 and 4 weren\'t captured. Proofread next time; there are a few run-on sentences in the recommendations.' },
+      { id: 'f2', author: 'Kevin H.',        authorType: 'student',    authorInitials: 'KH', date: 'Dec 21', body: 'Noted — I\'ll make sure to capture edge cases more thoroughly in the final usability round. Thanks for the feedback!' },
+    ],
   },
   {
     id: 'asgn-is-3',
@@ -598,6 +645,11 @@ export const assignments: Assignment[] = [
       'Include at least 2-3 insights from the card sort in your rationale.',
     ],
     deliverables: ['Sitemap (PDF or FigJam link)', 'Card sort results summary', 'Written rationale (250 words)'],
+    feedbackThread: [
+      { id: 'f1', author: 'A.J. Singh', authorType: 'instructor', authorInitials: 'AJ', date: 'Nov 28', body: 'The sitemap is missing secondary and tertiary navigation levels — users would hit dead ends on key content. The card sorting data isn\'t referenced anywhere. Please book office hours before the next assignment so we can address these structural issues together.' },
+      { id: 'f2', author: 'Kevin H.', authorType: 'student', authorInitials: 'KH', date: 'Nov 29', body: 'Hi Professor Singh, I\'ve booked office hours for Thursday at 2 PM. Is there any reading I should review beforehand to prepare?' },
+      { id: 'f3', author: 'A.J. Singh', authorType: 'instructor', authorInitials: 'AJ', date: 'Nov 29', body: 'Chapter 4–5 of Rosenfeld & Morville would be a good starting point. Bring a revised rough draft of the hierarchy if you can.' },
+    ],
   },
   {
     id: 'asgn-ce-3',
@@ -628,6 +680,24 @@ export const assignments: Assignment[] = [
 export function getAssignment(id: string) {
   return assignments.find(a => a.id === id)
 }
+
+// ─── Notifications ────────────────────────────────────────────────────────────
+// Grouped by recency so the Notifications page can render Today / This Week / Earlier.
+// The TopBar dropdown also reads from this array for the unread badge count.
+
+export const notifications: Notification[] = [
+  // ── Today ──
+  { id: 'n1', title: 'Assignment 5 – Branded Design graded', body: 'Your grade has been posted. Score: 18/25 (72%). Review the rubric feedback from Jaron Stewart.', time: '2 hours ago', timeGroup: 'today', type: 'grade', courseId: '2D', unread: true, linkTo: '/courses/2D/assignments/asgn-2d-5' },
+  { id: 'n2', title: 'New resource: Figma Prototyping Starter Kit', body: 'Michael Holland posted a new resource to Interactive Systems. Download it from the course page.', time: '5 hours ago', timeGroup: 'today', type: 'resource', courseId: 'IS', unread: true, linkTo: '/courses/IS' },
+  // ── This Week ──
+  { id: 'n3', title: 'Reminder: Research Proposal due tomorrow', body: 'Essay 3 – Research Proposal is due Dec 8 at 11:59 PM. Review your draft before submission.', time: 'Yesterday at 3 PM', timeGroup: 'this-week', type: 'assignment', courseId: 'CE', unread: false, linkTo: '/courses/CE/assignments/asgn-ce-3' },
+  { id: 'n4', title: 'Drawing Set 3 graded — 48/50', body: 'David Kim has released your grade for Drawing Set 3 – Mechanical Parts. Excellent drafting precision!', time: '2 days ago', timeGroup: 'this-week', type: 'grade', courseId: 'TD', unread: false, linkTo: '/courses/TD/assignments/asgn-td-3' },
+  { id: 'n5', title: 'OSAP deadline approaching', body: 'Your OSAP application deadline for Winter 2023 is December 15th. Log in to Ontario.ca to check your status.', time: '3 days ago', timeGroup: 'this-week', type: 'announcement', unread: false },
+  // ── Earlier ──
+  { id: 'n6', title: 'Assignment 4 – Style Guide: Perfect Score!', body: 'Jaron Stewart graded your Style Guide — 20/20. Excellent layout and professional presentation.', time: 'Dec 5', timeGroup: 'earlier', type: 'grade', courseId: '2D', unread: false, linkTo: '/courses/2D/assignments/asgn-2d-4' },
+  { id: 'n7', title: 'Assignment Posted: Usability Test Report', body: 'A new assignment has been posted in Interactive Systems. Due: December 20th.', time: 'Dec 4', timeGroup: 'earlier', type: 'assignment', courseId: 'IS', unread: false, linkTo: '/courses/IS/assignments/asgn-is-4' },
+  { id: 'n8', title: 'Sitemap Draft graded — 5/20', body: 'A.J. Singh has released your grade for Assignment 1 – Sitemap Draft. Please book office hours before the next submission.', time: 'Dec 3', timeGroup: 'earlier', type: 'grade', courseId: 'IA', unread: false, linkTo: '/courses/IA/assignments/asgn-ia-1' },
+]
 
 // ─── Messages ─────────────────────────────────────────────────────────────────
 
@@ -780,4 +850,43 @@ export function getCourse(id: string) {
 export function getOverallGPA(): number {
   const total = grades.reduce((sum, g) => sum + g.percentage, 0)
   return Math.round(total / grades.length)
+}
+
+/**
+ * getNextClass — returns the next upcoming class block relative to the demo
+ * reference time of Wednesday Dec 14, 2022 at 8:45 AM.
+ *
+ * At that time, 2D Visualization starts in 15 minutes (9:00 AM Wed, SFC B108).
+ * This drives the "Next class in X min" countdown in the dashboard welcome banner.
+ *
+ * To change the demo time, adjust DEMO_DOW and DEMO_MIN.
+ */
+export function getNextClass(): {
+  course: Course
+  minutesUntil: number
+  room: string
+  startHour: number
+} | null {
+  const DEMO_DOW = 3            // Wednesday (0=Sun…6=Sat)
+  const DEMO_MIN = 8 * 60 + 45 // 8:45 AM in minutes since midnight
+
+  const nowInWeek = DEMO_DOW * 24 * 60 + DEMO_MIN
+
+  let closest: { course: Course; minutesUntil: number; room: string; startHour: number } | null = null
+
+  for (const block of classBlocks) {
+    const blockStart = block.dayOfWeek * 24 * 60 + block.startHour * 60
+    if (blockStart <= nowInWeek) continue  // class already started or passed
+
+    const minutesUntil = blockStart - nowInWeek
+    if (!closest || minutesUntil < closest.minutesUntil) {
+      closest = {
+        course: courses.find(c => c.id === block.courseId)!,
+        minutesUntil,
+        room: block.room,
+        startHour: block.startHour,
+      }
+    }
+  }
+  return closest
 }

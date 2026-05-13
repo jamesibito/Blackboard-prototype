@@ -2,14 +2,18 @@ import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Search, Sun, Moon, Bell, ChevronDown, X } from './Icons'
 import { useTheme } from '../context/ThemeContext'
-import { user, courses } from '../data/mockData'
+import { user, courses, notifications, getCourse } from '../data/mockData'
 
-const notifications = [
-  { text: 'Assignment 5 – Branded Design graded', time: '2 hours ago', color: '#F97316', unread: true },
-  { text: 'New resource posted in Interactive Systems', time: '5 hours ago', color: '#EC4899', unread: true },
-  { text: 'Reminder: Research Proposal due tomorrow', time: '1 day ago', color: '#06B6D4', unread: false },
-]
+// Colours to show in the notification dot for each type
+const typeColors: Record<string, string> = {
+  grade:        '#22C55E',
+  assignment:   '#F97316',
+  announcement: '#8B5CF6',
+  resource:     '#06B6D4',
+}
 
+// Show only the 3 most recent in the dropdown — full list lives on /notifications
+const dropdownNotifs = notifications.slice(0, 3)
 const unreadCount = notifications.filter(n => n.unread).length
 
 export default function TopBar() {
@@ -152,7 +156,7 @@ export default function TopBar() {
           </button>
 
           {notifOpen && (
-            <div className="absolute right-0 top-[calc(100%+6px)] w-[320px] bg-white dark:bg-[#1A2236] border border-gray-200 dark:border-[#2D3A52] rounded-xl shadow-xl z-50 overflow-hidden">
+            <div className="absolute right-0 top-[calc(100%+6px)] w-[340px] bg-white dark:bg-[#1A2236] border border-gray-200 dark:border-[#2D3A52] rounded-xl shadow-xl z-50 overflow-hidden">
               <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-[#2D3A52]">
                 <span className="font-semibold text-[13px] text-gray-900 dark:text-gray-100">Notifications</span>
                 {unreadCount > 0 && (
@@ -161,20 +165,43 @@ export default function TopBar() {
                   </span>
                 )}
               </div>
-              {notifications.map((n, i) => (
-                <div key={i} className="flex items-start gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-[#232d42] cursor-pointer border-b border-gray-50 dark:border-[#2D3A52] last:border-b-0 transition-colors">
-                  <div className="w-2 h-2 rounded-full mt-1.5 shrink-0" style={{ background: n.unread ? n.color : 'transparent', border: n.unread ? 'none' : '1.5px solid #94a3b8' }} />
-                  <div className="flex-1 min-w-0">
-                    <p className={`text-[13px] leading-snug ${n.unread ? 'text-gray-900 dark:text-gray-100 font-medium' : 'text-gray-600 dark:text-gray-400'}`}>
-                      {n.text}
-                    </p>
-                    <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{n.time}</p>
-                  </div>
-                </div>
-              ))}
-              <div className="px-4 py-2.5 text-center">
-                <button className="text-[12px] text-[#2563EB] dark:text-[#60A5FA] font-medium hover:underline">
-                  View all notifications
+
+              {/* Show 3 most recent notifications */}
+              {dropdownNotifs.map(n => {
+                const course = n.courseId ? getCourse(n.courseId) : undefined
+                const dotColor = typeColors[n.type]
+                return (
+                  <button
+                    key={n.id}
+                    className="flex items-start gap-3 w-full px-4 py-3 hover:bg-gray-50 dark:hover:bg-[#232d42] text-left border-b border-gray-50 dark:border-[#2D3A52] last:border-b-0 transition-colors"
+                    onClick={() => { setNotifOpen(false); if (n.linkTo) navigate(n.linkTo) }}
+                  >
+                    {/* Coloured dot: filled = unread, ring = read */}
+                    <div className="w-2 h-2 rounded-full mt-1.5 shrink-0"
+                      style={{ background: n.unread ? dotColor : 'transparent', border: n.unread ? 'none' : '1.5px solid #94a3b8' }} />
+                    <div className="flex-1 min-w-0">
+                      {/* Course pill if applicable */}
+                      {course && (
+                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded mr-1" style={{ background: `${course.color}18`, color: course.color }}>
+                          {course.abbr}
+                        </span>
+                      )}
+                      <span className={`text-[13px] leading-snug ${n.unread ? 'text-gray-900 dark:text-gray-100 font-medium' : 'text-gray-600 dark:text-gray-400'}`}>
+                        {n.title}
+                      </span>
+                      <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{n.time}</p>
+                    </div>
+                  </button>
+                )
+              })}
+
+              {/* Footer: link to full Notifications page */}
+              <div className="px-4 py-2.5 text-center border-t border-gray-100 dark:border-[#2D3A52]">
+                <button
+                  className="text-[12px] text-[#2563EB] dark:text-[#60A5FA] font-medium hover:underline"
+                  onClick={() => { setNotifOpen(false); navigate('/notifications') }}
+                >
+                  View all {notifications.length} notifications
                 </button>
               </div>
             </div>

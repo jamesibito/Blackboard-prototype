@@ -103,7 +103,7 @@ export default function AssignmentPage() {
       </div>
 
       <div className="grid grid-cols-[1fr_320px] gap-6">
-        {/* Left: Instructions + Rubric */}
+        {/* Left: Instructions + Rubric + Feedback Thread */}
         <div className="space-y-6">
 
           {/* Instructions */}
@@ -180,6 +180,73 @@ export default function AssignmentPage() {
               </table>
             </div>
           </div>
+          {/*
+            Feedback Thread — instructor/student comment exchange below the rubric.
+            Only shown for graded assignments that have thread data.
+            Mirrors the Canvas "Comments" feature: lets students see instructor notes
+            and ask follow-up questions in context.
+          */}
+          {assignment.feedbackThread && assignment.feedbackThread.length > 0 && (
+            <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden">
+              <div className="px-5 pt-5 pb-3">
+                <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Feedback Thread</h2>
+                <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">Instructor and student comments on this submission</p>
+              </div>
+              <div className="px-5 pb-5 space-y-4">
+                {assignment.feedbackThread.map(msg => {
+                  const isInstructor = msg.authorType === 'instructor'
+                  return (
+                    <div key={msg.id} className={`flex gap-3 ${isInstructor ? '' : 'flex-row-reverse'}`}>
+                      {/* Author avatar */}
+                      <div
+                        className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-[11px] font-bold shrink-0"
+                        style={{ background: isInstructor ? course.color : '#6B7280' }}
+                      >
+                        {msg.authorInitials}
+                      </div>
+                      {/* Bubble */}
+                      <div className={`flex-1 max-w-[85%] ${isInstructor ? '' : 'flex flex-col items-end'}`}>
+                        <div className={`rounded-2xl px-4 py-3 ${
+                          isInstructor
+                            ? 'bg-gray-50 dark:bg-[#131825] rounded-tl-sm'
+                            : 'bg-[#2563EB]/[0.08] dark:bg-[#2563EB]/[0.12] rounded-tr-sm'
+                        }`}>
+                          <p className="text-[12px] font-semibold text-gray-900 dark:text-gray-100 mb-1">
+                            {msg.author}
+                          </p>
+                          <p className="text-[13px] text-gray-700 dark:text-gray-300 leading-relaxed">
+                            {msg.body}
+                          </p>
+                        </div>
+                        <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1 px-1">{msg.date}</p>
+                      </div>
+                    </div>
+                  )
+                })}
+
+                {/* Reply input — visual prototype only */}
+                <div className="flex gap-2 pt-2 border-t border-gray-100 dark:border-[#2D3A52]">
+                  <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-[11px] font-bold shrink-0 bg-gray-400">
+                    KH
+                  </div>
+                  <div className="flex-1 flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Reply to instructor…"
+                      className="flex-1 h-9 px-3 rounded-xl bg-gray-50 dark:bg-[#131825] border border-gray-200 dark:border-[#2D3A52] text-[12px] text-gray-700 dark:text-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none focus:ring-2 focus:ring-[#2563EB]/20 transition"
+                      readOnly
+                    />
+                    <button
+                      className="px-3 py-1.5 rounded-xl text-[12px] font-semibold text-white transition-opacity hover:opacity-90"
+                      style={{ background: course.color }}
+                    >
+                      Send
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Right sidebar */}
@@ -233,6 +300,41 @@ export default function AssignmentPage() {
               </div>
             )}
           </div>
+
+          {/*
+            Submission History — shows every file submission attempt with a timestamp.
+            Useful when students submit multiple drafts or resubmit after feedback.
+            Only rendered when the assignment has previousSubmissions data.
+          */}
+          {assignment.previousSubmissions && assignment.previousSubmissions.length > 0 && (
+            <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] p-5">
+              <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100 mb-3">Submission History</h2>
+              <div className="space-y-3">
+                {assignment.previousSubmissions.map((sub, i) => (
+                  <div key={sub.id} className="flex items-start gap-3">
+                    {/* Attempt number badge */}
+                    <div className="w-6 h-6 rounded-full bg-gray-100 dark:bg-[#232d42] flex items-center justify-center shrink-0 mt-0.5">
+                      <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400">{i + 1}</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[11px] font-semibold text-gray-700 dark:text-gray-300">{sub.submittedDate}</p>
+                      <div className="space-y-0.5 mt-1">
+                        {sub.files.map(f => (
+                          <div key={f} className="flex items-center gap-1.5">
+                            <FileText size={11} className="text-gray-400 dark:text-gray-500 shrink-0" />
+                            <span className="text-[11px] text-gray-500 dark:text-gray-400 truncate">{f}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <button className="text-[10px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline shrink-0">
+                      View
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Course info */}
           <Link

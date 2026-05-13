@@ -193,12 +193,22 @@ export default function Courses() {
                 )}
               </div>
 
+              {/* Primary action: full course page with modules, assignments, resources */}
               <Link
                 to={`/courses/${selected.id}`}
                 className="block w-full py-2.5 rounded-xl text-[13px] font-semibold text-white transition-opacity hover:opacity-90 active:scale-[0.98] text-center"
                 style={{ background: selected.color }}
               >
-                Continue Course
+                Open Full Course →
+              </Link>
+
+              {/* Secondary: jump straight to grades detail */}
+              <Link
+                to="/grades"
+                className="block w-full py-2 rounded-xl text-[13px] font-medium text-center border transition-colors hover:opacity-80"
+                style={{ borderColor: selected.color, color: selected.color }}
+              >
+                View Grades
               </Link>
             </div>
           </div>

@@ -9,6 +9,7 @@ import Courses from './pages/Courses'
 import CoursePage from './pages/CoursePage'
 import AssignmentPage from './pages/AssignmentPage'
 import Messages from './pages/Messages'
+import Notifications from './pages/Notifications'
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
           <Route path="/activity-stream"                     element={<ActivityStream />} />
           <Route path="/calendar"                            element={<CalendarPage />} />
           <Route path="/messages"                            element={<Messages />} />
+          <Route path="/notifications"                       element={<Notifications />} />
           {/* Stubs for remaining nav items */}
           <Route path="/communities"     element={<Placeholder title="Communities" description="Discussion boards and study groups for your courses." />} />
           <Route path="/resources"       element={<Placeholder title="Resources" description="Library access, writing centre, tutoring, and more." />} />

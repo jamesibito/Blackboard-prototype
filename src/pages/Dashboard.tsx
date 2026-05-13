@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ChevronRight, FileText, ImageIcon, Clock, CheckCircle, TrendingUp } from '../components/Icons'
-import { courses, dueSoon, grades, activityItems, getCourse, getOverallGPA } from '../data/mockData'
+import { courses, dueSoon, grades, activityItems, getCourse, getOverallGPA, getNextClass } from '../data/mockData'
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -46,11 +46,17 @@ function FileChip({ name }: { name: string }) {
 
 export default function Dashboard() {
   const overallGPA = getOverallGPA()
+  const nextClass  = getNextClass()
+
+  // Completion nudge: find the course closest to 100% that isn't quite there
+  const nudgeCourse = courses
+    .filter(c => c.completion >= 85 && c.completion < 100)
+    .sort((a, b) => b.completion - a.completion)[0]
 
   return (
     <div className="space-y-5 max-w-[1200px]">
 
-      {/* Welcome Banner */}
+      {/* ── Welcome Banner ── */}
       <div className="relative bg-gradient-to-br from-[#1B3F89] via-[#1E4DA0] to-[#2563EB] rounded-2xl p-7 text-white overflow-hidden">
         {/* Decorative circles */}
         <div className="absolute -right-10 -top-10 w-48 h-48 rounded-full bg-white/[0.06] pointer-events-none" />
@@ -64,20 +70,78 @@ export default function Dashboard() {
             You have <span className="font-semibold text-white">{dueSoon.length}</span> assignments due this week.
             Check the Activity Stream to stay on track.
           </p>
-          <div className="flex items-center gap-4 mt-4">
+
+          {/* Row: overall average + next-class countdown + activity link */}
+          <div className="flex items-center gap-5 mt-4 flex-wrap">
             <div className="flex items-center gap-1.5">
               <TrendingUp size={14} className="text-blue-200" />
               <span className="text-[13px] text-blue-100">Overall average: <strong className="text-white">{overallGPA}%</strong></span>
             </div>
+
+            {/*
+              Next class countdown — computed from the demo reference time.
+              Shows course name, minutes away, and room number.
+            */}
+            {nextClass && (
+              <Link
+                to={`/courses/${nextClass.course.id}`}
+                className="flex items-center gap-1.5 text-[13px] text-blue-100 hover:text-white transition-colors group"
+              >
+                <Clock size={13} className="text-blue-300" />
+                <span>
+                  Next class:{' '}
+                  <strong className="text-white group-hover:underline">{nextClass.course.name}</strong>
+                  {' '}in{' '}
+                  <strong className="text-white">
+                    {nextClass.minutesUntil < 60
+                      ? `${nextClass.minutesUntil} min`
+                      : `${Math.round(nextClass.minutesUntil / 60)}h`}
+                  </strong>
+                  {' '}· {nextClass.room}
+                </span>
+              </Link>
+            )}
+
             <Link
               to="/activity-stream"
-              className="flex items-center gap-1 text-[13px] font-semibold text-white/90 hover:text-white transition-colors"
+              className="flex items-center gap-1 text-[13px] font-semibold text-white/90 hover:text-white transition-colors ml-auto"
             >
               View activity <ChevronRight size={14} />
             </Link>
           </div>
         </div>
       </div>
+
+      {/*
+        ── Due Date Timeline ──
+        Horizontal strip showing all upcoming deadlines across courses, ordered by date.
+        Gives a at-a-glance "next 2 weeks" view so Kevin doesn't have to open the calendar.
+      */}
+      <DeadlineTimeline />
+
+      {/*
+        ── Completion Nudge ──
+        Appears when a course is ≥ 85% complete but not finished.
+        Encourages the student and links directly to the course.
+      */}
+      {nudgeCourse && (
+        <Link
+          to={`/courses/${nudgeCourse.id}`}
+          className="flex items-center gap-4 px-5 py-4 rounded-2xl border transition-all hover:shadow-sm group"
+          style={{ background: `${nudgeCourse.color}0D`, borderColor: `${nudgeCourse.color}40` }}
+        >
+          <div className="text-[24px]">🎓</div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[14px] font-semibold text-gray-900 dark:text-gray-100">
+              Almost there! <span style={{ color: nudgeCourse.color }}>{nudgeCourse.name}</span> is {nudgeCourse.completion}% complete.
+            </p>
+            <p className="text-[12px] text-gray-500 dark:text-gray-400 mt-0.5">
+              {nudgeCourse.moduleCount - nudgeCourse.completedModules} module{nudgeCourse.moduleCount - nudgeCourse.completedModules !== 1 ? 's' : ''} left to finish the course.
+            </p>
+          </div>
+          <ChevronRight size={16} className="text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 shrink-0 transition-colors" />
+        </Link>
+      )}
 
       {/* Main grid: Courses | Due Soon + Grades | Calendar + Activity */}
       <div className="grid grid-cols-[1fr_minmax(260px,0.65fr)_minmax(280px,0.75fr)] gap-5">
@@ -250,6 +314,79 @@ export default function Dashboard() {
           icon={<TrendingUp size={18} className="text-[#2563EB]" />}
           accent="#2563EB"
         />
+      </div>
+    </div>
+  )
+}
+
+// ─── Deadline Timeline ────────────────────────────────────────────────────────
+// Horizontal strip showing all deadlines from dueSoon, ordered by day.
+// Gives a mini Gantt-style overview without opening the calendar.
+
+function DeadlineTimeline() {
+  // Demo "today" = Dec 14
+  const TODAY_DAY = 14
+
+  // Parse day number from strings like "WEDNESDAY, DEC 7TH"
+  const parseDayNum = (dayStr: string): number => {
+    const match = dayStr.match(/DEC (\d+)/i)
+    return match ? parseInt(match[1], 10) : 99
+  }
+
+  const sorted = [...dueSoon].sort((a, b) => parseDayNum(a.dueDay) - parseDayNum(b.dueDay))
+
+  return (
+    <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] px-5 py-4">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="font-semibold text-[14px] text-gray-900 dark:text-gray-100">Upcoming Deadlines</h2>
+        <Link to="/calendar" className="text-[12px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline">
+          Open calendar
+        </Link>
+      </div>
+
+      {/* Scrollable horizontal track */}
+      <div className="relative overflow-x-auto">
+        {/* Connector line */}
+        <div className="absolute left-0 right-0 top-[18px] h-px bg-gray-100 dark:bg-[#2D3A52]" />
+
+        <div className="flex items-start gap-8 pb-1 min-w-max">
+          {/* "Today" marker */}
+          <div className="flex flex-col items-center gap-2 shrink-0">
+            <div className="w-4 h-4 rounded-full bg-[#2563EB] ring-4 ring-[#2563EB]/20 relative z-10" />
+            <span className="text-[10px] font-bold text-[#2563EB] dark:text-[#60A5FA] uppercase tracking-wide">Today</span>
+            <span className="text-[10px] text-gray-400">Dec {TODAY_DAY}</span>
+          </div>
+
+          {sorted.map(d => {
+            const course   = getCourse(d.courseId)
+            const dayNum   = parseDayNum(d.dueDay)
+            const linkTarget = d.assignmentId
+              ? `/courses/${d.courseId}/assignments/${d.assignmentId}`
+              : `/courses/${d.courseId}`
+            const daysOut  = dayNum - TODAY_DAY
+
+            return (
+              <Link key={d.id} to={linkTarget} className="flex flex-col items-center gap-2 shrink-0 group">
+                {/* Dot — course colour */}
+                <div
+                  className="w-4 h-4 rounded-full relative z-10 ring-2 transition-all group-hover:scale-110"
+                  style={{ background: course.color, outline: `3px solid ${course.color}30`, outlineOffset: '2px' }}
+                />
+                {/* Assignment name */}
+                <span className="text-[11px] font-semibold text-gray-800 dark:text-gray-200 group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors text-center max-w-[80px] leading-tight">
+                  {d.title}
+                </span>
+                {/* Course abbreviation */}
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded" style={{ background: `${course.color}18`, color: course.color }}>
+                  {course.abbr}
+                </span>
+                {/* Date + days away */}
+                <span className="text-[10px] text-gray-400 dark:text-gray-500">Dec {dayNum}</span>
+                <span className="text-[9px] text-gray-400 dark:text-gray-500">in {daysOut}d</span>
+              </Link>
+            )
+          })}
+        </div>
       </div>
     </div>
   )
