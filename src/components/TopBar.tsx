@@ -309,10 +309,28 @@ export default function TopBar() {
                 <p className="text-[13px] font-semibold text-gray-900 dark:text-gray-100">{user.displayName}</p>
                 <p className="text-[11px] text-gray-400 dark:text-gray-500">Student · Fall 2022</p>
               </div>
-              {['My Profile', 'Account Settings', 'Help Centre'].map((item, i) => (
-                <button key={i} className="w-full px-4 py-2 text-left text-[13px] text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors">
-                  {item}
-                </button>
+              {[
+                { label: 'My Profile',        to: '/profile' },
+                { label: 'Account Settings',  to: '/profile' },
+                { label: 'Help Centre',       to: null       },
+              ].map((item, i) => (
+                item.to ? (
+                  <button
+                    key={i}
+                    onClick={() => { setProfileOpen(false); navigate(item.to!) }}
+                    className="w-full px-4 py-2 text-left text-[13px] text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors"
+                  >
+                    {item.label}
+                  </button>
+                ) : (
+                  <button
+                    key={i}
+                    onClick={() => { setProfileOpen(false); navigate('/profile') }}
+                    className="w-full px-4 py-2 text-left text-[13px] text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors"
+                  >
+                    {item.label}
+                  </button>
+                )
               ))}
             </div>
           )}

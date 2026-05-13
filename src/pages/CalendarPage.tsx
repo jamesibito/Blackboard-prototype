@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { ChevronLeft, ChevronRight, Plus, Clock } from '../components/Icons'
-import { calendarEvents, classBlocks, getCourse } from '../data/mockData'
+import { Link } from 'react-router-dom'
+import { ChevronLeft, ChevronRight, Clock } from '../components/Icons'
+import { calendarEvents, classBlocks, dueSoon, getCourse } from '../data/mockData'
 
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December']
 const DAY_HEADERS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
@@ -274,16 +275,265 @@ export default function CalendarPage() {
         </div>
       )}
 
-      {/* Week / Day stubs — polished placeholder */}
-      {(view === 'Week' || view === 'Day') && (
-        <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] p-16 text-center">
-          <div className="w-12 h-12 rounded-2xl bg-gray-100 dark:bg-[#232d42] flex items-center justify-center mx-auto mb-3">
-            <Plus size={20} className="text-gray-400 dark:text-gray-500" />
+      {/* Week View */}
+      {view === 'Week' && <WeekView />}
+
+      {/* Day View — shows selected day as a single-column schedule */}
+      {view === 'Day' && <DayView selectedDay={selectedDay ?? TODAY} month={month} year={year} />}
+    </div>
+  )
+}
+
+// ─── Shared constants ─────────────────────────────────────────────────────────
+
+const HOUR_HEIGHT = 60  // px per hour in the time grid
+const DAY_START   = 8   // 8 AM
+const DAY_END     = 18  // 6 PM
+
+const SHORT_DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+
+// Week of Dec 11–17, 2022 (demo week — today = Dec 14 = Wednesday = index 3)
+const WEEK_DATES = [11, 12, 13, 14, 15, 16, 17]
+
+function fmt12(h: number) {
+  if (h === 0)  return '12 AM'
+  if (h === 12) return '12 PM'
+  return h > 12 ? `${h - 12} PM` : `${h} AM`
+}
+
+// ─── Week View ────────────────────────────────────────────────────────────────
+
+function WeekView() {
+  const hours = Array.from({ length: DAY_END - DAY_START }, (_, i) => DAY_START + i)
+
+  // Due-soon items that fall in this demo week (Dec 11-17)
+  const parseDec = (s: string) => { const m = s.match(/DEC (\d+)/i); return m ? +m[1] : 0 }
+  const weekDeadlines = dueSoon.filter(d => {
+    const day = parseDec(d.dueDay)
+    return day >= 11 && day <= 17
+  })
+
+  return (
+    <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden">
+
+      {/* Column headers */}
+      <div className="grid border-b border-gray-100 dark:border-[#2D3A52]" style={{ gridTemplateColumns: '56px repeat(7, 1fr)' }}>
+        <div />
+        {WEEK_DATES.map((date, dow) => {
+          const isToday = date === TODAY
+          return (
+            <div key={dow} className="py-3 text-center border-l border-gray-50 dark:border-[#1E2A3F] first:border-l-0">
+              <p className="text-[11px] font-medium text-gray-400 dark:text-gray-500">{SHORT_DAYS[dow]}</p>
+              <div className={`w-7 h-7 rounded-full flex items-center justify-center mx-auto mt-0.5 text-[13px] font-bold ${
+                isToday ? 'bg-[#2563EB] text-white' : 'text-gray-700 dark:text-gray-300'
+              }`}>
+                {date}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      {/* All-day strip: deadlines */}
+      {weekDeadlines.length > 0 && (
+        <div className="grid border-b border-gray-100 dark:border-[#2D3A52]" style={{ gridTemplateColumns: '56px repeat(7, 1fr)' }}>
+          <div className="flex items-center justify-end pr-2 py-1.5">
+            <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">Due</span>
           </div>
-          <p className="text-[15px] font-semibold text-gray-500 dark:text-gray-400">{view} view</p>
-          <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-1">Coming in the next update</p>
+          {WEEK_DATES.map((date, dow) => {
+            const deadlinesOnDay = weekDeadlines.filter(d => parseDec(d.dueDay) === date)
+            return (
+              <div key={dow} className="border-l border-gray-50 dark:border-[#1E2A3F] px-1 py-1 min-h-[24px]">
+                {deadlinesOnDay.map(d => {
+                  const course = getCourse(d.courseId)
+                  const target = d.assignmentId ? `/courses/${d.courseId}/assignments/${d.assignmentId}` : `/courses/${d.courseId}`
+                  return (
+                    <Link
+                      key={d.id}
+                      to={target}
+                      className="block text-[10px] font-semibold px-1.5 py-0.5 rounded truncate mb-0.5 hover:opacity-80 transition-opacity"
+                      style={{ background: `${course.color}18`, color: course.color }}
+                      title={d.title}
+                    >
+                      {d.title}
+                    </Link>
+                  )
+                })}
+              </div>
+            )
+          })}
         </div>
       )}
+
+      {/* Time grid */}
+      <div className="overflow-y-auto" style={{ maxHeight: '520px' }}>
+        <div className="grid relative" style={{ gridTemplateColumns: '56px repeat(7, 1fr)' }}>
+
+          {/* Hour labels */}
+          <div>
+            {hours.map(h => (
+              <div key={h} className="flex items-start justify-end pr-2 pt-0.5" style={{ height: HOUR_HEIGHT }}>
+                <span className="text-[10px] text-gray-400 dark:text-gray-500 font-medium tabular-nums">{fmt12(h)}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Day columns */}
+          {WEEK_DATES.map((date, dow) => {
+            const isToday    = date === TODAY
+            const dayBlocks  = classBlocks.filter(b => b.dayOfWeek === dow)
+
+            return (
+              <div
+                key={dow}
+                className={`relative border-l border-gray-50 dark:border-[#1E2A3F] ${isToday ? 'bg-[#2563EB]/[0.02] dark:bg-[#2563EB]/[0.04]' : ''}`}
+                style={{ height: HOUR_HEIGHT * hours.length }}
+              >
+                {/* Hour grid lines */}
+                {hours.map(h => (
+                  <div
+                    key={h}
+                    className="absolute left-0 right-0 border-t border-gray-50 dark:border-[#1E2A3F]"
+                    style={{ top: (h - DAY_START) * HOUR_HEIGHT }}
+                  />
+                ))}
+
+                {/* Class blocks */}
+                {dayBlocks.map((block, i) => {
+                  const course = getCourse(block.courseId)
+                  const top    = (block.startHour - DAY_START) * HOUR_HEIGHT
+                  const height = (block.endHour - block.startHour) * HOUR_HEIGHT
+                  return (
+                    <Link
+                      key={i}
+                      to={`/courses/${block.courseId}`}
+                      className="absolute left-1 right-1 rounded-lg px-2 py-1.5 overflow-hidden hover:opacity-90 transition-opacity"
+                      style={{ top: top + 2, height: height - 4, background: `${course.color}20`, borderLeft: `3px solid ${course.color}` }}
+                    >
+                      <p className="text-[11px] font-bold leading-tight truncate" style={{ color: course.color }}>{course.abbr}</p>
+                      <p className="text-[10px] leading-tight truncate" style={{ color: course.color, opacity: 0.8 }}>{course.name}</p>
+                      {height >= 80 && (
+                        <p className="text-[10px] mt-0.5" style={{ color: course.color, opacity: 0.7 }}>
+                          {fmt12(block.startHour)} – {fmt12(block.endHour)} · {block.room}
+                        </p>
+                      )}
+                    </Link>
+                  )
+                })}
+
+                {/* "Now" line on today at 8:45 AM */}
+                {isToday && (
+                  <div
+                    className="absolute left-0 right-0 flex items-center z-10 pointer-events-none"
+                    style={{ top: (8.75 - DAY_START) * HOUR_HEIGHT }}
+                  >
+                    <div className="w-2 h-2 rounded-full bg-[#2563EB] shrink-0 -ml-1" />
+                    <div className="flex-1 h-px bg-[#2563EB]" />
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ─── Day View ─────────────────────────────────────────────────────────────────
+
+function DayView({ selectedDay, month, year }: { selectedDay: number; month: number; year: number }) {
+  const date    = new Date(year, month, selectedDay)
+  const dow     = date.getDay()
+  const isToday = selectedDay === TODAY && year === 2022 && month === 11
+  const hours   = Array.from({ length: DAY_END - DAY_START }, (_, i) => DAY_START + i)
+
+  const dayBlocks    = classBlocks.filter(b => b.dayOfWeek === dow)
+  const parseDec     = (s: string) => { const m = s.match(/DEC (\d+)/i); return m ? +m[1] : 0 }
+  const dayDeadlines = year === 2022 && month === 11
+    ? dueSoon.filter(d => parseDec(d.dueDay) === selectedDay)
+    : []
+
+  return (
+    <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-100 dark:border-[#2D3A52]">
+        <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-[18px] ${isToday ? 'bg-[#2563EB] text-white' : 'bg-gray-100 dark:bg-[#232d42] text-gray-700 dark:text-gray-300'}`}>
+          {selectedDay}
+        </div>
+        <div>
+          <p className="text-[15px] font-bold text-gray-900 dark:text-gray-100">{SHORT_DAYS[dow]}, {MONTHS[month]} {selectedDay}</p>
+          {isToday && <span className="text-[11px] text-[#2563EB] dark:text-[#60A5FA] font-medium">Today</span>}
+        </div>
+      </div>
+
+      {/* Deadlines strip */}
+      {dayDeadlines.length > 0 && (
+        <div className="px-5 py-3 border-b border-gray-50 dark:border-[#1E2A3F] flex gap-2 flex-wrap">
+          <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wide self-center">Due</span>
+          {dayDeadlines.map(d => {
+            const course = getCourse(d.courseId)
+            const target = d.assignmentId ? `/courses/${d.courseId}/assignments/${d.assignmentId}` : `/courses/${d.courseId}`
+            return (
+              <Link key={d.id} to={target} className="text-[11px] font-semibold px-2 py-0.5 rounded hover:opacity-80 transition-opacity" style={{ background: `${course.color}18`, color: course.color }}>
+                {d.title}
+              </Link>
+            )
+          })}
+        </div>
+      )}
+
+      {/* Time grid */}
+      <div className="flex overflow-y-auto" style={{ maxHeight: '480px' }}>
+        {/* Hour labels */}
+        <div className="shrink-0 w-14">
+          {hours.map(h => (
+            <div key={h} className="flex items-start justify-end pr-2 pt-0.5" style={{ height: HOUR_HEIGHT }}>
+              <span className="text-[10px] text-gray-400 dark:text-gray-500 tabular-nums">{fmt12(h)}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Single-day column */}
+        <div className="flex-1 relative border-l border-gray-100 dark:border-[#2D3A52]" style={{ height: HOUR_HEIGHT * hours.length }}>
+          {hours.map(h => (
+            <div key={h} className="absolute left-0 right-0 border-t border-gray-50 dark:border-[#1E2A3F]" style={{ top: (h - DAY_START) * HOUR_HEIGHT }} />
+          ))}
+
+          {dayBlocks.map((block, i) => {
+            const course = getCourse(block.courseId)
+            const top    = (block.startHour - DAY_START) * HOUR_HEIGHT
+            const height = (block.endHour - block.startHour) * HOUR_HEIGHT
+            return (
+              <Link
+                key={i}
+                to={`/courses/${block.courseId}`}
+                className="absolute left-2 right-2 rounded-xl px-3 py-2 overflow-hidden hover:opacity-90 transition-opacity"
+                style={{ top: top + 2, height: height - 4, background: `${course.color}15`, borderLeft: `4px solid ${course.color}` }}
+              >
+                <p className="text-[13px] font-bold" style={{ color: course.color }}>{course.name}</p>
+                <p className="text-[11px] mt-0.5 flex items-center gap-1" style={{ color: course.color, opacity: 0.8 }}>
+                  <Clock size={10} />
+                  {fmt12(block.startHour)} – {fmt12(block.endHour)} · {block.room}
+                </p>
+              </Link>
+            )
+          })}
+
+          {isToday && (
+            <div className="absolute left-0 right-0 flex items-center z-10 pointer-events-none" style={{ top: (8.75 - DAY_START) * HOUR_HEIGHT }}>
+              <div className="w-2 h-2 rounded-full bg-[#2563EB] shrink-0 -ml-1" />
+              <div className="flex-1 h-px bg-[#2563EB]" />
+            </div>
+          )}
+
+          {dayBlocks.length === 0 && (
+            <div className="flex items-center justify-center h-full">
+              <p className="text-[13px] text-gray-400 dark:text-gray-500">No classes scheduled</p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

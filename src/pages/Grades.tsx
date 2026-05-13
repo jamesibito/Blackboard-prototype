@@ -1,11 +1,14 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, Eye, EyeOff, TrendingUp } from '../components/Icons'
-import { grades, getCourse, getOverallGPA } from '../data/mockData'
-import { getLetterGrade } from '../utils/grades'  // shared scale — edit grades.ts to change
+import {
+  grades, getCourse, getOverallGPA,
+  winterGrades, getWinterCourse, getWinterGPA,
+  semesters,
+} from '../data/mockData'
+import { getLetterGrade } from '../utils/grades'
 
 // ─── Circle Progress ───────────────────────────────────────────────────────────
-// SVG ring used on each course card to show the percentage at a glance
 
 function CircleProgress({ percentage, color, size = 56 }: { percentage: number; color: string; size?: number }) {
   const r = (size - 8) / 2
@@ -27,14 +30,32 @@ function CircleProgress({ percentage, color, size = 56 }: { percentage: number; 
 // ─── Grades Page ───────────────────────────────────────────────────────────────
 
 export default function Grades() {
-  const [expandedId, setExpandedId] = useState<string | null>('2D')
+  // semesters[0] = Winter 2022, semesters[1] = Fall 2022 (current)
+  const [semIdx, setSemIdx] = useState(semesters.length - 1)
+  const [expandedId, setExpandedId] = useState<string | null>(null)
   const [hideGrades, setHideGrades] = useState(false)
 
-  const overall = getOverallGPA()
-  const { letter: overallLetter, color: overallColor } = getLetterGrade(overall)
+  const isFall    = semesters[semIdx].id === 'fall-2022'
+  const semester  = semesters[semIdx]
 
-  // Sort: highest percentage first in the GPA bar so best performers are leftmost
-  const sortedGrades = [...grades].sort((a, b) => b.percentage - a.percentage)
+  // Pick the right data set based on active semester
+  const activeGrades  = isFall ? grades      : winterGrades
+  const activeOverall = isFall ? getOverallGPA() : getWinterGPA()
+  const getCourseInfo = isFall
+    ? (id: string) => { const c = getCourse(id); return { ...c, hasPage: true } }
+    : (id: string) => { const c = getWinterCourse(id); return { ...c, hasPage: false } }
+
+  const sortedGrades = [...activeGrades].sort((a, b) => b.percentage - a.percentage)
+  const { letter: overallLetter, color: overallColor } = getLetterGrade(activeOverall)
+
+  const canGoPrev = semIdx > 0
+  const canGoNext = semIdx < semesters.length - 1
+
+  // Reset expanded card when switching semesters
+  const navigate = (dir: -1 | 1) => {
+    setSemIdx(i => i + dir)
+    setExpandedId(null)
+  }
 
   return (
     <div className="max-w-[1200px]">
@@ -43,18 +64,41 @@ export default function Grades() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-[24px] font-bold text-gray-900 dark:text-gray-100 tracking-tight">Grades</h1>
-          <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-0.5">Fall 2022 · George Brown College</p>
+          <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-0.5">
+            {semester.label} · George Brown College
+            {semester.isCurrent && (
+              <span className="ml-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#2563EB]/10 text-[#2563EB] dark:bg-[#2563EB]/20 dark:text-[#60A5FA] align-middle">
+                Current
+              </span>
+            )}
+          </p>
         </div>
+
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5">
-            <button className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-[#232d42] transition text-gray-500 dark:text-gray-400">
+          {/* Semester navigation */}
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => canGoPrev && navigate(-1)}
+              disabled={!canGoPrev}
+              className={`p-1.5 rounded-lg transition ${canGoPrev ? 'hover:bg-gray-100 dark:hover:bg-[#232d42] text-gray-500 dark:text-gray-400' : 'text-gray-200 dark:text-gray-700 cursor-not-allowed'}`}
+              title="Previous semester"
+            >
               <ChevronLeft size={18} />
             </button>
-            <span className="text-[14px] font-semibold text-gray-700 dark:text-gray-300 px-1">Fall 2022</span>
-            <button className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-[#232d42] transition text-gray-500 dark:text-gray-400">
+            <span className="text-[14px] font-semibold text-gray-700 dark:text-gray-300 px-2 min-w-[100px] text-center">
+              {semester.label}
+            </span>
+            <button
+              onClick={() => canGoNext && navigate(1)}
+              disabled={!canGoNext}
+              className={`p-1.5 rounded-lg transition ${canGoNext ? 'hover:bg-gray-100 dark:hover:bg-[#232d42] text-gray-500 dark:text-gray-400' : 'text-gray-200 dark:text-gray-700 cursor-not-allowed'}`}
+              title="Next semester"
+            >
               <ChevronRight size={18} />
             </button>
           </div>
+
+          {/* Hide/show toggle */}
           <button
             onClick={() => setHideGrades(h => !h)}
             className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#232d42] transition text-gray-400 dark:text-gray-500"
@@ -70,8 +114,7 @@ export default function Grades() {
 
         {/* Left: overall average + letter */}
         <div className="flex items-center gap-5 shrink-0">
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center"
-            style={{ background: `${overallColor}15` }}>
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: `${overallColor}15` }}>
             <TrendingUp size={24} style={{ color: overallColor }} />
           </div>
           <div>
@@ -80,54 +123,64 @@ export default function Grades() {
               <div className="h-8 w-20 rounded-lg bg-gray-200 dark:bg-[#232d42] mt-1" />
             ) : (
               <div className="flex items-baseline gap-2 mt-1">
-                <span className="text-[32px] font-bold leading-none" style={{ color: overallColor }}>{overall}%</span>
+                <span className="text-[32px] font-bold leading-none" style={{ color: overallColor }}>{activeOverall}%</span>
                 <span className="text-[16px] font-bold" style={{ color: overallColor }}>{overallLetter}</span>
               </div>
             )}
           </div>
         </div>
 
-        {/* Divider */}
         <div className="w-px self-stretch bg-gray-100 dark:bg-[#2D3A52]" />
 
-        {/*
-          Per-course mini bars — each is a Link to its course page.
-          Hover tooltip (title) shows the full course name so the abbreviations
-          are self-explanatory even for first-time viewers.
-        */}
-        <div className="flex-1 grid grid-cols-6 gap-4">
+        {/* Per-course mini bars */}
+        <div className="flex-1 grid gap-4" style={{ gridTemplateColumns: `repeat(${sortedGrades.length}, 1fr)` }}>
           {sortedGrades.map(g => {
-            const course = getCourse(g.courseId)
+            const course = getCourseInfo(g.courseId)
             const { letter } = getLetterGrade(g.percentage)
-            return (
-              <Link
-                key={g.courseId}
-                to={`/courses/${g.courseId}`}
-                title={course.name}           // Tooltip shows full course name on hover
-                className="flex flex-col items-center gap-2 group"
-              >
-                {/* Progress bar */}
+            const barContent = (
+              <div className="flex flex-col items-center gap-2 group">
                 <div className="w-full h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
                   <div
                     className="h-full rounded-full transition-all duration-500 group-hover:opacity-80"
                     style={{ width: hideGrades ? '0%' : `${g.percentage}%`, background: course.color }}
                   />
                 </div>
-
-                {/* Abbreviation — underlines on hover to signal it's a link */}
-                <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 group-hover:underline group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors">
+                <span className={`text-[10px] font-bold text-gray-500 dark:text-gray-400 transition-colors ${course.hasPage ? 'group-hover:underline group-hover:text-gray-700 dark:group-hover:text-gray-300' : ''}`}>
                   {course.abbr}
                 </span>
-
-                {/* Letter grade (hidden when grades are masked) */}
                 {!hideGrades && (
                   <span className="text-[10px] font-semibold" style={{ color: course.color }}>{letter}</span>
                 )}
+              </div>
+            )
+            return course.hasPage ? (
+              <Link key={g.courseId} to={`/courses/${g.courseId}`} title={course.name}>
+                {barContent}
               </Link>
+            ) : (
+              <div key={g.courseId} title={course.name}>
+                {barContent}
+              </div>
             )
           })}
         </div>
       </div>
+
+      {/* ── Past semester badge ── */}
+      {!isFall && (
+        <div className="flex items-center gap-2 mb-4 px-4 py-3 rounded-xl bg-gray-50 dark:bg-[#1A2236] border border-gray-100 dark:border-[#2D3A52]">
+          <span className="text-[13px] text-gray-500 dark:text-gray-400">
+            Viewing archived grades for <strong className="text-gray-700 dark:text-gray-300">{semester.label}</strong>.
+            Course pages are not available for past semesters.
+          </span>
+          <button
+            onClick={() => navigate(1)}
+            className="ml-auto text-[12px] font-semibold text-[#2563EB] dark:text-[#60A5FA] hover:underline shrink-0"
+          >
+            Back to current →
+          </button>
+        </div>
+      )}
 
       {/* ── Expand hint ── */}
       <p className="text-[11px] text-gray-400 dark:text-gray-500 mb-4 flex items-center gap-1">
@@ -137,9 +190,9 @@ export default function Grades() {
 
       {/* ── Course grade cards ── */}
       <div className="grid grid-cols-3 gap-5">
-        {grades.map(g => {
-          const course = getCourse(g.courseId)
-          const isExpanded = expandedId === g.courseId
+        {activeGrades.map(g => {
+          const course      = getCourseInfo(g.courseId)
+          const isExpanded  = expandedId === g.courseId
           const { letter, color: letterColor } = getLetterGrade(g.percentage)
 
           return (
@@ -152,11 +205,9 @@ export default function Grades() {
               }`}
               onClick={() => setExpandedId(isExpanded ? null : g.courseId)}
             >
-              {/* Colour accent strip at top — course colour */}
               <div className="h-1 w-full" style={{ background: course.color }} />
 
               <div className="p-6">
-                {/* Card header: course info + circle ring */}
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1 min-w-0 pr-4">
                     <div className="flex items-center gap-1.5">
@@ -173,26 +224,20 @@ export default function Grades() {
                   )}
                 </div>
 
-                {/* Letter grade badge */}
                 {!hideGrades && (
                   <div className="mb-4">
-                    <span
-                      className="text-[12px] font-bold px-2.5 py-1 rounded-lg"
-                      style={{ background: `${letterColor}15`, color: letterColor }}
-                    >
+                    <span className="text-[12px] font-bold px-2.5 py-1 rounded-lg" style={{ background: `${letterColor}15`, color: letterColor }}>
                       {letter}
                     </span>
                   </div>
                 )}
 
-                {/* Divider + marks list */}
                 <div className="pt-4 border-t border-gray-100 dark:border-[#2D3A52]">
                   <h4 className="text-[11px] font-semibold text-gray-400 dark:text-gray-500 mb-3 uppercase tracking-wide">
-                    Recent marks
+                    {isFall ? 'Recent marks' : 'Final marks'}
                   </h4>
 
                   {isExpanded ? (
-                    // Expanded: show real mark rows with progress bars
                     <div className="space-y-3">
                       {g.marks.map((m, i) => {
                         const pct = Math.round((m.score / m.total) * 100)
@@ -206,16 +251,13 @@ export default function Grades() {
                             </div>
                             {!hideGrades && (
                               <div className="h-1.5 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
-                                <div
-                                  className="h-full rounded-full"
-                                  style={{ width: `${pct}%`, background: course.color, opacity: 0.65 }}
-                                />
+                                <div className="h-full rounded-full" style={{ width: `${pct}%`, background: course.color, opacity: 0.65 }} />
                               </div>
                             )}
                           </>
                         )
-                        // Marks with an assignmentId link through to the assignment detail page
-                        return m.assignmentId ? (
+                        // Fall 2022 marks can link to assignment pages; Winter 2022 cannot
+                        return (isFall && m.assignmentId) ? (
                           <Link
                             key={i}
                             to={`/courses/${g.courseId}/assignments/${m.assignmentId}`}
@@ -225,16 +267,13 @@ export default function Grades() {
                             {inner}
                           </Link>
                         ) : (
-                          <div key={i} className="py-1">
-                            {inner}
-                          </div>
+                          <div key={i} className="py-1">{inner}</div>
                         )
                       })}
                     </div>
                   ) : (
-                    // Collapsed: skeleton bars as a preview
                     <div className="space-y-3">
-                      {[85, 72, 60, 45, 30].map((w, i) => (
+                      {[85, 72, 60, 45, 30].slice(0, g.marks.length).map((w, i) => (
                         <div key={i} className="flex items-center gap-2">
                           <div className="h-2 rounded-full bg-gray-100 dark:bg-[#232d42] flex-1">
                             <div className="h-full rounded-full bg-gray-200 dark:bg-[#2D3A52]" style={{ width: `${w}%` }} />

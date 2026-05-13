@@ -1,6 +1,7 @@
 import { Outlet, useLocation } from 'react-router-dom'
 import Sidebar from './Sidebar'
 import TopBar from './TopBar'
+import ToastContainer from './ToastContainer'
 
 export default function Layout() {
   const location = useLocation()
@@ -45,6 +46,7 @@ export default function Layout() {
           </a>
         </footer>
       </div>
+      <ToastContainer />
     </div>
   )
 }

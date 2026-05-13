@@ -859,10 +859,266 @@ export const user = {
   avatarColor: '#2563EB',
 }
 
+// ─── Semester registry ────────────────────────────────────────────────────────
+// Used by the Grades page for prev/next term navigation.
+
+export interface SemesterInfo {
+  id: string
+  label: string
+  isCurrent: boolean
+}
+
+export const semesters: SemesterInfo[] = [
+  { id: 'winter-2022', label: 'Winter 2022', isCurrent: false },
+  { id: 'fall-2022',   label: 'Fall 2022',   isCurrent: true  },
+]
+
+// ─── Winter 2022 courses ──────────────────────────────────────────────────────
+// Kevin's Year 1 Semester 2 courses (Jan – Apr 2022), before the current term.
+// Intentionally lighter structure than Course — no modules, assignments, or zoom.
+
+export interface PastCourse {
+  id: string
+  abbr: string
+  name: string
+  code: string
+  instructor: string
+  color: string
+  credits: number
+  description: string
+}
+
+export const winterCourses: PastCourse[] = [
+  {
+    id: 'DT', abbr: 'DT', name: 'Design Thinking', code: 'DSGN 1001',
+    instructor: 'Maria Okonkwo', color: '#D97706', credits: 3,
+    description: 'Human-centred design methodology covering empathy mapping, ideation, rapid prototyping, and iterative testing. Students ship a tested prototype by end of term.',
+  },
+  {
+    id: 'UR', abbr: 'UR', name: 'UX Research Foundations', code: 'INTR 1001',
+    instructor: 'Carlos Reyes', color: '#4338CA', credits: 3,
+    description: 'Core qualitative and quantitative research methods: user interviews, surveys, diary studies, affinity diagramming, and usability testing with real participants.',
+  },
+  {
+    id: 'WF', abbr: 'WF', name: 'Web Fundamentals', code: 'COMP 1002',
+    instructor: 'Priya Nair', color: '#0D9488', credits: 3,
+    description: 'Semantic HTML, CSS layout (flexbox, grid), responsive design, and introductory JavaScript. Students build and publish a personal portfolio site by Week 12.',
+  },
+  {
+    id: 'SF', abbr: 'SF', name: 'Studio Foundation', code: 'DSGN 1002',
+    instructor: 'James Webb', color: '#BE185D', credits: 2,
+    description: 'Traditional drawing, perspective, composition, and material exploration. Develops observational skills and a critical visual vocabulary through weekly studio work.',
+  },
+]
+
+// ─── Winter 2022 grades ───────────────────────────────────────────────────────
+// Uses the same CourseGrade/GradeMark shape as Fall 2022 grades.
+// IDs reference winterCourses, not the active courses array.
+
+export const winterGrades: CourseGrade[] = [
+  {
+    courseId: 'DT', percentage: 83,
+    marks: [
+      { name: 'Assignment 1 – Concept Sketches',   score: 21,  total: 25  },
+      { name: 'Midterm – Process Documentation',   score: 37,  total: 45  },
+      { name: 'Final – Working Prototype',         score: 67,  total: 80  },
+    ],
+  },
+  {
+    courseId: 'UR', percentage: 91,
+    marks: [
+      { name: 'User Interview Assignment',         score: 27,  total: 30  },
+      { name: 'Affinity Diagram Lab',              score: 18,  total: 20  },
+      { name: 'Usability Test Report',             score: 64,  total: 70  },
+    ],
+  },
+  {
+    courseId: 'WF', percentage: 74,
+    marks: [
+      { name: 'HTML/CSS Lab 1',                    score: 15,  total: 20  },
+      { name: 'Responsive Layout Project',         score: 33,  total: 45  },
+      { name: 'Final Portfolio Site',              score: 26,  total: 35  },
+    ],
+  },
+  {
+    courseId: 'SF', percentage: 88,
+    marks: [
+      { name: 'Life Drawing Series',               score: 21,  total: 25  },
+      { name: 'Material Exploration',              score: 39,  total: 45  },
+      { name: 'Process Journal',                   score: 50,  total: 55  },
+    ],
+  },
+]
+
+// ─── Discussion threads ───────────────────────────────────────────────────────
+// Backs the Communities page. courseId: null = college-wide board.
+
+export interface DiscussionThread {
+  id: string
+  courseId: string | null
+  title: string
+  preview: string
+  author: string
+  authorType: 'student' | 'instructor' | 'college'
+  date: string
+  replyCount: number
+  isPinned: boolean
+  isRead: boolean
+  tag: 'question' | 'discussion' | 'announcement' | 'resource'
+}
+
+export const discussionThreads: DiscussionThread[] = [
+  // 2D Visualization
+  {
+    id: 'dt1', courseId: '2D', isPinned: true, isRead: true, replyCount: 5, date: 'Dec 1',
+    title: 'Final Project Brief – Updated Rubric Posted',
+    preview: "Hi everyone — I've updated the final project rubric to clarify the \"brand application\" criteria. Please re-read Section 3 before you finalize your mockups.",
+    author: 'Jaron Stewart', authorType: 'instructor', tag: 'announcement',
+  },
+  {
+    id: 'dt2', courseId: '2D', isPinned: false, isRead: false, replyCount: 8, date: 'Dec 9',
+    title: 'My logo iteration 4 — feedback welcome!',
+    preview: 'Posted my latest logo revision in the shared Figma. I\'m torn between the wordmark and the icon-only version. What do you all think for the brand application section?',
+    author: 'Aisha M.', authorType: 'student', tag: 'discussion',
+  },
+  // Interactive Systems
+  {
+    id: 'dt3', courseId: 'IS', isPinned: true, isRead: true, replyCount: 12, date: 'Dec 5',
+    title: 'Usability Test Participants Needed – Sign Up Here',
+    preview: 'I need 5 participants for my usability test this week. Sessions are 20 min via Zoom. All feedback is confidential. Reply below or DM me to book a slot.',
+    author: 'Michael Holland', authorType: 'instructor', tag: 'resource',
+  },
+  {
+    id: 'dt4', courseId: 'IS', isPinned: false, isRead: false, replyCount: 15, date: 'Dec 10',
+    title: 'Figma vs. Adobe XD for prototyping — which do you prefer?',
+    preview: 'Starting the interactive prototype for Assignment 4 and debating which tool to use. Our course uses Figma but my placement employer uses XD. Pros/cons?',
+    author: 'Dante R.', authorType: 'student', tag: 'question',
+  },
+  // Information Architecture
+  {
+    id: 'dt5', courseId: 'IA', isPinned: false, isRead: true, replyCount: 4, date: 'Dec 7',
+    title: 'Card sort results — am I reading these right?',
+    preview: 'Used OptimalSort for the card sort exercise and the dendrogram is confusing me. Three clusters seem right but the "Support" category keeps splitting. Anyone else see this?',
+    author: 'Priya S.', authorType: 'student', tag: 'question',
+  },
+  // Visual Design
+  {
+    id: 'dt6', courseId: 'VD', isPinned: false, isRead: false, replyCount: 6, date: 'Dec 8',
+    title: 'Campaign concept direction — thoughts?',
+    preview: 'Going with a brutalist editorial aesthetic for the campaign. Very high contrast, bold type, intentional misalignment. Worried it might be too niche — would love critique.',
+    author: 'Lena K.', authorType: 'student', tag: 'discussion',
+  },
+  // College English
+  {
+    id: 'dt7', courseId: 'CE', isPinned: true, isRead: true, replyCount: 3, date: 'Dec 6',
+    title: 'APA Citation Workshop — Friday Dec 16, SFC A105',
+    preview: 'Voluntary workshop to run through APA 7th edition rules before the Research Proposal deadline. Pizza provided. Attendance optional but highly recommended.',
+    author: 'Erik Brown', authorType: 'instructor', tag: 'announcement',
+  },
+  // Technical Drawing
+  {
+    id: 'dt8', courseId: 'TD', isPinned: false, isRead: false, replyCount: 9, date: 'Dec 11',
+    title: 'AutoCAD keeps crashing on Mac — anyone else?',
+    preview: 'AutoCAD 2023 crashes every time I try to hatch a region. Running macOS Ventura. I\'ve tried reinstalling but same issue. Is anyone else on Mac having this problem?',
+    author: 'Omar J.', authorType: 'student', tag: 'question',
+  },
+  // College-wide
+  {
+    id: 'dt9', courseId: null, isPinned: true, isRead: true, replyCount: 22, date: 'Dec 3',
+    title: 'Hackathon @ The Forge — Find your team here!',
+    preview: 'GBC Hackathon is Jan 14–15. 36 hours, cross-disciplinary teams of 3–5. Designers especially needed. Post your skills and availability below to find teammates.',
+    author: 'GBC Student Union', authorType: 'college', tag: 'announcement',
+  },
+  {
+    id: 'dt10', courseId: null, isPinned: false, isRead: false, replyCount: 11, date: 'Dec 9',
+    title: 'Winter semester registration tips — which sections fill first?',
+    preview: 'Registering for Winter 2023 courses next week. Anyone know which sections of INTR 2001 fill up fastest? Last year I missed the Tuesday morning section.',
+    author: 'Felix T.', authorType: 'student', tag: 'question',
+  },
+]
+
+// ─── Tools / integrations ─────────────────────────────────────────────────────
+// Backs the Tools page. status drives the CTA: active = Launch, setup-required = Set Up.
+
+export interface ToolItem {
+  id: string
+  name: string
+  description: string
+  category: 'assessment' | 'communication' | 'productivity' | 'library'
+  status: 'active' | 'inactive' | 'setup-required'
+  color: string
+  abbr: string
+  url: string
+}
+
+export const tools: ToolItem[] = [
+  {
+    id: 'turnitin', name: 'Turnitin', abbr: 'TII',
+    description: 'Originality checking and peer review for written assignments. Used by all writing-intensive courses this semester.',
+    category: 'assessment', status: 'active', color: '#0077B6',
+    url: 'https://turnitin.com',
+  },
+  {
+    id: 'zoom', name: 'Zoom', abbr: 'ZM',
+    description: 'Video conferencing for online office hours, remote lectures, and group project meetings. Integrated with your course schedule.',
+    category: 'communication', status: 'active', color: '#2D8CFF',
+    url: 'https://georgebrown.zoom.us',
+  },
+  {
+    id: 'microsoft365', name: 'Microsoft 365', abbr: 'M365',
+    description: 'Word, Excel, PowerPoint, Teams, and 1 TB OneDrive storage — free for all enrolled students. Sign in with your GBC student email.',
+    category: 'productivity', status: 'active', color: '#D83B01',
+    url: 'https://microsoft.com/education',
+  },
+  {
+    id: 'linkedin-learning', name: 'LinkedIn Learning', abbr: 'LiL',
+    description: 'Unlimited access to 16,000+ courses in design, technology, and business. Certificates count toward co-op readiness requirements.',
+    category: 'library', status: 'active', color: '#0A66C2',
+    url: 'https://linkedin.com/learning',
+  },
+  {
+    id: 'adobe-cc', name: 'Adobe Creative Cloud', abbr: 'ACC',
+    description: 'Photoshop, Illustrator, InDesign, XD, and the full Creative Cloud suite. Subsidised student licence — complete account setup to activate.',
+    category: 'productivity', status: 'setup-required', color: '#FA0F00',
+    url: 'https://adobe.com/creativecloud',
+  },
+  {
+    id: 'grammarly', name: 'Grammarly', abbr: 'GR',
+    description: 'AI writing assistant for grammar, clarity, and citation suggestions. Connect your account to unlock the Premium tier included in your tuition.',
+    category: 'productivity', status: 'setup-required', color: '#15C39A',
+    url: 'https://grammarly.com',
+  },
+  {
+    id: 'respondus', name: 'Respondus LockDown Browser', abbr: 'RLB',
+    description: 'Required for online proctored exams. Not currently needed this semester — will activate automatically if a monitored assessment is scheduled.',
+    category: 'assessment', status: 'inactive', color: '#64748B',
+    url: 'https://respondus.com/products/lockdown-browser',
+  },
+  {
+    id: 'library', name: 'GBC Library', abbr: 'LIB',
+    description: 'Access e-journals, databases (JSTOR, Emerald, LinkedIn Learning), interlibrary loans, and book a research consultation with a librarian.',
+    category: 'library', status: 'active', color: '#1B3F89',
+    url: 'https://library.georgebrown.ca',
+  },
+]
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 export function getCourse(id: string) {
   return courses.find(c => c.id === id)!
+}
+
+export function getWinterCourse(id: string) {
+  return winterCourses.find(c => c.id === id)!
+}
+
+export function getWinterGPA(): number {
+  const totalWeighted = winterGrades.reduce((sum, g) => {
+    const course = winterCourses.find(c => c.id === g.courseId)!
+    return sum + g.percentage * course.credits
+  }, 0)
+  const totalCredits = winterCourses.reduce((sum, c) => sum + c.credits, 0)
+  return Math.round(totalWeighted / totalCredits)
 }
 
 export function getOverallGPA(): number {

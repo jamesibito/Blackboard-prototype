@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { messages, getCourse } from '../data/mockData'
 import type { Message } from '../data/mockData'
-import { Mail, Star, Reply, Inbox } from '../components/Icons'
+import { Mail, Star, Inbox, Send } from '../components/Icons'
 import ComposeModal from '../components/ComposeModal'
+import { useToast } from '../context/ToastContext'
 
 const tagConfig = {
   assignment:    { label: 'Assignment',    color: '#F97316', bg: '#F9731618' },
@@ -12,6 +13,7 @@ const tagConfig = {
 }
 
 export default function Messages() {
+  const { toast } = useToast()
   const [selectedId, setSelectedId] = useState<string>(messages[0].id)
   const [starred, setStarred] = useState<Set<string>>(
     new Set(messages.filter(m => m.isStarred).map(m => m.id))
@@ -20,12 +22,25 @@ export default function Messages() {
     new Set(messages.filter(m => m.isRead).map(m => m.id))
   )
   const [composeOpen, setComposeOpen] = useState(false)
+  const [replyText, setReplyText] = useState('')
+  // Track replies sent per message: messageId → reply string[]
+  const [replies, setReplies] = useState<Record<string, string[]>>({})
+  const replyRef = useRef<HTMLTextAreaElement>(null)
 
   const selected = messages.find(m => m.id === selectedId)!
 
   function selectMessage(msg: Message) {
     setSelectedId(msg.id)
     setRead(prev => new Set([...prev, msg.id]))
+    setReplyText('')
+  }
+
+  function sendReply() {
+    const text = replyText.trim()
+    if (!text) return
+    setReplies(prev => ({ ...prev, [selectedId]: [...(prev[selectedId] ?? []), text] }))
+    setReplyText('')
+    toast('Reply sent', 'success')
   }
 
   function toggleStar(id: string, e: React.MouseEvent) {
@@ -199,28 +214,57 @@ export default function Messages() {
             </div>
           </div>
 
-          {/* Message body */}
+          {/* Message body + replies */}
           <div className="flex-1 overflow-y-auto px-6 py-5">
-            <div className="max-w-[640px]">
-              {selected.body.split('\n\n').map((para, i) => (
-                <p key={i} className="text-[14px] text-gray-700 dark:text-gray-300 leading-relaxed mb-3 last:mb-0 whitespace-pre-line">
-                  {para}
-                </p>
+            <div className="max-w-[640px] space-y-5">
+              {/* Original message */}
+              <div>
+                {selected.body.split('\n\n').map((para, i) => (
+                  <p key={i} className="text-[14px] text-gray-700 dark:text-gray-300 leading-relaxed mb-3 last:mb-0 whitespace-pre-line">
+                    {para}
+                  </p>
+                ))}
+              </div>
+
+              {/* Sent replies — appear inline below the original */}
+              {(replies[selectedId] ?? []).map((r, i) => (
+                <div key={i} className="flex justify-end">
+                  <div className="max-w-[80%] bg-[#2563EB]/[0.08] dark:bg-[#2563EB]/[0.12] border border-[#2563EB]/20 rounded-2xl rounded-br-md px-4 py-3">
+                    <p className="text-[13px] text-gray-800 dark:text-gray-200 leading-relaxed whitespace-pre-line">{r}</p>
+                    <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1.5 text-right">You · Just now</p>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
 
-          {/* Reply bar */}
+          {/* Reply bar — functional textarea */}
           <div className="px-6 py-4 border-t border-gray-50 dark:border-[#232d42]">
-            <div className="flex items-center gap-3">
-              <div className="flex-1 h-10 rounded-xl bg-gray-50 dark:bg-[#131825] border border-gray-200 dark:border-[#2D3A52] px-4 flex items-center text-[13px] text-gray-400 dark:text-gray-500 cursor-text">
-                Reply to {selected.senderName.split(' ')[0]}…
-              </div>
-              <button className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[13px] font-semibold transition-colors shrink-0">
-                <Reply size={14} />
-                Reply
+            <div className="flex items-end gap-3">
+              <textarea
+                ref={replyRef}
+                value={replyText}
+                onChange={e => setReplyText(e.target.value)}
+                onKeyDown={e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) sendReply() }}
+                placeholder={`Reply to ${selected.senderName.split(' ')[0]}…`}
+                rows={1}
+                className="flex-1 rounded-xl bg-gray-50 dark:bg-[#131825] border border-gray-200 dark:border-[#2D3A52] px-4 py-2.5 text-[13px] text-gray-800 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB]/50 resize-none leading-relaxed"
+                style={{ minHeight: 40, maxHeight: 120 }}
+              />
+              <button
+                onClick={sendReply}
+                disabled={!replyText.trim()}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-semibold transition-all shrink-0 ${
+                  replyText.trim()
+                    ? 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white'
+                    : 'bg-gray-100 dark:bg-[#232d42] text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                }`}
+              >
+                <Send size={14} />
+                Send
               </button>
             </div>
+            <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1.5">⌘ + Enter to send</p>
           </div>
         </div>
       </div>

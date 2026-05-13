@@ -1,13 +1,34 @@
+import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { getCourse, getAssignment } from '../data/mockData'
-import { CheckCircle, Clock, FileText, Download } from '../components/Icons'
+import { CheckCircle, Clock, FileText, Download, Send } from '../components/Icons'
 import Breadcrumbs from '../components/Breadcrumbs'
-import { getLetterGrade } from '../utils/grades'  // shared grading scale
+import { getLetterGrade } from '../utils/grades'
+import { useToast } from '../context/ToastContext'
 
 export default function AssignmentPage() {
+  const { toast } = useToast()
   const { courseId, assignmentId } = useParams<{ courseId: string; assignmentId: string }>()
   const course = courseId ? getCourse(courseId) : null
   const assignment = assignmentId ? getAssignment(assignmentId) : null
+
+  // Local state for interactivity (doesn't persist — prototype only)
+  const [feedbackText, setFeedbackText] = useState('')
+  const [extraReplies, setExtraReplies] = useState<string[]>([])
+  const [submitted, setSubmitted] = useState(false)
+
+  function sendFeedbackReply() {
+    const text = feedbackText.trim()
+    if (!text) return
+    setExtraReplies(prev => [...prev, text])
+    setFeedbackText('')
+    toast('Reply sent to instructor', 'success')
+  }
+
+  function handleSubmit() {
+    setSubmitted(true)
+    toast('Assignment submitted successfully!', 'success')
+  }
 
   if (!course || !assignment) {
     return (
@@ -224,22 +245,40 @@ export default function AssignmentPage() {
                   )
                 })}
 
-                {/* Reply input — visual prototype only */}
-                <div className="flex gap-2 pt-2 border-t border-gray-100 dark:border-[#2D3A52]">
-                  <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-[11px] font-bold shrink-0 bg-gray-400">
-                    KH
+                {/* Replies added this session */}
+                {extraReplies.map((r, i) => (
+                  <div key={i} className="flex gap-3 flex-row-reverse">
+                    <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-[11px] font-bold shrink-0 bg-gray-400">KH</div>
+                    <div className="flex-1 max-w-[85%] flex flex-col items-end">
+                      <div className="rounded-2xl rounded-tr-sm px-4 py-3 bg-[#2563EB]/[0.08] dark:bg-[#2563EB]/[0.12]">
+                        <p className="text-[12px] font-semibold text-gray-900 dark:text-gray-100 mb-1">Kevin H.</p>
+                        <p className="text-[13px] text-gray-700 dark:text-gray-300 leading-relaxed">{r}</p>
+                      </div>
+                      <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1 px-1">Just now</p>
+                    </div>
                   </div>
-                  <div className="flex-1 flex gap-2">
-                    <input
-                      type="text"
+                ))}
+
+                {/* Functional reply input */}
+                <div className="flex gap-2 pt-2 border-t border-gray-100 dark:border-[#2D3A52]">
+                  <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-[11px] font-bold shrink-0 bg-gray-400">KH</div>
+                  <div className="flex-1 flex gap-2 items-end">
+                    <textarea
+                      value={feedbackText}
+                      onChange={e => setFeedbackText(e.target.value)}
+                      onKeyDown={e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) sendFeedbackReply() }}
                       placeholder="Reply to instructor…"
-                      className="flex-1 h-9 px-3 rounded-xl bg-gray-50 dark:bg-[#131825] border border-gray-200 dark:border-[#2D3A52] text-[12px] text-gray-700 dark:text-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none focus:ring-2 focus:ring-[#2563EB]/20 transition"
-                      readOnly
+                      rows={1}
+                      className="flex-1 px-3 py-2 rounded-xl bg-gray-50 dark:bg-[#131825] border border-gray-200 dark:border-[#2D3A52] text-[12px] text-gray-700 dark:text-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none focus:ring-2 focus:ring-[#2563EB]/20 transition resize-none"
+                      style={{ minHeight: 36, maxHeight: 100 }}
                     />
                     <button
-                      className="px-3 py-1.5 rounded-xl text-[12px] font-semibold text-white transition-opacity hover:opacity-90"
+                      onClick={sendFeedbackReply}
+                      disabled={!feedbackText.trim()}
+                      className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-[12px] font-semibold text-white transition-all ${feedbackText.trim() ? 'hover:opacity-90' : 'opacity-40 cursor-not-allowed'}`}
                       style={{ background: course.color }}
                     >
+                      <Send size={12} />
                       Send
                     </button>
                   </div>
@@ -267,7 +306,7 @@ export default function AssignmentPage() {
           {/* Submission area */}
           <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] p-5">
             <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100 mb-3">Submission</h2>
-            {assignment.status === 'graded' || assignment.status === 'submitted' ? (
+            {(assignment.status === 'graded' || assignment.status === 'submitted' || submitted) ? (
               <div className="text-center py-4">
                 <div className="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center mx-auto mb-2">
                   <CheckCircle size={22} className="text-emerald-500" />
@@ -275,27 +314,36 @@ export default function AssignmentPage() {
                 <p className="text-[13px] font-medium text-gray-700 dark:text-gray-300">
                   {assignment.status === 'graded' ? 'Submitted & Graded' : 'Submitted'}
                 </p>
-                <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{assignment.submittedDate}</p>
-                <button className="flex items-center gap-1.5 mx-auto mt-3 text-[12px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline">
+                <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">
+                  {submitted ? 'Just now' : assignment.submittedDate}
+                </p>
+                <button
+                  onClick={() => toast('Downloading submission…', 'info')}
+                  className="flex items-center gap-1.5 mx-auto mt-3 text-[12px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline"
+                >
                   <Download size={12} />
                   View submission
                 </button>
               </div>
             ) : (
               <div>
-                <div className="border-2 border-dashed border-gray-200 dark:border-[#2D3A52] rounded-xl p-6 text-center">
+                <div
+                  className="border-2 border-dashed border-gray-200 dark:border-[#2D3A52] rounded-xl p-6 text-center cursor-pointer hover:border-gray-300 dark:hover:border-gray-500 transition-colors"
+                  onClick={() => toast('File picker would open here', 'info')}
+                >
                   <Download size={24} className="text-gray-300 dark:text-gray-600 mx-auto mb-2" />
                   <p className="text-[13px] text-gray-500 dark:text-gray-400">Drop files here or click to upload</p>
                   <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1">PDF, DOCX, ZIP up to 25MB</p>
                 </div>
                 <button
-                  className="w-full mt-3 py-2.5 rounded-xl text-[13px] font-semibold text-white transition-opacity hover:opacity-90"
+                  onClick={handleSubmit}
+                  className="w-full mt-3 py-2.5 rounded-xl text-[13px] font-semibold text-white transition-opacity hover:opacity-90 active:scale-[0.98]"
                   style={{ background: course.color }}
                 >
                   Submit Assignment
                 </button>
                 <p className="text-[11px] text-gray-400 dark:text-gray-500 text-center mt-2">
-                  This is a prototype — files are not uploaded.
+                  Prototype — no files are uploaded.
                 </p>
               </div>
             )}
