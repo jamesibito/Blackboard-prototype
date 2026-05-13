@@ -1044,25 +1044,50 @@ export interface ToolItem {
   id: string
   name: string
   description: string
-  category: 'assessment' | 'communication' | 'productivity' | 'library'
+  category: 'assessment' | 'communication' | 'productivity' | 'library' | 'campus'
   status: 'active' | 'inactive' | 'setup-required'
   color: string
   abbr: string
   url: string
+  linkedCourses?: string[]   // course IDs — omit if available to all
 }
 
 export const tools: ToolItem[] = [
+  // ── Assessment ──
   {
     id: 'turnitin', name: 'Turnitin', abbr: 'TII',
-    description: 'Originality checking and peer review for written assignments. Used by all writing-intensive courses this semester.',
+    description: 'Originality checking and peer review for written assignments. Required for College English and Information Architecture submissions.',
     category: 'assessment', status: 'active', color: '#0077B6',
     url: 'https://turnitin.com',
+    linkedCourses: ['is', 'ce', 'ia'],
   },
+  {
+    id: 'respondus', name: 'Respondus LockDown Browser', abbr: 'RLB',
+    description: 'Required for online proctored exams. Not currently needed this semester — will activate automatically if a monitored assessment is scheduled.',
+    category: 'assessment', status: 'inactive', color: '#64748B',
+    url: 'https://respondus.com/products/lockdown-browser',
+  },
+  // ── Communication ──
   {
     id: 'zoom', name: 'Zoom', abbr: 'ZM',
     description: 'Video conferencing for online office hours, remote lectures, and group project meetings. Integrated with your course schedule.',
     category: 'communication', status: 'active', color: '#2D8CFF',
     url: 'https://georgebrown.zoom.us',
+  },
+  // ── Productivity ──
+  {
+    id: 'adobe-cc', name: 'Adobe Creative Cloud', abbr: 'ACC',
+    description: 'Photoshop, Illustrator, InDesign, After Effects, and the full CC suite. Subsidised student licence — complete account setup to activate.',
+    category: 'productivity', status: 'setup-required', color: '#FA0F00',
+    url: 'https://adobe.com/creativecloud',
+    linkedCourses: ['2d', 'vd', 'ia', 'is'],
+  },
+  {
+    id: 'figma', name: 'Figma', abbr: 'FIG',
+    description: 'Collaborative UI design and prototyping. Used for wireframes, component libraries, and interactive mockups across design courses.',
+    category: 'productivity', status: 'active', color: '#F24E1E',
+    url: 'https://figma.com',
+    linkedCourses: ['ia', 'vd', '2d', 'is'],
   },
   {
     id: 'microsoft365', name: 'Microsoft 365', abbr: 'M365',
@@ -1071,34 +1096,45 @@ export const tools: ToolItem[] = [
     url: 'https://microsoft.com/education',
   },
   {
+    id: 'grammarly', name: 'Grammarly', abbr: 'GR',
+    description: 'AI writing assistant for grammar, clarity, and citation suggestions. Connect your account to unlock the Premium tier included in your tuition.',
+    category: 'productivity', status: 'setup-required', color: '#15C39A',
+    url: 'https://grammarly.com',
+    linkedCourses: ['ce', 'is', 'ia'],
+  },
+  // ── Library & Research ──
+  {
+    id: 'library', name: 'GBC Library', abbr: 'LIB',
+    description: 'Access e-journals, databases (JSTOR, Emerald), interlibrary loans, and book a research consultation with a librarian.',
+    category: 'library', status: 'active', color: '#1B3F89',
+    url: 'https://library.georgebrown.ca',
+  },
+  {
     id: 'linkedin-learning', name: 'LinkedIn Learning', abbr: 'LiL',
     description: 'Unlimited access to 16,000+ courses in design, technology, and business. Certificates count toward co-op readiness requirements.',
     category: 'library', status: 'active', color: '#0A66C2',
     url: 'https://linkedin.com/learning',
   },
+  // ── Campus Services ──
   {
-    id: 'adobe-cc', name: 'Adobe Creative Cloud', abbr: 'ACC',
-    description: 'Photoshop, Illustrator, InDesign, XD, and the full Creative Cloud suite. Subsidised student licence — complete account setup to activate.',
-    category: 'productivity', status: 'setup-required', color: '#FA0F00',
-    url: 'https://adobe.com/creativecloud',
+    id: 'study-rooms', name: 'Study Room Booking', abbr: 'SR',
+    description: 'Reserve a study room at St. James, Waterfront, or Casa Loma campus. Rooms seat 2–10 people and include whiteboards and display screens.',
+    category: 'campus', status: 'active', color: '#0EA5E9',
+    url: 'https://georgebrown.ca/student-life/study-spaces',
   },
   {
-    id: 'grammarly', name: 'Grammarly', abbr: 'GR',
-    description: 'AI writing assistant for grammar, clarity, and citation suggestions. Connect your account to unlock the Premium tier included in your tuition.',
-    category: 'productivity', status: 'setup-required', color: '#15C39A',
-    url: 'https://grammarly.com',
+    id: 'print-centre', name: 'GBC Print Centre', abbr: 'PRT',
+    description: 'Print, scan, and large-format plot. Bring your design files for presentation boards, technical drawings, and mounted portfolio pieces.',
+    category: 'campus', status: 'active', color: '#6366F1',
+    url: 'https://georgebrown.ca/services/print',
+    linkedCourses: ['2d', 'vd', 'ia', 'td'],
   },
   {
-    id: 'respondus', name: 'Respondus LockDown Browser', abbr: 'RLB',
-    description: 'Required for online proctored exams. Not currently needed this semester — will activate automatically if a monitored assessment is scheduled.',
-    category: 'assessment', status: 'inactive', color: '#64748B',
-    url: 'https://respondus.com/products/lockdown-browser',
-  },
-  {
-    id: 'library', name: 'GBC Library', abbr: 'LIB',
-    description: 'Access e-journals, databases (JSTOR, Emerald, LinkedIn Learning), interlibrary loans, and book a research consultation with a librarian.',
-    category: 'library', status: 'active', color: '#1B3F89',
-    url: 'https://library.georgebrown.ca',
+    id: 'tech-lab', name: 'Tech Lab Rentals', abbr: 'TLR',
+    description: 'Borrow cameras, drawing tablets, VR headsets, tripods, microphones, gaming consoles, and other equipment from the campus tech lab.',
+    category: 'campus', status: 'active', color: '#8B5CF6',
+    url: 'https://georgebrown.ca/services/tech-lab',
+    linkedCourses: ['vd', '2d', 'is'],
   },
 ]
 

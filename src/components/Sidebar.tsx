@@ -33,19 +33,22 @@ export default function Sidebar() {
 
       {/* GBC Logo Header — navy background, logo inverted to white */}
       <div className="h-[72px] flex items-center justify-center border-b border-[#1E2A3F] bg-[#1B3F89] relative overflow-hidden shrink-0">
-        {/* GBC four-colour identity stripe */}
+        {/* Real GBC rainbow stripe — 7 segments matching the brand palette */}
         <div className="absolute left-0 top-0 bottom-0 w-[5px] flex flex-col">
-          <div className="flex-1 bg-[#E53935]" />
-          <div className="flex-1 bg-[#FDD835]" />
-          <div className="flex-1 bg-[#1E88E5]" />
-          <div className="flex-1 bg-[#43A047]" />
+          <div className="flex-1" style={{ background: '#3DAA35' }} />
+          <div className="flex-1" style={{ background: '#8DC63F' }} />
+          <div className="flex-1" style={{ background: '#FDD835' }} />
+          <div className="flex-1" style={{ background: '#29ABE2' }} />
+          <div className="flex-1" style={{ background: '#2E77BD' }} />
+          <div className="flex-1" style={{ background: '#9B8EC4' }} />
+          <div className="flex-1" style={{ background: '#F7941D' }} />
         </div>
-        <div className="relative z-10 pl-2 pr-4 flex items-center">
+        <div className="relative z-10 pl-3 pr-3 flex items-center w-full justify-center">
           <img
             src="/gbc-logo.png"
             alt="George Brown Polytechnic"
-            className="h-10 w-auto object-contain"
-            style={{ filter: 'brightness(0) invert(1)' }}
+            className="w-auto object-contain"
+            style={{ filter: 'brightness(0) invert(1)', height: 52, maxWidth: 170 }}
           />
         </div>
       </div>

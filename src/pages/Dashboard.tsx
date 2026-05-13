@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ChevronRight, Clock, CheckCircle, TrendingUp, MessageCircle } from '../components/Icons'
+import { ChevronRight, Clock, TrendingUp } from '../components/Icons'
 import { courses, dueSoon, grades, activityItems, getCourse, getOverallGPA, getNextClass } from '../data/mockData'
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -117,7 +117,7 @@ export default function Dashboard() {
       {nudgeCourse && (
         <Link
           to={`/courses/${nudgeCourse.id}`}
-          className="flex items-center gap-4 px-5 py-4 rounded-2xl border transition-all hover:shadow-sm group"
+          className="flex items-center gap-3 px-4 py-3 rounded-xl border transition-all hover:shadow-sm group"
           style={{ background: `${nudgeCourse.color}0D`, borderColor: `${nudgeCourse.color}40` }}
         >
           <div className="text-[24px]">🎓</div>
@@ -290,24 +290,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Bottom row: Quick stats */}
-      <div className="grid grid-cols-2 gap-5">
-        <StatCard
-          label="Assignments Completed"
-          value="12 / 18"
-          sub="this semester"
-          icon={<CheckCircle size={18} className="text-emerald-500" />}
-          accent="#22C55E"
-        />
-        <StatCard
-          label="Unread Messages"
-          value="2"
-          sub="new in your inbox"
-          icon={<MessageCircle size={18} className="text-[#2563EB]" />}
-          accent="#2563EB"
-          linkTo="/messages"
-        />
-      </div>
     </div>
   )
 }
@@ -337,14 +319,14 @@ function DeadlineTimeline() {
         </Link>
       </div>
 
-      {/* Scrollable horizontal track */}
-      <div className="relative overflow-x-auto pt-2">
+      {/* Horizontal track — items fill full width evenly */}
+      <div className="relative pt-2">
         {/* Connector line */}
         <div className="absolute left-0 right-0 top-[26px] h-px bg-gray-100 dark:bg-[#2D3A52]" />
 
-        <div className="flex items-start gap-8 pb-1 min-w-max">
+        <div className="flex items-start justify-between pb-1">
           {/* "Today" marker */}
-          <div className="flex flex-col items-center gap-2 shrink-0">
+          <div className="flex flex-col items-center gap-1.5 shrink-0">
             <div className="w-4 h-4 rounded-full bg-[#2563EB] ring-4 ring-[#2563EB]/20 relative z-10" />
             <span className="text-[10px] font-bold text-[#2563EB] dark:text-[#60A5FA] uppercase tracking-wide">Today</span>
             <span className="text-[10px] text-gray-400">Dec {TODAY_DAY}</span>
@@ -359,17 +341,17 @@ function DeadlineTimeline() {
             const daysOut  = dayNum - TODAY_DAY
 
             return (
-              <Link key={d.id} to={linkTarget} className="flex flex-col items-center gap-2 shrink-0 group">
+              <Link key={d.id} to={linkTarget} className="flex flex-col items-center gap-1.5 shrink-0 group">
                 {/* Dot — course colour */}
                 <div
                   className="w-4 h-4 rounded-full relative z-10 ring-2 transition-all group-hover:scale-110"
                   style={{ background: course.color, outline: `3px solid ${course.color}30`, outlineOffset: '2px' }}
                 />
-                {/* Assignment name */}
-                <span className="text-[11px] font-semibold text-gray-800 dark:text-gray-200 group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors text-center max-w-[80px] leading-tight">
+                {/* Fixed-height title — ensures badge always sits at the same level */}
+                <span className="text-[11px] font-semibold text-gray-800 dark:text-gray-200 group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors text-center max-w-[84px] leading-tight" style={{ minHeight: 30, display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
                   {d.title}
                 </span>
-                {/* Course abbreviation */}
+                {/* Course abbreviation — always at same vertical position */}
                 <span className="text-[10px] font-bold px-1.5 py-0.5 rounded" style={{ background: `${course.color}18`, color: course.color }}>
                   {course.abbr}
                 </span>
@@ -444,21 +426,3 @@ function MiniCalendar() {
 
 // ─── Stat Card ────────────────────────────────────────────────────────────────
 
-function StatCard({ label, value, sub, icon, accent, linkTo }: {
-  label: string; value: string; sub: string; icon: React.ReactNode; accent: string; linkTo?: string
-}) {
-  const inner = (
-    <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] px-5 py-4 flex items-center gap-4 transition-shadow hover:shadow-sm">
-      <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-        style={{ background: `${accent}15` }}>
-        {icon}
-      </div>
-      <div>
-        <div className="text-[22px] font-bold text-gray-900 dark:text-gray-100 leading-none">{value}</div>
-        <div className="text-[12px] font-medium text-gray-700 dark:text-gray-300 mt-0.5">{label}</div>
-        <div className="text-[11px] text-gray-400 dark:text-gray-500">{sub}</div>
-      </div>
-    </div>
-  )
-  return linkTo ? <Link to={linkTo}>{inner}</Link> : inner
-}

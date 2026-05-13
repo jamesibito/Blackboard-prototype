@@ -1,18 +1,19 @@
-import { tools } from '../data/mockData'
+import { tools, courses } from '../data/mockData'
 import type { ToolItem } from '../data/mockData'
 import { useToast } from '../context/ToastContext'
 import { CheckCircle, AlertCircle, Clock } from '../components/Icons'
 
 // ─── Category config ──────────────────────────────────────────────────────────
 
-const categoryConfig: Record<ToolItem['category'], { label: string }> = {
-  assessment:    { label: 'Assessment' },
-  communication: { label: 'Communication' },
-  productivity:  { label: 'Productivity' },
-  library:       { label: 'Library & Research' },
+const categoryConfig: Record<ToolItem['category'], { label: string; description: string }> = {
+  assessment:    { label: 'Assessment',         description: 'Submission, integrity, and exam tools' },
+  communication: { label: 'Communication',      description: 'Office hours, lectures, and messaging' },
+  productivity:  { label: 'Productivity',       description: 'Design, writing, and office software' },
+  library:       { label: 'Library & Research', description: 'Databases, journals, and learning resources' },
+  campus:        { label: 'Campus Services',    description: 'Book rooms, print, and rent equipment on campus' },
 }
 
-const categoryOrder: ToolItem['category'][] = ['assessment', 'communication', 'productivity', 'library']
+const categoryOrder: ToolItem['category'][] = ['productivity', 'assessment', 'communication', 'library', 'campus']
 
 // ─── Status config ────────────────────────────────────────────────────────────
 
@@ -57,17 +58,22 @@ export default function Tools() {
         {categoryOrder.map(cat => {
           const catTools = tools.filter(t => t.category === cat)
           if (catTools.length === 0) return null
+          const cfg = categoryConfig[cat]
           return (
             <div key={cat}>
-              <h2 className="text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">
-                {categoryConfig[cat].label}
-              </h2>
+              <div className="mb-3">
+                <h2 className="text-[12px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{cfg.label}</h2>
+                <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{cfg.description}</p>
+              </div>
               <div className="grid grid-cols-2 gap-4">
                 {catTools.map(tool => {
-                  const sc   = statusConfig[tool.status]
-                  const SIcon = sc.icon
-                  const isSetup   = tool.status === 'setup-required'
+                  const sc       = statusConfig[tool.status]
+                  const SIcon    = sc.icon
+                  const isSetup    = tool.status === 'setup-required'
                   const isInactive = tool.status === 'inactive'
+                  const linkedCourseObjs = tool.linkedCourses
+                    ? tool.linkedCourses.map(id => courses.find(c => c.id === id)).filter(Boolean)
+                    : []
 
                   return (
                     <div
@@ -78,7 +84,7 @@ export default function Tools() {
                     >
                       {/* Icon */}
                       <div
-                        className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-[13px] shrink-0"
+                        className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-[12px] shrink-0"
                         style={{ background: isInactive ? '#94A3B8' : tool.color }}
                       >
                         {tool.abbr}
@@ -99,13 +105,32 @@ export default function Tools() {
                         <p className="text-[12px] text-gray-500 dark:text-gray-400 mt-1 leading-relaxed line-clamp-2">
                           {tool.description}
                         </p>
+
+                        {/* Linked courses */}
+                        {linkedCourseObjs.length > 0 && (
+                          <div className="flex flex-wrap gap-1 mt-2">
+                            {linkedCourseObjs.map(c => c && (
+                              <span
+                                key={c.id}
+                                className="text-[10px] font-bold px-1.5 py-0.5 rounded"
+                                style={{ background: `${c.color}18`, color: c.color }}
+                              >
+                                {c.abbr}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        {!tool.linkedCourses && (
+                          <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-2">Available to all students</p>
+                        )}
+
                         <button
                           onClick={() => handleLaunch(tool)}
                           className={`mt-3 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-all ${
                             isInactive
                               ? 'bg-gray-100 dark:bg-[#232d42] text-gray-400 dark:text-gray-500 cursor-default'
                               : isSetup
-                                ? 'border text-white'
+                                ? 'border'
                                 : 'text-white hover:opacity-90'
                           }`}
                           style={

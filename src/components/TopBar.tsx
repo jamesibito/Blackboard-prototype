@@ -85,7 +85,7 @@ export default function TopBar() {
           onChange={e => setSearchQuery(e.target.value)}
           onFocus={() => setSearchFocused(true)}
           placeholder="Search courses, resources, activities…"
-          className="w-full h-[40px] pl-10 pr-20 rounded-lg bg-gray-50 dark:bg-[#1A2236] border border-gray-200 dark:border-[#2D3A52] text-[13px] text-gray-800 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB]/50 dark:focus:border-[#60A5FA]/30 transition-all duration-150"
+          className="w-full h-[40px] pl-10 pr-20 rounded-lg bg-white dark:bg-[#1A2236] border border-gray-300 dark:border-[#2D3A52] text-[13px] text-gray-800 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB]/50 dark:focus:border-[#60A5FA]/30 transition-all duration-150"
         />
         {searchQuery ? (
           <button
@@ -210,14 +210,14 @@ export default function TopBar() {
         >
           <Sun size={15} className={theme === 'light' ? 'text-amber-500' : 'text-gray-400'} />
           {/* Toggle track */}
-          <div className="relative w-9 h-5 rounded-full bg-gray-200 dark:bg-[#2563EB] transition-colors duration-200 mx-0.5">
+          <div className="relative w-9 h-5 rounded-full bg-gray-300 dark:bg-[#2563EB] transition-colors duration-200 mx-0.5">
             <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-all duration-200 ${theme === 'dark' ? 'left-[18px]' : 'left-0.5'}`} />
           </div>
           <Moon size={15} className={theme === 'dark' ? 'text-[#60A5FA]' : 'text-gray-400'} />
         </button>
 
         {/* Divider */}
-        <div className="w-px h-5 bg-gray-200 dark:bg-[#2D3A52] mx-1" />
+        <div className="w-px h-5 bg-gray-300 dark:bg-[#2D3A52] mx-1" />
 
         {/* Notifications */}
         <div ref={notifRef} className="relative">
@@ -226,7 +226,7 @@ export default function TopBar() {
             className="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#1A2236] transition-colors duration-150"
             aria-label="Notifications"
           >
-            <Bell size={19} className="text-gray-500 dark:text-gray-400" />
+            <Bell size={19} className="text-gray-700 dark:text-gray-400" />
             {unreadCount > 0 && (
               <span className="absolute top-1.5 right-1.5 min-w-[8px] h-2 bg-red-500 rounded-full" />
             )}
