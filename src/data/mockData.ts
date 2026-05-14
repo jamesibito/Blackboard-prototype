@@ -1375,61 +1375,69 @@ export const discussionThreads: DiscussionThread[] = [
 export interface ToolItem {
   id: string
   name: string
-  description: string
+  description: string         // short tagline — always visible on the card
+  details?: string            // longer paragraph — revealed by "Show more" toggle
   category: 'assessment' | 'communication' | 'productivity' | 'library' | 'campus'
   status: 'active' | 'inactive' | 'setup-required'
   color: string
   abbr: string
   url: string
-  linkedCourses?: string[]   // course IDs — omit if available to all
+  linkedCourses?: string[]    // course IDs — omit if available to all
 }
 
 export const tools: ToolItem[] = [
   // ── Assessment ──
   {
     id: 'turnitin', name: 'Turnitin', abbr: 'TII',
-    description: 'Originality checking and peer review for written assignments. Required for Interactive Systems, College English, and Information Architecture submissions.',
+    description: 'Originality checking + peer review for written work.',
+    details: 'Required for written submissions in Interactive Systems, College English, and Information Architecture. Submissions are auto-checked against the Turnitin database within 24 hours and a similarity report is attached to your grade. Peer-review assignments use the same interface for anonymous feedback rounds.',
     category: 'assessment', status: 'active', color: '#0077B6',
     url: 'https://turnitin.com',
     linkedCourses: ['IS', 'CE', 'IA'],
   },
   {
     id: 'respondus', name: 'Respondus LockDown Browser', abbr: 'RLB',
-    description: 'Required for online proctored exams. Not currently needed this semester — will activate automatically if a monitored assessment is scheduled.',
+    description: 'Secure browser for online proctored exams.',
+    details: 'Not currently needed this semester — Respondus only activates when an instructor schedules a monitored assessment. If you need it, the install link will appear directly in the relevant course page within 48 hours of your exam.',
     category: 'assessment', status: 'inactive', color: '#64748B',
     url: 'https://respondus.com/products/lockdown-browser',
   },
   // ── Communication ──
   {
     id: 'zoom', name: 'Zoom', abbr: 'ZM',
-    description: 'Video conferencing for online office hours, remote lectures, and group project meetings. Integrated with your course schedule.',
+    description: 'Video conferencing — office hours, lectures, group calls.',
+    details: 'Each course has a recurring Zoom link visible on the course page. Office hours bookings auto-generate a Zoom link in your calendar. Group projects can use breakout rooms for collaboration. Recordings are saved to your GBC Zoom account for 90 days.',
     category: 'communication', status: 'active', color: '#2D8CFF',
     url: 'https://georgebrown.zoom.us',
   },
   // ── Productivity ──
   {
     id: 'adobe-cc', name: 'Adobe Creative Cloud', abbr: 'ACC',
-    description: 'Photoshop, Illustrator, InDesign, After Effects, and the full CC suite. Subsidised student licence — complete account setup to activate.',
+    description: 'Photoshop, Illustrator, InDesign, After Effects + full CC suite.',
+    details: 'Subsidised student licence — full Creative Cloud access for the duration of your program. Activate by signing in with your GBC student email, then download the Creative Cloud desktop app to install individual tools. Cloud storage included (100 GB).',
     category: 'productivity', status: 'setup-required', color: '#FA0F00',
     url: 'https://adobe.com/creativecloud',
     linkedCourses: ['2D', 'VD', 'IA', 'IS'],
   },
   {
     id: 'figma', name: 'Figma', abbr: 'FIG',
-    description: 'Collaborative UI design and prototyping. Used for wireframes, component libraries, and interactive mockups across design courses.',
+    description: 'Collaborative UI design + prototyping.',
+    details: 'Used for wireframes, component libraries, interactive prototypes, and FigJam workshops across all design courses. Your GBC email unlocks the Education tier — unlimited files, version history, and dev mode. Class projects often share a team library.',
     category: 'productivity', status: 'active', color: '#F24E1E',
     url: 'https://figma.com',
     linkedCourses: ['IA', 'VD', '2D', 'IS'],
   },
   {
     id: 'microsoft365', name: 'Microsoft 365', abbr: 'M365',
-    description: 'Word, Excel, PowerPoint, Teams, and 1 TB OneDrive storage — free for all enrolled students. Sign in with your GBC student email.',
+    description: 'Word, Excel, PowerPoint, Teams + 1 TB OneDrive.',
+    details: 'Free for all enrolled students. Sign in with your @georgebrown.ca email to access desktop apps, web versions, and OneDrive sync. Teams is the default for group projects in CE and IS. Outlook handles your student email.',
     category: 'productivity', status: 'active', color: '#D83B01',
     url: 'https://microsoft.com/education',
   },
   {
     id: 'grammarly', name: 'Grammarly', abbr: 'GR',
-    description: 'AI writing assistant for grammar, clarity, and citation suggestions. Connect your account to unlock the Premium tier included in your tuition.',
+    description: 'AI writing assistant — grammar, clarity, citations.',
+    details: 'Premium tier is included in your tuition but requires a one-time account connection. Once active, Grammarly works in your browser, in Word, and as a desktop app. Particularly useful for College English essays and Research Proposal drafts.',
     category: 'productivity', status: 'setup-required', color: '#15C39A',
     url: 'https://grammarly.com',
     linkedCourses: ['CE', 'IS', 'IA'],
@@ -1437,33 +1445,38 @@ export const tools: ToolItem[] = [
   // ── Library & Research ──
   {
     id: 'library', name: 'GBC Library', abbr: 'LIB',
-    description: 'Access e-journals, databases (JSTOR, Emerald), interlibrary loans, and book a research consultation with a librarian.',
+    description: 'E-journals, databases, interlibrary loans, librarian help.',
+    details: 'Access JSTOR, Emerald, and 80+ research databases through the library portal. Book a 30-minute research consultation with a subject librarian — especially helpful for Research Proposals. Interlibrary loans available within 5 business days.',
     category: 'library', status: 'active', color: '#1B3F89',
     url: 'https://library.georgebrown.ca',
   },
   {
     id: 'linkedin-learning', name: 'LinkedIn Learning', abbr: 'LiL',
-    description: 'Unlimited access to 16,000+ courses in design, technology, and business. Certificates count toward co-op readiness requirements.',
+    description: '16,000+ courses in design, tech, and business.',
+    details: 'Unlimited access via your GBC LinkedIn integration. Completed certificates count toward co-op readiness requirements and appear on your LinkedIn profile automatically. Curated learning paths exist for each design program — check the Communities tab for recommendations.',
     category: 'library', status: 'active', color: '#0A66C2',
     url: 'https://linkedin.com/learning',
   },
   // ── Campus Services ──
   {
     id: 'study-rooms', name: 'Study Room Booking', abbr: 'SR',
-    description: 'Reserve a study room at St. James, Waterfront, or Casa Loma campus. Rooms seat 2–10 people and include whiteboards and display screens.',
+    description: 'Book group study rooms across all three campuses.',
+    details: 'Reserve a room at St. James, Waterfront, or Casa Loma. Rooms seat 2–10 people, include whiteboards and HDMI display screens. Maximum 3-hour booking per day. Bookings open 7 days in advance and fill quickly during exam weeks.',
     category: 'campus', status: 'active', color: '#0EA5E9',
     url: 'https://georgebrown.ca/student-life/study-spaces',
   },
   {
     id: 'print-centre', name: 'GBC Print Centre', abbr: 'PRT',
-    description: 'Print, scan, and large-format plot. Bring your design files for presentation boards, technical drawings, and mounted portfolio pieces.',
+    description: 'Print, scan, large-format plot, mounting.',
+    details: 'Located at the St. James and Casa Loma campuses. Send print jobs ahead online to skip the queue. Large-format plotting (up to 36" wide) is required for Technical Drawing finals. Foam-core mounting available for portfolio crit days.',
     category: 'campus', status: 'active', color: '#6366F1',
     url: 'https://georgebrown.ca/services/print',
     linkedCourses: ['2D', 'VD', 'IA', 'TD'],
   },
   {
     id: 'tech-lab', name: 'Tech Lab Rentals', abbr: 'TLR',
-    description: 'Borrow cameras, drawing tablets, VR headsets, tripods, microphones, gaming consoles, and other equipment from the campus tech lab.',
+    description: 'Borrow cameras, tablets, VR headsets, lighting, audio.',
+    details: 'Reserve equipment up to 7 days in advance. 48-hour rental periods, renewable if no waitlist. Wacom tablets, DSLR cameras, mirrorless cameras, lavalier mics, ring lights, and Meta Quest VR headsets available. Photo ID required at pickup.',
     category: 'campus', status: 'active', color: '#8B5CF6',
     url: 'https://georgebrown.ca/services/tech-lab',
     linkedCourses: ['VD', '2D', 'IS'],
