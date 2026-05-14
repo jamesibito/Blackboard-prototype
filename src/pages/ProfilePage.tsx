@@ -4,6 +4,7 @@ import { courses, grades, getOverallGPA, getWinterGPA } from '../data/mockData'
 import { getLetterGrade } from '../utils/grades'
 import { useToast } from '../context/ToastContext'
 import { CheckCircle, Mail, Bell, Eye, EyeOff, ChevronRight } from '../components/Icons'
+import AccessibilitySettingsModal from '../components/AccessibilitySettingsModal'
 
 // ─── Profile Page ─────────────────────────────────────────────────────────────
 
@@ -16,6 +17,7 @@ export default function ProfilePage() {
     messages:      true,
   })
   const [hideGPA, setHideGPA] = useState(false)
+  const [a11yOpen, setA11yOpen] = useState(false)
 
   const fallGPA   = getOverallGPA()
   const winterGPA = getWinterGPA()
@@ -39,16 +41,10 @@ export default function ProfilePage() {
 
         <div className="px-6 pb-6">
           {/* Avatar */}
-          <div className="-mt-10 mb-4 flex items-end justify-between">
+          <div className="-mt-10 mb-4">
             <div className="w-20 h-20 rounded-2xl border-4 border-white dark:border-[#1A2236] bg-[#2563EB] flex items-center justify-center text-white font-bold text-[24px] shadow-sm">
               KH
             </div>
-            <button
-              onClick={() => toast('Profile editing coming soon!', 'info')}
-              className="px-4 py-2 rounded-xl border border-gray-200 dark:border-[#2D3A52] text-[13px] font-semibold text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors"
-            >
-              Edit Profile
-            </button>
           </div>
 
           <h1 className="text-[22px] font-bold text-gray-900 dark:text-gray-100">Kevin H.</h1>
@@ -156,7 +152,7 @@ export default function ProfilePage() {
             <div className="space-y-1">
               {[
                 { label: 'Change Password',        action: () => toast('Redirecting to account settings…', 'info') },
-                { label: 'Accessibility Settings', action: () => toast('Accessibility options coming soon!', 'info') },
+                { label: 'Accessibility Settings', action: () => setA11yOpen(true) },
                 { label: 'Download Transcript',    action: () => toast('Transcript request submitted', 'success') },
                 { label: 'Help Centre',            action: () => toast('Opening GBC Help Centre…', 'info') },
               ].map(item => (
@@ -173,6 +169,9 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+
+      {/* Accessibility Settings modal — opened from the Account quick-links */}
+      <AccessibilitySettingsModal open={a11yOpen} onClose={() => setA11yOpen(false)} />
     </div>
   )
 }

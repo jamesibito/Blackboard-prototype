@@ -1,11 +1,21 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { ChevronLeft, ChevronRight, Clock } from '../components/Icons'
+import { useState, useEffect, useRef } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { ChevronLeft, ChevronRight, Clock, Filter, CheckCircle } from '../components/Icons'
 import { calendarEvents, classBlocks, dueSoon, getCourse } from '../data/mockData'
+import type { CalendarEvent } from '../data/mockData'
 
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December']
 const DAY_HEADERS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
 type ViewMode = 'Month' | 'Week' | 'Day' | 'List'
+
+// Filter options for the event-type dropdown — drives which events render across the page
+type EventTypeFilter = 'all' | 'deadline' | 'class' | 'event'
+const filterLabels: Record<EventTypeFilter, string> = {
+  all:      'All events',
+  deadline: 'Deadlines only',
+  class:    'Classes only',
+  event:    'Events only',
+}
 
 // Dec 14, 2022 = "today" in this demo
 const TODAY = 14
@@ -14,10 +24,36 @@ function getDaysInMonth(year: number, month: number) { return new Date(year, mon
 function getFirstDayOfWeek(year: number, month: number) { return new Date(year, month, 1).getDay() }
 
 export default function CalendarPage() {
+  const navigate = useNavigate()
   const [year, setYear] = useState(2022)
   const [month, setMonth] = useState(11) // December
   const [view, setView] = useState<ViewMode>('Month')
   const [selectedDay, setSelectedDay] = useState<number | null>(TODAY)
+  const [typeFilter, setTypeFilter] = useState<EventTypeFilter>('all')
+  const [filterOpen, setFilterOpen] = useState(false)
+  const filterRef = useRef<HTMLDivElement>(null)
+
+  // Close filter dropdown on outside click
+  useEffect(() => {
+    function onClick(e: MouseEvent) {
+      if (filterRef.current && !filterRef.current.contains(e.target as Node)) setFilterOpen(false)
+    }
+    document.addEventListener('mousedown', onClick)
+    return () => document.removeEventListener('mousedown', onClick)
+  }, [])
+
+  // Apply the active type filter to any list of events.
+  // Note: only `type` field on CalendarEvent — items without a type are
+  // treated as `event` for filtering purposes.
+  function applyTypeFilter(events: CalendarEvent[]): CalendarEvent[] {
+    if (typeFilter === 'all') return events
+    return events.filter(e => (e.type ?? 'event') === typeFilter)
+  }
+
+  // Clicking a List-view event row navigates to its course
+  function handleEventClick(event: CalendarEvent) {
+    navigate(`/courses/${event.courseId}`)
+  }
 
   const daysInMonth = getDaysInMonth(year, month)
   const firstDay = getFirstDayOfWeek(year, month)
@@ -37,7 +73,9 @@ export default function CalendarPage() {
   for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7))
 
   const getEventsForDay = (day: number) =>
-    year === 2022 && month === 11 ? calendarEvents.filter(e => e.day === day) : []
+    year === 2022 && month === 11
+      ? applyTypeFilter(calendarEvents.filter(e => e.day === day))
+      : []
 
   const selectedEvents = selectedDay ? getEventsForDay(selectedDay) : []
 
@@ -73,9 +111,48 @@ export default function CalendarPage() {
         </div>
 
         <div className="flex items-center gap-2">
-          <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-[#232d42] transition border border-gray-200 dark:border-[#2D3A52]">
-            Filter
-          </button>
+          {/* Filter — dropdown of event types. Active filter shown in the button label. */}
+          <div ref={filterRef} className="relative">
+            <button
+              type="button"
+              onClick={() => setFilterOpen(o => !o)}
+              aria-haspopup="menu"
+              aria-expanded={filterOpen}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-medium transition border ${
+                typeFilter !== 'all'
+                  ? 'border-[#2563EB]/40 text-[#2563EB] dark:text-[#60A5FA] bg-[#2563EB]/[0.06]'
+                  : 'border-gray-200 dark:border-[#2D3A52] text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-[#232d42]'
+              }`}
+            >
+              <Filter size={13} aria-hidden="true" />
+              {typeFilter === 'all' ? 'Filter' : filterLabels[typeFilter]}
+            </button>
+
+            {filterOpen && (
+              <div role="menu" className="absolute right-0 top-[calc(100%+6px)] w-[180px] bg-white dark:bg-[#1A2236] border border-gray-200 dark:border-[#2D3A52] rounded-xl shadow-lg z-50 overflow-hidden py-1">
+                {(Object.entries(filterLabels) as [EventTypeFilter, string][]).map(([key, label]) => {
+                  const active = typeFilter === key
+                  return (
+                    <button
+                      key={key}
+                      role="menuitemradio"
+                      aria-checked={active}
+                      onClick={() => { setTypeFilter(key); setFilterOpen(false) }}
+                      className={`flex items-center justify-between w-full px-4 py-2 text-left text-[13px] transition-colors ${
+                        active
+                          ? 'text-[#2563EB] dark:text-[#60A5FA] bg-[#2563EB]/[0.06] font-semibold'
+                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#232d42]'
+                      }`}
+                    >
+                      {label}
+                      {active && <CheckCircle size={13} aria-hidden="true" />}
+                    </button>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+
           {/* View mode tabs */}
           <div className="flex border border-gray-200 dark:border-[#2D3A52] rounded-xl overflow-hidden">
             {(['Month','Week','Day','List'] as ViewMode[]).map(v => (
@@ -240,38 +317,56 @@ export default function CalendarPage() {
         </div>
       )}
 
-      {/* List View */}
+      {/* List View — chronological list of all events for the visible month.
+          Honours the active type filter; clicking a row navigates to the course. */}
       {view === 'List' && (
         <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden">
-          <div className="divide-y divide-gray-50 dark:divide-[#2D3A52]">
-            {(year === 2022 && month === 11 ? calendarEvents : [])
+          {(() => {
+            const events = applyTypeFilter(year === 2022 && month === 11 ? calendarEvents : [])
               .sort((a, b) => a.day - b.day)
-              .map(evt => {
-                const course = getCourse(evt.courseId)
-                const isToday = evt.day === TODAY
-                return (
-                  <div key={evt.id} className={`flex items-center gap-4 px-5 py-4 hover:bg-gray-50 dark:hover:bg-[#232d42] transition cursor-pointer ${isToday ? 'bg-[#2563EB]/[0.03] dark:bg-[#2563EB]/[0.06]' : ''}`}>
-                    <div className="text-center w-12 shrink-0">
-                      <div className={`text-[22px] font-bold leading-none ${isToday ? 'text-[#2563EB] dark:text-[#60A5FA]' : 'text-gray-900 dark:text-gray-100'}`}>
-                        {evt.day}
-                      </div>
-                      <div className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-medium mt-0.5">Dec</div>
-                    </div>
-                    <div className="w-1 h-8 rounded-full shrink-0" style={{ background: evt.color }} />
-                    <div className="flex-1">
-                      <h3 className="text-[14px] font-semibold text-gray-900 dark:text-gray-100">{evt.title}</h3>
-                      <p className="text-[12px] text-gray-400 dark:text-gray-500 mt-0.5">{course.name} · {course.code}</p>
-                    </div>
-                    {isToday && (
-                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#2563EB]/10 text-[#2563EB] dark:text-[#60A5FA]">
-                        Today
-                      </span>
-                    )}
-                  </div>
-                )
-              })
+            if (events.length === 0) {
+              return (
+                <div className="text-center py-12 px-5">
+                  <p className="text-[13px] text-gray-400 dark:text-gray-500">
+                    No events match the active filter.
+                  </p>
+                </div>
+              )
             }
-          </div>
+            return (
+              <div className="divide-y divide-gray-50 dark:divide-[#2D3A52]">
+                {events.map(evt => {
+                  const course = getCourse(evt.courseId)
+                  const isToday = evt.day === TODAY
+                  return (
+                    <button
+                      key={evt.id}
+                      type="button"
+                      onClick={() => handleEventClick(evt)}
+                      className={`flex items-center gap-4 w-full px-5 py-4 hover:bg-gray-50 dark:hover:bg-[#232d42] transition text-left ${isToday ? 'bg-[#2563EB]/[0.03] dark:bg-[#2563EB]/[0.06]' : ''}`}
+                    >
+                      <div className="text-center w-12 shrink-0">
+                        <div className={`text-[22px] font-bold leading-none ${isToday ? 'text-[#2563EB] dark:text-[#60A5FA]' : 'text-gray-900 dark:text-gray-100'}`}>
+                          {evt.day}
+                        </div>
+                        <div className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-medium mt-0.5">Dec</div>
+                      </div>
+                      <div className="w-1 h-8 rounded-full shrink-0" style={{ background: evt.color }} />
+                      <div className="flex-1">
+                        <h3 className="text-[14px] font-semibold text-gray-900 dark:text-gray-100">{evt.title}</h3>
+                        <p className="text-[12px] text-gray-400 dark:text-gray-500 mt-0.5">{course.name} · {course.code}</p>
+                      </div>
+                      {isToday && (
+                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#2563EB]/10 text-[#2563EB] dark:text-[#60A5FA]">
+                          Today
+                        </span>
+                      )}
+                    </button>
+                  )
+                })}
+              </div>
+            )
+          })()}
         </div>
       )}
 

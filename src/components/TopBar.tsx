@@ -14,7 +14,6 @@ const typeColors: Record<string, string> = {
 
 // Show only the 3 most recent in the dropdown — full list lives on /notifications
 const dropdownNotifs = notifications.slice(0, 3)
-const unreadCount = notifications.filter(n => n.unread).length
 
 export default function TopBar() {
   const navigate = useNavigate()
@@ -23,6 +22,16 @@ export default function TopBar() {
   const [profileOpen, setProfileOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [searchFocused, setSearchFocused] = useState(false)
+  // Tracks which notifications the user has marked read in this session.
+  // Initialised empty — combined with `notification.unread` to compute the badge.
+  const [readIds, setReadIds] = useState<Set<string>>(new Set())
+
+  // Computed unread = base unread minus anything the user marked read this session
+  const unreadCount = notifications.filter(n => n.unread && !readIds.has(n.id)).length
+
+  function markAllRead() {
+    setReadIds(new Set(notifications.filter(n => n.unread).map(n => n.id)))
+  }
 
   const notifRef = useRef<HTMLDivElement>(null)
   const profileRef = useRef<HTMLDivElement>(null)
@@ -245,16 +254,22 @@ export default function TopBar() {
               <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-[#2D3A52]">
                 <span className="font-semibold text-[13px] text-gray-900 dark:text-gray-100">Notifications</span>
                 {unreadCount > 0 && (
-                  <span className="text-[11px] text-[#2563EB] dark:text-[#60A5FA] font-medium cursor-pointer hover:underline">
+                  <button
+                    type="button"
+                    onClick={markAllRead}
+                    className="text-[11px] text-[#2563EB] dark:text-[#60A5FA] font-medium hover:underline"
+                  >
                     Mark all read
-                  </span>
+                  </button>
                 )}
               </div>
 
-              {/* Show 3 most recent notifications */}
+              {/* Show 3 most recent notifications. Read state combines base data
+                  + anything marked read in this session (via Mark all read). */}
               {dropdownNotifs.map(n => {
                 const course = n.courseId ? getCourse(n.courseId) : undefined
                 const dotColor = typeColors[n.type]
+                const isUnread = n.unread && !readIds.has(n.id)
                 return (
                   <button
                     key={n.id}
@@ -263,7 +278,7 @@ export default function TopBar() {
                   >
                     {/* Coloured dot: filled = unread, ring = read */}
                     <div className="w-2 h-2 rounded-full mt-1.5 shrink-0"
-                      style={{ background: n.unread ? dotColor : 'transparent', border: n.unread ? 'none' : '1.5px solid #94a3b8' }} />
+                      style={{ background: isUnread ? dotColor : 'transparent', border: isUnread ? 'none' : '1.5px solid #94a3b8' }} />
                     <div className="flex-1 min-w-0">
                       {/* Course pill if applicable */}
                       {course && (
@@ -271,7 +286,7 @@ export default function TopBar() {
                           {course.abbr}
                         </span>
                       )}
-                      <span className={`text-[13px] leading-snug ${n.unread ? 'text-gray-900 dark:text-gray-100 font-medium' : 'text-gray-600 dark:text-gray-400'}`}>
+                      <span className={`text-[13px] leading-snug ${isUnread ? 'text-gray-900 dark:text-gray-100 font-medium' : 'text-gray-600 dark:text-gray-400'}`}>
                         {n.title}
                       </span>
                       <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{n.time}</p>
@@ -321,29 +336,29 @@ export default function TopBar() {
                 <p className="text-[13px] font-semibold text-gray-900 dark:text-gray-100">{user.displayName}</p>
                 <p className="text-[11px] text-gray-400 dark:text-gray-500">Student · Fall 2022</p>
               </div>
+              {/* Internal nav items — go to in-app pages */}
               {[
-                { label: 'My Profile',        to: '/profile' },
-                { label: 'Account Settings',  to: '/profile' },
-                { label: 'Help Centre',       to: null       },
+                { label: 'My Profile',       to: '/profile' },
+                { label: 'Account Settings', to: '/profile' },
               ].map((item, i) => (
-                item.to ? (
-                  <button
-                    key={i}
-                    onClick={() => { setProfileOpen(false); navigate(item.to!) }}
-                    className="w-full px-4 py-2 text-left text-[13px] text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors"
-                  >
-                    {item.label}
-                  </button>
-                ) : (
-                  <button
-                    key={i}
-                    onClick={() => { setProfileOpen(false); navigate('/profile') }}
-                    className="w-full px-4 py-2 text-left text-[13px] text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors"
-                  >
-                    {item.label}
-                  </button>
-                )
+                <button
+                  key={i}
+                  onClick={() => { setProfileOpen(false); navigate(item.to) }}
+                  className="w-full px-4 py-2 text-left text-[13px] text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors"
+                >
+                  {item.label}
+                </button>
               ))}
+              {/* Help Centre — external GBC student services site (opens new tab) */}
+              <a
+                href="https://georgebrown.ca/student-life/student-services"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setProfileOpen(false)}
+                className="block w-full px-4 py-2 text-left text-[13px] text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors"
+              >
+                Help Centre ↗
+              </a>
             </div>
           )}
         </div>

@@ -1,16 +1,30 @@
 import { useState, useEffect, useRef } from 'react'
 import { X, Send } from './Icons'
 import { courses } from '../data/mockData'
+import { useToast } from '../context/ToastContext'
 
 interface Props {
   onClose: () => void
 }
 
 export default function ComposeModal({ onClose }: Props) {
+  const { toast } = useToast()
   const [to, setTo] = useState('')
   const [subject, setSubject] = useState('')
   const [body, setBody] = useState('')
   const [courseId, setCourseId] = useState('')
+
+  // Decorative — no message is actually persisted (this is a portfolio prototype).
+  // We still fire a realistic success toast and close so the interaction feels real.
+  function handleSend() {
+    const recipient = to.trim() || 'recipient'
+    toast(`Message sent to ${recipient}`, 'success')
+    onClose()
+  }
+
+  // Disable Send unless at least the recipient + body are filled — mirrors real
+  // form validation a student would expect from a real LMS.
+  const canSend = to.trim().length > 0 && body.trim().length > 0
 
   const toInputRef = useRef<HTMLInputElement>(null)
 
@@ -137,8 +151,13 @@ export default function ComposeModal({ onClose }: Props) {
               Cancel
             </button>
             <button
-              onClick={onClose}
-              className="flex items-center gap-2 px-5 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[13px] font-semibold transition-colors"
+              onClick={handleSend}
+              disabled={!canSend}
+              className={`flex items-center gap-2 px-5 py-2 rounded-xl text-white text-[13px] font-semibold transition-colors ${
+                canSend
+                  ? 'bg-[#2563EB] hover:bg-[#1D4ED8]'
+                  : 'bg-[#2563EB]/40 cursor-not-allowed'
+              }`}
             >
               <Send size={13} aria-hidden="true" />
               Send

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { discussionThreads, courses } from '../data/mockData'
 import type { DiscussionThread } from '../data/mockData'
-import { MessageCircle, Plus, ChevronRight } from '../components/Icons'
+import { MessageCircle, Plus, ChevronRight, X, Send } from '../components/Icons'
 import { useToast } from '../context/ToastContext'
 
 // ─── Tag config ───────────────────────────────────────────────────────────────
@@ -26,19 +26,67 @@ export default function Communities() {
   const [readIds, setReadIds]           = useState<Set<string>>(
     new Set(discussionThreads.filter(t => t.isRead).map(t => t.id))
   )
+  // Composer state — open/close + form fields. Threads created here live only
+  // in component state (`localThreads`) since this is a portfolio prototype.
+  const [composerOpen, setComposerOpen] = useState(false)
+  const [draftTitle, setDraftTitle]     = useState('')
+  const [draftBody, setDraftBody]       = useState('')
+  const [draftTag, setDraftTag]         = useState<DiscussionThread['tag']>('discussion')
+  const [draftCourseId, setDraftCourseId] = useState<string>('')   // '' = college-wide
+  const [localThreads, setLocalThreads] = useState<DiscussionThread[]>([])
 
-  const filtered = discussionThreads.filter(t => {
+  // Combined list — newly composed threads appear at the top so the user sees
+  // the result of their action immediately
+  const allThreads = [...localThreads, ...discussionThreads]
+
+  const filtered = allThreads.filter(t => {
     if (tagFilter && t.tag !== tagFilter) return false
     if (courseFilter === COLLEGE_ID && t.courseId !== null) return false
     if (courseFilter && courseFilter !== COLLEGE_ID && t.courseId !== courseFilter) return false
     return true
   })
 
-  const unreadCount = discussionThreads.filter(t => !readIds.has(t.id)).length
+  const unreadCount = allThreads.filter(t => !readIds.has(t.id)).length
 
   function markRead(id: string) {
     setReadIds(prev => new Set([...prev, id]))
   }
+
+  // Close composer + reset draft fields
+  function closeComposer() {
+    setComposerOpen(false)
+    setDraftTitle('')
+    setDraftBody('')
+    setDraftTag('discussion')
+    setDraftCourseId('')
+  }
+
+  function publishThread() {
+    const title = draftTitle.trim()
+    const body  = draftBody.trim()
+    if (!title || !body) return
+
+    const newThread: DiscussionThread = {
+      id: `local-${Date.now()}`,
+      courseId: draftCourseId || null,
+      title,
+      preview: body,
+      author: 'Kevin H.',
+      authorType: 'student',
+      date: 'Just now',
+      replyCount: 0,
+      isPinned: false,
+      isRead: true,        // own posts are auto-read
+      tag: draftTag,
+    }
+
+    setLocalThreads(prev => [newThread, ...prev])
+    setReadIds(prev => new Set([...prev, newThread.id]))
+    closeComposer()
+    toast('Thread posted', 'success')
+  }
+
+  const canPublish = draftTitle.trim().length > 0 && draftBody.trim().length > 0
 
   return (
     <div className="max-w-[900px]">
@@ -52,13 +100,92 @@ export default function Communities() {
           </p>
         </div>
         <button
-          onClick={() => toast('New thread composer coming soon!', 'info')}
+          onClick={() => setComposerOpen(o => !o)}
+          aria-expanded={composerOpen}
           className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[13px] font-semibold transition-colors"
         >
-          <Plus size={14} />
-          New Thread
+          <Plus size={14} className={`transition-transform ${composerOpen ? 'rotate-45' : ''}`} aria-hidden="true" />
+          {composerOpen ? 'Close' : 'New Thread'}
         </button>
       </div>
+
+      {/* ── Inline composer ──
+          Opens above the filter bar when the user clicks New Thread. Threads
+          published here are added to local state and appear at the top of the
+          list immediately. */}
+      {composerOpen && (
+        <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-[#2563EB]/30 dark:border-[#60A5FA]/20 shadow-sm p-5 mb-5 ring-1 ring-[#2563EB]/10">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-[14px] font-bold text-gray-900 dark:text-gray-100">Start a new thread</h2>
+            <button
+              onClick={closeComposer}
+              aria-label="Close composer"
+              className="p-1 rounded-md hover:bg-gray-100 dark:hover:bg-[#232d42] text-gray-400"
+            >
+              <X size={14} aria-hidden="true" />
+            </button>
+          </div>
+
+          {/* Title */}
+          <input
+            type="text"
+            value={draftTitle}
+            onChange={e => setDraftTitle(e.target.value)}
+            placeholder="Thread title…"
+            className="w-full h-10 px-3.5 rounded-xl bg-gray-50 dark:bg-[#131825] border border-gray-200 dark:border-[#2D3A52] text-[13px] font-semibold text-gray-800 dark:text-gray-200 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB]/50 transition mb-2"
+            autoFocus
+          />
+
+          {/* Body */}
+          <textarea
+            value={draftBody}
+            onChange={e => setDraftBody(e.target.value)}
+            placeholder="Share a question, observation, or resource…"
+            rows={4}
+            className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-[#131825] border border-gray-200 dark:border-[#2D3A52] text-[12.5px] text-gray-700 dark:text-gray-300 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB]/50 resize-none transition leading-relaxed mb-3"
+          />
+
+          {/* Meta row: tag + course + publish */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <select
+              value={draftTag}
+              onChange={e => setDraftTag(e.target.value as DiscussionThread['tag'])}
+              aria-label="Thread type"
+              className="h-9 px-3 rounded-lg bg-gray-50 dark:bg-[#131825] border border-gray-200 dark:border-[#2D3A52] text-[12px] text-gray-700 dark:text-gray-300 outline-none focus:ring-2 focus:ring-[#2563EB]/30 transition"
+            >
+              <option value="discussion">Discussion</option>
+              <option value="question">Question</option>
+              <option value="resource">Resource</option>
+              <option value="announcement">Announcement</option>
+            </select>
+
+            <select
+              value={draftCourseId}
+              onChange={e => setDraftCourseId(e.target.value)}
+              aria-label="Course context"
+              className="h-9 px-3 rounded-lg bg-gray-50 dark:bg-[#131825] border border-gray-200 dark:border-[#2D3A52] text-[12px] text-gray-700 dark:text-gray-300 outline-none focus:ring-2 focus:ring-[#2563EB]/30 transition"
+            >
+              <option value="">College-wide</option>
+              {courses.map(c => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
+            </select>
+
+            <button
+              onClick={publishThread}
+              disabled={!canPublish}
+              className={`ml-auto flex items-center gap-1.5 h-9 px-4 rounded-lg text-[12px] font-semibold text-white transition-colors ${
+                canPublish
+                  ? 'bg-[#2563EB] hover:bg-[#1D4ED8]'
+                  : 'bg-[#2563EB]/40 cursor-not-allowed'
+              }`}
+            >
+              <Send size={11} aria-hidden="true" />
+              Publish
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* ── Filter bar ── */}
       <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] p-4 mb-5 space-y-3">

@@ -15,6 +15,7 @@ import Resources from './pages/Resources'
 import Communities from './pages/Communities'
 import Tools from './pages/Tools'
 import ProfilePage from './pages/ProfilePage'
+import NotFound from './pages/NotFound'
 
 export default function App() {
   return (
@@ -35,6 +36,8 @@ export default function App() {
             <Route path="/communities"                         element={<Communities />} />
             <Route path="/tools"                               element={<Tools />} />
             <Route path="/profile"                             element={<ProfilePage />} />
+            {/* Catch-all 404 — keep last so registered routes take precedence */}
+            <Route path="*"                                    element={<NotFound />} />
           </Route>
         </Routes>
       </ToastProvider>

@@ -102,3 +102,24 @@ body {
     animation: none !important;
   }
 }
+
+/* User-controlled accessibility preferences (set by AccessibilitySettingsModal).
+   Layered on top of the system-level prefers-reduced-motion above so users can
+   opt-in even if their OS doesn't expose the preference. */
+html.user-reduced-motion *,
+html.user-reduced-motion *::before,
+html.user-reduced-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+html.user-reduced-motion .animate-pulse {
+  animation: none !important;
+}
+
+/* Force-underline every link when the user opts in. */
+html.user-underline-links a {
+  text-decoration: underline !important;
+  text-underline-offset: 2px;
+}

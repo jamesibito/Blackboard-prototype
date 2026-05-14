@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { getCourse, getAssignment } from '../data/mockData'
-import { CheckCircle, Clock, FileText, Download, Send } from '../components/Icons'
+import { CheckCircle, Clock, FileText, Download, Send, X } from '../components/Icons'
 import Breadcrumbs from '../components/Breadcrumbs'
 import { getLetterGrade } from '../utils/grades'
 import { useToast } from '../context/ToastContext'
@@ -16,6 +16,9 @@ export default function AssignmentPage() {
   const [feedbackText, setFeedbackText] = useState('')
   const [extraReplies, setExtraReplies] = useState<string[]>([])
   const [submitted, setSubmitted] = useState(false)
+  // Files selected via the upload input — kept in component state, never uploaded
+  const [stagedFiles, setStagedFiles] = useState<File[]>([])
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   function sendFeedbackReply() {
     const text = feedbackText.trim()
@@ -27,7 +30,33 @@ export default function AssignmentPage() {
 
   function handleSubmit() {
     setSubmitted(true)
-    toast('Assignment submitted successfully!', 'success')
+    const fileNote = stagedFiles.length > 0
+      ? ` (${stagedFiles.length} file${stagedFiles.length === 1 ? '' : 's'})`
+      : ''
+    toast(`Assignment submitted${fileNote}`, 'success')
+    // Clear staging so the post-submit state shows the "Submitted & Graded" view
+    setStagedFiles([])
+  }
+
+  // Real file picker — opens the OS file dialog. Selected files live in state
+  // so the staging UI can show them with size + remove controls.
+  function handleFilesPicked(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files
+    if (!files || files.length === 0) return
+    setStagedFiles(prev => [...prev, ...Array.from(files)])
+    // Reset the input so re-picking the same file fires onChange again
+    e.target.value = ''
+  }
+
+  function removeStagedFile(index: number) {
+    setStagedFiles(prev => prev.filter((_, i) => i !== index))
+  }
+
+  // Human-readable file size — used in the staging list
+  function formatFileSize(bytes: number): string {
+    if (bytes < 1024) return `${bytes} B`
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+    return `${(bytes / 1024 / 1024).toFixed(1)} MB`
   }
 
   if (!course || !assignment) {
@@ -318,7 +347,10 @@ export default function AssignmentPage() {
                   {submitted ? 'Just now' : assignment.submittedDate}
                 </p>
                 <button
-                  onClick={() => toast('Downloading submission…', 'info')}
+                  onClick={() => {
+                    const filename = assignment.previousSubmissions?.[0]?.files[0] ?? `${assignment.title}.pdf`
+                    toast(`Opening ${filename}`, 'info')
+                  }}
                   className="flex items-center gap-1.5 mx-auto mt-3 text-[12px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline"
                 >
                   <Download size={12} />
@@ -327,23 +359,68 @@ export default function AssignmentPage() {
               </div>
             ) : (
               <div>
-                <div
-                  className="border-2 border-dashed border-gray-200 dark:border-[#2D3A52] rounded-xl p-6 text-center cursor-pointer hover:border-gray-300 dark:hover:border-gray-500 transition-colors"
-                  onClick={() => toast('File picker would open here', 'info')}
+                {/* Real (hidden) file input — opens the OS file picker on click */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  accept=".pdf,.doc,.docx,.zip,.png,.jpg,.jpeg"
+                  onChange={handleFilesPicked}
+                  className="sr-only"
+                  aria-label="Upload assignment files"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="w-full border-2 border-dashed border-gray-200 dark:border-[#2D3A52] rounded-xl p-6 text-center hover:border-gray-300 dark:hover:border-gray-500 transition-colors block"
                 >
-                  <Download size={24} className="text-gray-300 dark:text-gray-600 mx-auto mb-2" />
-                  <p className="text-[13px] text-gray-500 dark:text-gray-400">Drop files here or click to upload</p>
+                  <Download size={24} className="text-gray-300 dark:text-gray-600 mx-auto mb-2" aria-hidden="true" />
+                  <p className="text-[13px] text-gray-500 dark:text-gray-400">Click to upload files</p>
                   <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1">PDF, DOCX, ZIP up to 25MB</p>
-                </div>
+                </button>
+
+                {/* Staged files — what the student has chosen but not yet submitted */}
+                {stagedFiles.length > 0 && (
+                  <div className="mt-3 space-y-1.5">
+                    <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">
+                      Ready to submit ({stagedFiles.length})
+                    </p>
+                    {stagedFiles.map((f, i) => (
+                      <div key={i} className="flex items-center gap-2 px-2.5 py-2 rounded-lg bg-gray-50 dark:bg-[#131825] border border-gray-100 dark:border-[#2D3A52]">
+                        <FileText size={12} className="text-gray-400 shrink-0" aria-hidden="true" />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[12px] font-medium text-gray-800 dark:text-gray-200 truncate">{f.name}</p>
+                          <p className="text-[10px] text-gray-400 dark:text-gray-500">{formatFileSize(f.size)}</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => removeStagedFile(i)}
+                          aria-label={`Remove ${f.name}`}
+                          className="p-1 rounded-md hover:bg-gray-100 dark:hover:bg-[#232d42] text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                        >
+                          <X size={12} aria-hidden="true" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
                 <button
                   onClick={handleSubmit}
-                  className="w-full mt-3 py-2.5 rounded-xl text-[13px] font-semibold text-white transition-opacity hover:opacity-90 active:scale-[0.98]"
+                  disabled={stagedFiles.length === 0}
+                  className={`w-full mt-3 py-2.5 rounded-xl text-[13px] font-semibold text-white transition-all ${
+                    stagedFiles.length > 0
+                      ? 'hover:opacity-90 active:scale-[0.98]'
+                      : 'opacity-40 cursor-not-allowed'
+                  }`}
                   style={{ background: course.color }}
                 >
-                  Submit Assignment
+                  {stagedFiles.length > 0
+                    ? `Submit ${stagedFiles.length} file${stagedFiles.length === 1 ? '' : 's'}`
+                    : 'Submit Assignment'}
                 </button>
                 <p className="text-[11px] text-gray-400 dark:text-gray-500 text-center mt-2">
-                  Prototype — no files are uploaded.
+                  Prototype — files stay on your device only.
                 </p>
               </div>
             )}
@@ -375,7 +452,11 @@ export default function AssignmentPage() {
                         ))}
                       </div>
                     </div>
-                    <button className="text-[10px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => toast(`Opening ${sub.files[0] ?? 'submission'}`, 'info')}
+                      className="text-[10px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline shrink-0"
+                    >
                       View
                     </button>
                   </div>

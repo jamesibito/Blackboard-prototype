@@ -155,16 +155,15 @@ export default function Tools() {
         })}
       </div>
 
-      {/* ── Footer note ── */}
+      {/* ── Footer note ── Real mailto so the link actually does something. */}
       <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-8 text-center">
         Need a tool added? Contact your instructor or{' '}
-        <button
-          type="button"
-          onClick={() => toast('Opening IT support portal…', 'info')}
-          className="text-[#2563EB] dark:text-[#60A5FA] hover:underline cursor-pointer"
+        <a
+          href="mailto:itsupport@georgebrown.ca?subject=Blackboard%20tool%20request"
+          className="text-[#2563EB] dark:text-[#60A5FA] hover:underline"
         >
           GBC IT Support
-        </button>.
+        </a>.
       </p>
     </div>
   )
