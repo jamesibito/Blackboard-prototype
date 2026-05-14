@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronRight, Clock, TrendingUp } from '../components/Icons'
 import {
-  courses, dueSoon, grades, activityItems, assignments,
+  courses, dueSoon, activityItems, assignments,
   getCourse, getOverallGPA, getNextClass, getTodayClasses,
 } from '../data/mockData'
-import { Skeleton, SkeletonText, SkeletonAvatar, SkeletonCard } from '../components/Skeleton'
+import { Skeleton, SkeletonAvatar, SkeletonCard } from '../components/Skeleton'
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -20,19 +20,80 @@ function CourseAvatar({ abbr, color, size = 40 }: { abbr: string; color: string;
   )
 }
 
-function CircleProgress({ percentage, color, size = 48 }: { percentage: number; color: string; size?: number }) {
-  const r      = (size - 7) / 2
-  const circ   = 2 * Math.PI * r
-  const offset = circ - (percentage / 100) * circ
+// ─── Recent Grades widget ────────────────────────────────────────────────────
+// Surfaces the most recently graded assignments at assignment-level granularity.
+// Replaces the previous static per-course aggregate widget — aggregates aren't
+// time-sensitive ("you have a 75% in 2D" doesn't change day-to-day) but new grade
+// returns are exactly the kind of thing students check the dashboard for.
+
+function RecentGrades() {
+  // Sum the rubric → score / total → percentage. Falls back to 0/1 if rubric empty.
+  function gradeFor(asgnId: string) {
+    const a = assignments.find(x => x.id === asgnId)
+    if (!a || !a.rubric.length) return { score: 0, total: 1, pct: 0 }
+    const score = a.rubric.reduce((sum, c) => sum + (c.score ?? 0), 0)
+    const total = a.rubric.reduce((sum, c) => sum + c.total, 0)
+    return { score, total, pct: total > 0 ? Math.round((score / total) * 100) : 0 }
+  }
+
+  // Pull all graded assignments, newest first. Assignments are already in
+  // reverse-chronological order in mockData, so we just slice the top 5.
+  const recent = assignments.filter(a => a.status === 'graded').slice(0, 5)
+
+  // Pct → swatch colour. Mirrors the Grades page convention.
+  function pctTone(pct: number) {
+    if (pct >= 85) return { color: '#22C55E', bg: '#22C55E12' }    // emerald
+    if (pct >= 70) return { color: '#2563EB', bg: '#2563EB12' }    // blue
+    if (pct >= 60) return { color: '#F59E0B', bg: '#F59E0B12' }    // amber
+    return                  { color: '#EF4444', bg: '#EF444412' }  // red
+  }
+
   return (
-    <div className="relative flex items-center justify-center shrink-0" style={{ width: size, height: size }}>
-      <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
-        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="currentColor"
-          className="text-gray-100 dark:text-gray-800" strokeWidth={3} />
-        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color}
-          strokeWidth={3} strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round" />
-      </svg>
-      <span className="absolute text-[10px] font-bold tabular-nums" style={{ color }}>{percentage}%</span>
+    <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden">
+      <div className="flex items-center justify-between px-5 pt-5 pb-3">
+        <div>
+          <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Recent Grades</h2>
+          <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">Latest returned work</p>
+        </div>
+        <Link to="/grades" className="text-[12px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline">
+          View all
+        </Link>
+      </div>
+      <div className="divide-y divide-gray-50 dark:divide-[#232d42]">
+        {recent.map(a => {
+          const course = getCourse(a.courseId)
+          const { score, total, pct } = gradeFor(a.id)
+          const tone = pctTone(pct)
+          return (
+            <Link
+              key={a.id}
+              to={`/courses/${a.courseId}/assignments/${a.id}`}
+              className="flex items-center gap-3 px-5 py-3 hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors group"
+            >
+              <div className="flex-1 min-w-0">
+                <h3 className="font-semibold text-[13px] text-gray-900 dark:text-gray-100 truncate group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors">
+                  {a.title}
+                </h3>
+                <div className="flex items-center gap-1.5 mt-1">
+                  <span
+                    className="text-[10px] font-bold px-1.5 py-0.5 rounded"
+                    style={{ background: `${course.color}18`, color: course.color }}
+                  >
+                    {course.abbr}
+                  </span>
+                  <span className="text-[10px] text-gray-400 dark:text-gray-500 tabular-nums">{score}/{total}</span>
+                </div>
+              </div>
+              <div
+                className="text-[12px] font-bold px-2.5 py-1 rounded-lg tabular-nums shrink-0"
+                style={{ background: tone.bg, color: tone.color }}
+              >
+                {pct}%
+              </div>
+            </Link>
+          )
+        })}
+      </div>
     </div>
   )
 }
@@ -115,7 +176,7 @@ export default function Dashboard() {
       {/* ── Deadline Timeline ── */}
       <DeadlineTimeline />
 
-      {/* ── Main grid: Courses | Due Soon + Grades | Calendar + Activity ── */}
+      {/* ── Main grid: Courses | Recent Grades | Calendar + Activity ── */}
       <div className="grid grid-cols-[1fr_minmax(260px,0.65fr)_minmax(280px,0.75fr)] gap-5">
 
         {/* Courses */}
@@ -159,75 +220,10 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Middle column: Due Soon + Grades */}
-        <div className="space-y-5">
-
-          {/* Due Soon */}
-          <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden">
-            <div className="flex items-center justify-between px-5 pt-5 pb-3">
-              <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Due Soon</h2>
-              <Link to="/calendar" className="text-[12px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline">
-                Calendar
-              </Link>
-            </div>
-            <div className="px-4 pb-4 space-y-2">
-              {dueSoon.map(d => {
-                const course = getCourse(d.courseId)
-                const linkTarget = d.assignmentId
-                  ? `/courses/${d.courseId}/assignments/${d.assignmentId}`
-                  : `/courses/${d.courseId}`
-                return (
-                  <Link
-                    key={d.id}
-                    to={linkTarget}
-                    className="flex items-center gap-3 p-3 rounded-xl transition-colors
-                      bg-gray-50 dark:bg-[#232d42] hover:bg-gray-100 dark:hover:bg-[#2a354d]
-                      border-l-[3px]"
-                    style={{ borderLeftColor: course.color }}
-                  >
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-semibold text-[13px] text-gray-900 dark:text-gray-100 truncate">{d.title}</h4>
-                      <div className="flex items-center gap-1 mt-0.5">
-                        <Clock size={10} className="text-gray-400 dark:text-gray-500" />
-                        <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase tracking-wide font-medium">{d.dueDay}</p>
-                      </div>
-                    </div>
-                    <div
-                      className="px-2 py-0.5 rounded-lg text-[10px] font-bold text-white shrink-0"
-                      style={{ background: course.color }}
-                    >
-                      {course.abbr}
-                    </div>
-                  </Link>
-                )
-              })}
-            </div>
-          </div>
-
-          {/* Grades summary */}
-          <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden">
-            <div className="flex items-center justify-between px-5 pt-5 pb-3">
-              <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Grades</h2>
-              <Link to="/grades" className="text-[12px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline">
-                View all
-              </Link>
-            </div>
-            <div className="px-5 pb-5 space-y-3.5">
-              {grades.slice(0, 4).map(g => {
-                const course = getCourse(g.courseId)
-                return (
-                  <div key={g.courseId} className="flex items-center justify-between gap-3">
-                    <div className="min-w-0 flex-1">
-                      <p className="text-[13px] font-medium text-gray-900 dark:text-gray-100 truncate">{course.name}</p>
-                      <p className="text-[11px] text-gray-400 dark:text-gray-500">{course.code}</p>
-                    </div>
-                    <CircleProgress percentage={g.percentage} color={course.color} size={44} />
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        </div>
+        {/* Middle column: Recent Grades — assignment-level, time-sensitive
+            (Replaced the previous Due Soon + aggregate Grades widgets.
+             Deadline Timeline above covers "what's due"; this surfaces "what just came back".) */}
+        <RecentGrades />
 
         {/* Right column: Mini Calendar + Activity */}
         <div className="space-y-5">
@@ -357,40 +353,30 @@ function DashboardSkeleton() {
           </div>
         </SkeletonCard>
 
-        {/* Middle col */}
-        <div className="space-y-5">
-          <SkeletonCard>
-            <div className="flex items-center justify-between px-5 pt-5 pb-3">
-              <Skeleton className="h-4 w-20" />
-              <Skeleton className="h-3.5 w-16" />
+        {/* Middle col — Recent Grades */}
+        <SkeletonCard>
+          <div className="flex items-center justify-between px-5 pt-5 pb-3">
+            <div className="space-y-1">
+              <Skeleton className="h-4 w-28" />
+              <Skeleton className="h-3 w-24" />
             </div>
-            <div className="px-4 pb-4 space-y-2">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 dark:bg-[#232d42]">
-                  <div className="flex-1 space-y-1.5">
-                    <Skeleton className="h-3.5 w-32" />
-                    <Skeleton className="h-2.5 w-24" />
+            <Skeleton className="h-3.5 w-14" />
+          </div>
+          <div className="divide-y divide-gray-50 dark:divide-[#232d42]">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="flex items-center gap-3 px-5 py-3">
+                <div className="flex-1 space-y-1.5">
+                  <Skeleton className="h-3.5 w-40" />
+                  <div className="flex gap-1.5">
+                    <Skeleton className="h-3 w-7 rounded" />
+                    <Skeleton className="h-3 w-12" />
                   </div>
-                  <Skeleton className="h-5 w-8 rounded-lg" />
                 </div>
-              ))}
-            </div>
-          </SkeletonCard>
-          <SkeletonCard>
-            <div className="flex items-center justify-between px-5 pt-5 pb-3">
-              <Skeleton className="h-4 w-16" />
-              <Skeleton className="h-3.5 w-14" />
-            </div>
-            <div className="px-5 pb-5 space-y-3.5">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="flex items-center justify-between gap-3">
-                  <SkeletonText lines={2} className="flex-1" />
-                  <Skeleton className="w-11 h-11 rounded-full shrink-0" />
-                </div>
-              ))}
-            </div>
-          </SkeletonCard>
-        </div>
+                <Skeleton className="h-6 w-12 rounded-lg shrink-0" />
+              </div>
+            ))}
+          </div>
+        </SkeletonCard>
 
         {/* Right col */}
         <div className="space-y-5">
