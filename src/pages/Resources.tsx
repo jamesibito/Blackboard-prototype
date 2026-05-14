@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { courses } from '../data/mockData'
 import { Download, LinkIcon, Search } from '../components/Icons'
+import { useToast } from '../context/ToastContext'
 
 // ─── File type badge config ────────────────────────────────────────────────────
 
@@ -16,6 +17,7 @@ const typeConfig: Record<string, { label: string; bg: string; text: string }> = 
 // ─── Resources Page ────────────────────────────────────────────────────────────
 
 export default function Resources() {
+  const { toast } = useToast()
   const [query, setQuery]       = useState('')
   const [activeType, setActiveType] = useState<string>('all')
 
@@ -158,6 +160,11 @@ export default function Resources() {
 
                       {/* Download / link button */}
                       <button
+                        onClick={() =>
+                          r.type === 'link'
+                            ? toast(`Opening ${r.title}…`, 'info')
+                            : toast(`Downloading ${r.filename}…`, 'info')
+                        }
                         className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold border transition-all opacity-0 group-hover:opacity-100 shrink-0"
                         style={{ borderColor: course.color, color: course.color }}
                         title={r.type === 'link' ? 'Open link' : 'Download'}
@@ -183,10 +190,22 @@ export default function Resources() {
           (query.trim() === '' || r.title.toLowerCase().includes(query.toLowerCase()) || r.filename.toLowerCase().includes(query.toLowerCase()))
         ).length === 0
       ) && (
-        <div className="text-center py-20">
-          <p className="text-[32px] mb-3">🔍</p>
+        <div className="flex flex-col items-center justify-center py-20 px-6">
+          <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-[#232d42] flex items-center justify-center mb-4">
+            <Search size={26} className="text-gray-400 dark:text-gray-500" />
+          </div>
           <p className="text-[15px] font-semibold text-gray-700 dark:text-gray-300">No files found</p>
-          <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-1">Try a different search term or file type</p>
+          <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-1 text-center max-w-[240px]">
+            Try a different search term or file type.
+          </p>
+          {(query || activeType !== 'all') && (
+            <button
+              onClick={() => { setQuery(''); setActiveType('all') }}
+              className="mt-4 px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[13px] font-semibold transition-colors"
+            >
+              Clear filters
+            </button>
+          )}
         </div>
       )}
     </div>

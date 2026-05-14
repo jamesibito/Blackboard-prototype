@@ -268,6 +268,9 @@ export const courses: Course[] = [
     resources: [
       { id: 'ria-1', title: 'IA Foundations Slides', filename: 'IA-Foundations.pdf', type: 'pdf', uploadedBy: 'A.J. Singh', uploadedOn: 'Sep 16', size: '3.8 MB' },
       { id: 'ria-2', title: 'Card Sorting Workshop Guide', filename: 'Card-Sorting-Guide.pdf', type: 'pdf', uploadedBy: 'A.J. Singh', uploadedOn: 'Oct 7', size: '1.2 MB' },
+      { id: 'ria-3', title: 'Navigation Design Patterns', filename: 'Nav-Design-Patterns.pdf', type: 'pdf', uploadedBy: 'A.J. Singh', uploadedOn: 'Oct 21', size: '2.4 MB' },
+      { id: 'ria-4', title: 'Taxonomy & Labelling Reference', filename: 'Taxonomy-Reference.pdf', type: 'pdf', uploadedBy: 'A.J. Singh', uploadedOn: 'Nov 11', size: '0.9 MB' },
+      { id: 'ria-5', title: 'Sitemap Revision Checklist', filename: 'Sitemap-Checklist.doc', type: 'doc', uploadedBy: 'A.J. Singh', uploadedOn: 'Dec 9', size: '0.2 MB' },
     ],
   },
   {
@@ -607,6 +610,7 @@ export const activityItems: ActivityItem[] = [
     id: 'a1', courseId: 'CE', title: 'Lecture Notes Posted',
     date: '8th – 10th Dec 2022', timeRange: '8 AM – 9 AM', type: 'resource',
     body: 'Erik Brown has posted the Week 13 lecture notes covering comma splices, run-on sentences, and thesis statement revision strategies. Review before Tuesday\'s workshop session.',
+    linkTo: '/courses/CE',
   },
   {
     id: 'a2', courseId: 'IS', title: 'Assignment Posted: Usability Test Report',
@@ -630,6 +634,7 @@ export const activityItems: ActivityItem[] = [
     id: 'a5', courseId: 'VD', title: 'New Resource: Campaign Layout Examples',
     date: '11th Dec 2022', timeRange: '2 PM – 3 PM', type: 'resource',
     body: 'Xander has shared a curated gallery of campaign layout examples from Behance. Review the visual hierarchy techniques used across the examples and bring notes to the next critique session.',
+    linkTo: '/courses/VD',
   },
   {
     id: 'a6', courseId: 'IA', title: 'Grade Released: Sitemap Draft',
@@ -1047,6 +1052,8 @@ export const notifications: Notification[] = [
   { id: 'n6', title: 'Assignment 4 – Style Guide: Perfect Score!', body: 'Jaron Stewart graded your Style Guide — 20/20. Excellent layout and professional presentation.', time: 'Dec 5', timeGroup: 'earlier', type: 'grade', courseId: '2D', unread: false, linkTo: '/courses/2D/assignments/asgn-2d-4' },
   { id: 'n7', title: 'Assignment Posted: Usability Test Report', body: 'A new assignment has been posted in Interactive Systems. Due: December 20th.', time: 'Dec 4', timeGroup: 'earlier', type: 'assignment', courseId: 'IS', unread: false, linkTo: '/courses/IS/assignments/asgn-is-4' },
   { id: 'n8', title: 'Sitemap Draft graded — 5/20', body: 'A.J. Singh has released your grade for Assignment 1 – Sitemap Draft. Please book office hours before the next submission.', time: 'Dec 3', timeGroup: 'earlier', type: 'grade', courseId: 'IA', unread: false, linkTo: '/courses/IA/assignments/asgn-ia-1' },
+  { id: 'n9', title: 'New resource: Navigation Design Patterns', body: 'A.J. Singh uploaded a reference document for the Sitemap Revision. Check it out on the IA course page.', time: '2 days ago', timeGroup: 'this-week', type: 'resource', courseId: 'IA', unread: true, linkTo: '/courses/IA' },
+  { id: 'n10', title: 'Research Proposal graded — 82/100', body: 'Your Essay 3 – Research Proposal has been marked. Strong sources and good academic references. Minor comma splice issues noted.', time: 'Dec 2', timeGroup: 'earlier', type: 'grade', courseId: 'CE', unread: false, linkTo: '/courses/CE/assignments/asgn-ce-3' },
 ]
 
 // ─── Messages ─────────────────────────────────────────────────────────────────
@@ -1181,6 +1188,34 @@ I've attached detailed rubric comments. Use this feedback heading into the final
     isStarred: false,
     courseId: 'VD',
     tag: 'grade',
+  },
+  {
+    id: 'msg6',
+    senderName: 'David Kim',
+    senderAbbr: 'DK',
+    senderColor: '#22C55E',
+    subject: 'Drawing Set 3 – Great Work + Final Submission Reminder',
+    preview: 'Hi Kevin, just wanted to follow up on Drawing Set 3 — your isometric views were excellent...',
+    body: `Hi Kevin,
+
+Just wanted to follow up on Drawing Set 3. Your isometric views were excellent — clean line weights, accurate dimensions, and the section hatching was done properly. That's the standard to maintain for the final submission.
+
+Speaking of which: the Final Drawing Submission (Drawing Set 4) is due December 20th. It's a complete assembly drawing package — you'll need orthographic views, an exploded view, and a proper title block with your name and student number.
+
+A few things to remember:
+• All drawings must meet ASME Y14.5 standards
+• Include your .dwg source files alongside the PDF
+• Late submissions lose 20% within the first 24 hours — after that I can't accept them
+
+You're in a strong position heading into the final. Keep it up.
+
+— David`,
+    time: 'Dec 13',
+    date: 'Dec 13, 2022',
+    isRead: false,
+    isStarred: false,
+    courseId: 'TD',
+    tag: 'assignment',
   },
 ]
 
