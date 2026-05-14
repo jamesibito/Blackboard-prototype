@@ -13,7 +13,7 @@ This project uses semantic versioning: **vMAJOR.MINOR.PATCH**
 | MINOR (x.**1**.0) | New feature, new page, or meaningful new capability |
 | MAJOR (**1**.0.0) | Complete redesign of a section or structural overhaul |
 
-**Current version: v4.8.0** — update this line every time a version merges to main.
+**Current version: v4.9.0** — update this line every time a version merges to main.
 
 Before starting any task, determine the correct next version number and use it everywhere (branch name, commit message, and summary to the user).
 
