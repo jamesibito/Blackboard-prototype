@@ -161,10 +161,10 @@ export default function Tools() {
       <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-8 text-center">
         Need a tool added? Contact your instructor or{' '}
         <a
-          href="mailto:itsupport@georgebrown.ca?subject=Blackboard%20tool%20request"
+          href="mailto:gbcassist@georgebrown.ca?subject=Blackboard%20tool%20request"
           className="text-[#2563EB] dark:text-[#60A5FA] hover:underline"
         >
-          GBC IT Support
+          GBC Assist
         </a>.
       </p>
     </div>

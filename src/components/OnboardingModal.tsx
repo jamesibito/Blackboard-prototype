@@ -1,16 +1,20 @@
 import { useEffect, useRef, useState } from 'react'
-import { X, GraduationCap, Info, MessageCircle, ArrowRight } from './Icons'
+import { X, Home, BookOpen, Bell, ArrowRight } from './Icons'
 
 /**
  * OnboardingModal
  * ───────────────
- * First-visit explanatory modal. Sets context for portfolio viewers landing
- * on the dashboard cold — what this prototype is, what they can interact with,
- * and what to expect.
+ * First-visit "how to use this site" walkthrough. Teaches the three main
+ * navigation surfaces (sidebar, course pages, top bar) so a brand-new user
+ * isn't hunting for where things live.
+ *
+ * What this is NOT: a meta-explanation of the prototype/persona — that's
+ * the DemoBanner's job. Keeping the two messages separate lets each do
+ * one thing well: the banner sets context, the modal teaches the UI.
  *
  * Persistence: dismissal is stored in localStorage so the modal only appears
- * once per browser. The version suffix (`-v1`) lets us re-prompt visitors if
- * the onboarding copy ever changes meaningfully — just bump it.
+ * once per browser. The version suffix (`-v2`) re-prompts past visitors who
+ * saw the older meta-only copy.
  *
  * Accessibility:
  *   - role="dialog" + aria-modal + aria-labelledby on the title
@@ -18,17 +22,10 @@ import { X, GraduationCap, Info, MessageCircle, ArrowRight } from './Icons'
  *   - Click on backdrop dismisses
  *   - Body scroll locked while open
  *   - Initial focus on the primary CTA
- *
- * Coexistence with DemoBanner:
- *   - DemoBanner is a thin in-flow strip ("dismiss me to keep going")
- *   - OnboardingModal is the heavier first-impression overlay
- *   - They use *different* localStorage keys, so dismissing one does not
- *     dismiss the other. A return visitor with both keys set sees neither.
  */
 
-// localStorage key — bump the version suffix to re-prompt past visitors
-// after meaningful copy or content changes.
-const DISMISS_KEY = 'gbc-bb-onboarding-seen-v1'
+// localStorage key — v2 forces past v1 visitors to see the new how-to copy
+const DISMISS_KEY = 'gbc-bb-onboarding-seen-v2'
 
 interface OnboardingBullet {
   icon: React.FC<{ size?: number; className?: string }>
@@ -39,19 +36,19 @@ interface OnboardingBullet {
 // Centralised content so it's easy to edit copy without hunting through JSX
 const BULLETS: OnboardingBullet[] = [
   {
-    icon: GraduationCap,
-    title: "You're viewing Kevin's account",
-    body: 'A fictional 2nd-year design student at George Brown College — Fall 2022, the week before finals. Every grade, message, and deadline is made up but internally consistent.',
+    icon: Home,
+    title: 'Start on the Dashboard',
+    body: 'Your day at a glance — today\'s classes, what\'s due soon, and the priority assignments to tackle next. Everything else is one click away in the sidebar.',
   },
   {
-    icon: Info,
-    title: 'Most pages are fully interactive',
-    body: 'Click any course, assignment, grade card, or notification to drill in. The dashboard, course pages, grades, and messages all have real depth.',
+    icon: BookOpen,
+    title: 'Open any course to drill in',
+    body: 'Each course has its own modules, assignments, resources, syllabus, and instructor info. Click a course card on the Dashboard or use the Courses tab in the sidebar.',
   },
   {
-    icon: MessageCircle,
-    title: 'Some buttons are decorative',
-    body: "Things like Submit Assignment, Send Message, or Download Syllabus are styled but won't actually do anything — this is a portfolio prototype, not a live LMS.",
+    icon: Bell,
+    title: 'Notifications and account live up top',
+    body: 'The bell shows new grades, deadlines, and announcements. Your avatar opens settings, transcripts, and the Help Centre. The Tools page bundles every external app — Figma, Zoom, the Library, and more.',
   },
 ]
 
@@ -160,10 +157,10 @@ export default function OnboardingModal() {
             id="onboarding-title"
             className="text-[18px] font-bold text-gray-900 dark:text-gray-100 tracking-tight"
           >
-            Welcome to the Blackboard prototype
+            Welcome — quick tour
           </h2>
           <p className="text-[13px] text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
-            Quick context before you start clicking around.
+            Three quick things, then you're set.
           </p>
 
           {/* Bullet list */}
@@ -188,27 +185,17 @@ export default function OnboardingModal() {
             ))}
           </ul>
 
-          {/* CTA row */}
-          <div className="mt-6 flex items-center gap-3">
-            <button
-              ref={ctaRef}
-              onClick={dismiss}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl
-                bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[13px] font-semibold
-                transition-colors"
-            >
-              Start exploring
-              <ArrowRight size={14} aria-hidden="true" />
-            </button>
-            <a
-              href="https://jamesibitoye.framer.website"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[12px] font-semibold text-gray-500 dark:text-gray-400 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors px-2"
-            >
-              Case study →
-            </a>
-          </div>
+          {/* CTA */}
+          <button
+            ref={ctaRef}
+            onClick={dismiss}
+            className="mt-6 w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl
+              bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[13px] font-semibold
+              transition-colors"
+          >
+            Got it — start exploring
+            <ArrowRight size={14} aria-hidden="true" />
+          </button>
         </div>
       </div>
     </div>

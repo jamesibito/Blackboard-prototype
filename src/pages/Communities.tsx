@@ -246,10 +246,18 @@ export default function Communities() {
 
       {/* ── Thread list ── */}
       {filtered.length === 0 ? (
-        <div className="text-center py-16">
-          <MessageCircle size={32} className="text-gray-300 dark:text-gray-600 mx-auto mb-3" />
-          <p className="text-[15px] font-semibold text-gray-500 dark:text-gray-400">No threads match your filters</p>
-          <button onClick={() => { setCourseFilter(null); setTagFilter(null) }} className="mt-2 text-[13px] text-[#2563EB] dark:text-[#60A5FA] hover:underline">
+        <div className="flex flex-col items-center justify-center py-20 px-6">
+          <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-[#232d42] flex items-center justify-center mb-4">
+            <MessageCircle size={26} className="text-gray-400 dark:text-gray-500" />
+          </div>
+          <p className="text-[15px] font-semibold text-gray-700 dark:text-gray-300">No threads match your filters</p>
+          <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-1 text-center max-w-[240px]">
+            Try a different tag or course, or start a new thread.
+          </p>
+          <button
+            onClick={() => { setCourseFilter(null); setTagFilter(null) }}
+            className="mt-4 px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[13px] font-semibold transition-colors"
+          >
             Clear filters
           </button>
         </div>

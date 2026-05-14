@@ -276,6 +276,9 @@ export default function TopBar() {
                     className="flex items-start gap-3 w-full px-4 py-3 hover:bg-gray-50 dark:hover:bg-[#232d42] text-left border-b border-gray-50 dark:border-[#2D3A52] last:border-b-0 transition-colors"
                     onClick={() => {
                       setNotifOpen(false)
+                      // Mark this notification read so the badge count drops immediately,
+                      // regardless of whether the link is internal or external
+                      setReadIds(prev => new Set([...prev, n.id]))
                       if (n.linkTo) {
                         n.linkTo.startsWith('http')
                           ? window.open(n.linkTo, '_blank', 'noopener,noreferrer')
@@ -293,7 +296,7 @@ export default function TopBar() {
                           {course.abbr}
                         </span>
                       )}
-                      <span className={`text-[13px] leading-snug ${isUnread ? 'text-gray-900 dark:text-gray-100 font-medium' : 'text-gray-600 dark:text-gray-400'}`}>
+                      <span className={`text-[13px] leading-snug line-clamp-2 ${isUnread ? 'text-gray-900 dark:text-gray-100 font-medium' : 'text-gray-600 dark:text-gray-400'}`}>
                         {n.title}
                       </span>
                       <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{n.time}</p>
