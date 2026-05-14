@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronLeft, ChevronRight, Eye, EyeOff, TrendingUp } from '../components/Icons'
+import { ChevronLeft, ChevronRight, Eye, EyeOff, TrendingUp, ArrowRight } from '../components/Icons'
 import {
   grades, getCourse, getOverallGPA,
   winterGrades, getWinterCourse, getWinterGPA,
   semesters,
+  getPriorityAssignments, type PriorityAssignment,
 } from '../data/mockData'
 import { getLetterGrade } from '../utils/grades'
 
@@ -182,6 +183,11 @@ export default function Grades() {
         </div>
       )}
 
+      {/* ── Priority Assignments (Fall semester only) ──
+          Surfaces upcoming work weighted toward grade impact. Helps a student
+          who's falling behind decide what to tackle FIRST. */}
+      {isFall && !hideGrades && <PriorityAssignmentsCard />}
+
       {/* ── Expand hint ── */}
       <p className="text-[11px] text-gray-400 dark:text-gray-500 mb-4 flex items-center gap-1">
         <Eye size={12} />
@@ -282,5 +288,103 @@ export default function Grades() {
         })}
       </div>
     </div>
+  )
+}
+
+// ─── Priority Assignments Card ─────────────────────────────────────────────────
+// "What should I tackle first to catch up?" — surfaces upcoming work in the
+// courses where the grade has the most room to climb. Pulled into its own
+// sub-component so the main Grades function stays readable.
+//
+// Data shape comes from getPriorityAssignments() in mockData. Each row links
+// directly to the assignment detail page so a student can act on the prompt.
+
+function PriorityAssignmentsCard() {
+  const priority = getPriorityAssignments(4)
+
+  // No upcoming work? Don't render anything — empty state would be noise here.
+  if (priority.length === 0) return null
+
+  return (
+    <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden mb-5">
+
+      {/* Header */}
+      <div className="px-5 pt-5 pb-3 border-b border-gray-100 dark:border-[#2D3A52]">
+        <div className="flex items-center gap-2">
+          <div
+            className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"
+            style={{ background: '#2563EB15', color: '#2563EB' }}
+          >
+            <TrendingUp size={15} />
+          </div>
+          <div>
+            <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">
+              Priority Assignments
+            </h2>
+            <p className="text-[12px] text-gray-500 dark:text-gray-400 mt-0.5 leading-snug">
+              Upcoming work weighted by grade-improvement potential. Tackle these
+              first to climb fastest in your weakest courses.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Assignment rows */}
+      <div className="divide-y divide-gray-50 dark:divide-[#232d42]">
+        {priority.map(p => (
+          <PriorityRow key={p.assignment.id} item={p} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// One row in the Priority Assignments list. Extracted so layout changes
+// here don't bloat the parent component.
+function PriorityRow({ item }: { item: PriorityAssignment }) {
+  const { assignment, course, currentGrade, weightLabel, weightColor } = item
+
+  return (
+    <Link
+      to={`/courses/${course.id}/assignments/${assignment.id}`}
+      className="flex items-center gap-3 px-5 py-3.5 hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors group"
+    >
+      {/* Course colour dot — primary visual anchor for the row */}
+      <div
+        className="w-2.5 h-2.5 rounded-full shrink-0"
+        style={{ background: course.color }}
+        aria-hidden="true"
+      />
+
+      {/* Title + current course grade context */}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2">
+          <p className="text-[13px] font-semibold text-gray-900 dark:text-gray-100 truncate group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors">
+            {assignment.title}
+          </p>
+          <span
+            className="text-[9px] font-bold px-1.5 py-0.5 rounded text-white shrink-0"
+            style={{ background: course.color }}
+          >
+            {course.abbr}
+          </span>
+        </div>
+        <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">
+          {course.name} · currently <strong className="text-gray-600 dark:text-gray-300">{currentGrade}%</strong> · due {assignment.dueDate}
+        </p>
+      </div>
+
+      {/* Weight badge — High / Medium / Low */}
+      <div className="flex items-center gap-2 shrink-0">
+        <span
+          className="text-[10px] font-bold px-2 py-1 rounded-lg tabular-nums"
+          style={{ background: `${weightColor}15`, color: weightColor }}
+          title={`${assignment.points} points`}
+        >
+          {weightLabel} · {assignment.points}pts
+        </span>
+        <ArrowRight size={13} className="text-gray-300 dark:text-gray-600 group-hover:text-gray-500 dark:group-hover:text-gray-400 transition-colors" />
+      </div>
+    </Link>
   )
 }

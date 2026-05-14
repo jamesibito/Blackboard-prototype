@@ -3,6 +3,7 @@ import Sidebar from './Sidebar'
 import TopBar from './TopBar'
 import ToastContainer from './ToastContainer'
 import DemoBanner from './DemoBanner'
+import OnboardingModal from './OnboardingModal'
 
 export default function Layout() {
   const location = useLocation()
@@ -57,6 +58,8 @@ export default function Layout() {
         </footer>
       </div>
       <ToastContainer />
+      {/* First-visit onboarding overlay — gated on localStorage inside the component */}
+      <OnboardingModal />
     </div>
   )
 }

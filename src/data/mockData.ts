@@ -190,7 +190,7 @@ export const courses: Course[] = [
     files: ['Brand Ideation.docx'],
     description: 'Foundational design principles applied to 2D visual communication. Covers typography, colour theory, brand identity, and layout across print and digital media.',
     credits: 3, schedule: 'Mon / Wed  9:00 AM – 11:00 AM', room: 'SFC B108',
-    completion: 72, moduleCount: 12, completedModules: 9,
+    completion: 72, moduleCount: 13, completedModules: 10,
     lastActivity: '2 days ago',
     zoomLink: 'https://georgebrown.zoom.us/j/96271830412',
     officeHours: 'Mon 2:00–4:00 PM · SFC B108 (or by appointment)',
@@ -220,7 +220,7 @@ export const courses: Course[] = [
     files: ['Image.jpg', 'Form.jpg', 'Image 2.jpg'],
     description: 'Human-computer interaction principles, UX research methods, wireframing, usability testing, and interactive prototyping using industry tools.',
     credits: 3, schedule: 'Tue / Thu  1:00 PM – 3:00 PM', room: 'SFC B112',
-    completion: 88, moduleCount: 14, completedModules: 12,
+    completion: 88, moduleCount: 15, completedModules: 13,
     lastActivity: 'Today',
     zoomLink: 'https://georgebrown.zoom.us/j/84512093761',
     officeHours: 'Wed 3:00–5:00 PM · Online via Zoom (book via email)',
@@ -249,7 +249,7 @@ export const courses: Course[] = [
     files: [],
     description: 'Structuring and organizing information for digital products. Topics include sitemaps, card sorting, navigation design, content strategy, and taxonomy.',
     credits: 2, schedule: 'Fri  9:00 AM – 12:00 PM', room: 'SFC A209',
-    completion: 45, moduleCount: 10, completedModules: 4,
+    completion: 45, moduleCount: 11, completedModules: 5,
     lastActivity: '1 week ago',
     zoomLink: 'https://georgebrown.zoom.us/j/71038294651',
     officeHours: 'Thu 2:00–4:00 PM · SFC A209 (walk-ins welcome)',
@@ -276,7 +276,7 @@ export const courses: Course[] = [
     files: ['Ideation Jam.docx'],
     description: 'Advanced visual composition, grid systems, motion principles, and design systems. Students develop a cohesive design language for a multi-channel campaign.',
     credits: 3, schedule: 'Mon / Wed  12:00 PM – 2:00 PM', room: 'SFC B110',
-    completion: 60, moduleCount: 11, completedModules: 7,
+    completion: 60, moduleCount: 12, completedModules: 8,
     lastActivity: '3 days ago',
     zoomLink: 'https://georgebrown.zoom.us/j/93847201938',
     officeHours: 'Tue 11:00 AM–1:00 PM · SFC B110 (or by appointment)',
@@ -304,7 +304,7 @@ export const courses: Course[] = [
     files: ['Image.jpg', 'Form.jpg', 'Image 2.jpg'],
     description: 'Academic writing, critical reading, and research skills for design professionals. Emphasis on portfolio writing, case studies, and professional communication.',
     credits: 3, schedule: 'Tue  9:00 AM – 12:00 PM', room: 'SFC A105',
-    completion: 80, moduleCount: 13, completedModules: 10,
+    completion: 80, moduleCount: 14, completedModules: 11,
     lastActivity: 'Yesterday',
     zoomLink: 'https://georgebrown.zoom.us/j/82910374652',
     officeHours: 'Mon & Wed 10:00–11:00 AM · SFC A105',
@@ -332,7 +332,7 @@ export const courses: Course[] = [
     files: [],
     description: 'Orthographic projection, isometric drawing, and dimensional annotation. Students use manual and digital drafting tools to produce technical documentation.',
     credits: 2, schedule: 'Thu  1:00 PM – 4:00 PM', room: 'SFC C204',
-    completion: 97, moduleCount: 9, completedModules: 8,
+    completion: 97, moduleCount: 10, completedModules: 9,
     lastActivity: 'Today',
     zoomLink: 'https://georgebrown.zoom.us/j/77614829304',
     officeHours: 'Thu 12:00–1:00 PM · SFC C204 (or by appointment)',
@@ -362,6 +362,7 @@ export const courseModules: Record<string, CourseModule[]> = {
   '2D': [
     { id: 'm1', title: 'Week 1 – Design Fundamentals', itemCount: 4, completed: true, type: 'lecture' },
     { id: 'm2', title: 'Week 2 – Colour Theory', itemCount: 3, completed: true, type: 'reading' },
+    { id: 'm2q', title: 'Quiz – Colour Theory Fundamentals', itemCount: 1, completed: true, type: 'quiz' },
     { id: 'm3', title: 'Assignment 1 – Brand Exploration', itemCount: 1, completed: true, type: 'assignment' },
     { id: 'm4', title: 'Week 3 – Typography Systems', itemCount: 5, completed: true, type: 'lecture' },
     { id: 'm5', title: 'Assignment 2 – Brand Ideation', itemCount: 2, completed: true, type: 'assignment' },
@@ -376,6 +377,7 @@ export const courseModules: Record<string, CourseModule[]> = {
   'IS': [
     { id: 'm1', title: 'Week 1 – HCI Foundations', itemCount: 3, completed: true, type: 'lecture' },
     { id: 'm2', title: 'Week 2 – Research Methods', itemCount: 4, completed: true, type: 'lecture' },
+    { id: 'm2q', title: 'Quiz – HCI Heuristics & Principles', itemCount: 1, completed: true, type: 'quiz' },
     { id: 'm3', title: 'Assignment 1 – User Interviews', itemCount: 2, completed: true, type: 'assignment' },
     { id: 'm4', title: 'Week 3 – Personas & Journey Maps', itemCount: 3, completed: true, type: 'reading' },
     { id: 'm5', title: 'Assignment 2 – Persona Development', itemCount: 1, completed: true, type: 'assignment' },
@@ -392,6 +394,7 @@ export const courseModules: Record<string, CourseModule[]> = {
   'IA': [
     { id: 'm1', title: 'Week 1 – What Is Information Architecture?', itemCount: 3, completed: true,  type: 'lecture' },
     { id: 'm2', title: 'Week 2 – Mental Models & User Needs',         itemCount: 2, completed: true,  type: 'reading' },
+    { id: 'm2q', title: 'Quiz – IA Foundations',                       itemCount: 1, completed: true,  type: 'quiz' },
     { id: 'm3', title: 'Week 3 – Card Sorting Methods',               itemCount: 4, completed: true,  type: 'video' },
     { id: 'm4', title: 'Assignment 1 – Sitemap Draft',                itemCount: 1, completed: true,  type: 'assignment' },
     { id: 'm5', title: 'Week 4 – Navigation Patterns',                itemCount: 3, completed: false, type: 'lecture' },
@@ -404,6 +407,7 @@ export const courseModules: Record<string, CourseModule[]> = {
   'VD': [
     { id: 'm1', title: 'Week 1 – Visual Principles & Composition',   itemCount: 4, completed: true,  type: 'lecture' },
     { id: 'm2', title: 'Week 2 – Grid Systems',                      itemCount: 3, completed: true,  type: 'lecture' },
+    { id: 'm2q', title: 'Quiz – Visual Hierarchy & Grid Basics',      itemCount: 1, completed: true,  type: 'quiz' },
     { id: 'm3', title: 'Assignment 2 – Colour Theory Study',         itemCount: 1, completed: true,  type: 'assignment' },
     { id: 'm4', title: 'Week 3 – Typography in Visual Design',       itemCount: 3, completed: true,  type: 'reading' },
     { id: 'm5', title: 'Assignment 3 – Typography Poster',           itemCount: 1, completed: true,  type: 'assignment' },
@@ -421,6 +425,7 @@ export const courseModules: Record<string, CourseModule[]> = {
     { id: 'm4',  title: 'Week 3 – Research Skills & Source Eval',    itemCount: 4, completed: true,  type: 'lecture' },
     { id: 'm5',  title: 'Workshop – Peer Review Process',            itemCount: 1, completed: true,  type: 'discussion' },
     { id: 'm6',  title: 'Week 4 – APA Citations & Formatting',       itemCount: 3, completed: true,  type: 'video' },
+    { id: 'm6q', title: 'Quiz – APA 7th Edition Citation Format',    itemCount: 1, completed: true,  type: 'quiz' },
     { id: 'm7',  title: 'Essay 2 – Comparative Analysis',            itemCount: 1, completed: true,  type: 'assignment' },
     { id: 'm8',  title: 'Week 5 – Writing for Design Portfolios',    itemCount: 3, completed: true,  type: 'lecture' },
     { id: 'm9',  title: 'Week 6 – Research Proposals',               itemCount: 4, completed: true,  type: 'lecture' },
@@ -435,6 +440,7 @@ export const courseModules: Record<string, CourseModule[]> = {
     { id: 'm3', title: 'Drawing Set 1 – Basic Drafting',             itemCount: 2, completed: true,  type: 'assignment' },
     { id: 'm4', title: 'Week 3 – Dimensioning & Tolerancing',        itemCount: 3, completed: true,  type: 'reading' },
     { id: 'm5', title: 'ASME Standards Video Reference',             itemCount: 1, completed: true,  type: 'video' },
+    { id: 'm5q', title: 'Quiz – ASME Standards & Title Block Rules',  itemCount: 1, completed: true,  type: 'quiz' },
     { id: 'm6', title: 'Drawing Set 2 – Orthographic Views',         itemCount: 2, completed: true,  type: 'assignment' },
     { id: 'm7', title: 'Week 4 – Isometric & Sectional Views',       itemCount: 3, completed: true,  type: 'lecture' },
     { id: 'm8', title: 'Drawing Set 3 – Mechanical Parts',           itemCount: 2, completed: true,  type: 'assignment' },
@@ -588,10 +594,10 @@ export const grades: CourseGrade[] = [
 // Due dates are all after the demo "today" of Dec 14, 2022 so the deadline
 // timeline and Due Soon widget show upcoming (not past) items.
 export const dueSoon: DueItem[] = [
-  { id: 'ds1', courseId: 'IS', title: 'Final Presentation',  dueDay: 'THURSDAY, DEC 15TH',  type: 'assignment' },
-  { id: 'ds2', courseId: 'VD', title: 'User Manual Revision', dueDay: 'FRIDAY, DEC 16TH',    type: 'assignment' },
-  { id: 'ds3', courseId: 'IA', title: 'Final Sitemap',        dueDay: 'TUESDAY, DEC 20TH',   type: 'project' },
-  { id: 'ds4', courseId: '2D', title: 'Final Project Brief',  dueDay: 'WEDNESDAY, DEC 21ST', type: 'assignment' },
+  { id: 'ds1', courseId: 'IS', title: 'Final Presentation',  dueDay: 'THURSDAY, DEC 15TH',  type: 'assignment', assignmentId: 'asgn-is-5' },
+  { id: 'ds2', courseId: 'VD', title: 'User Manual Revision', dueDay: 'FRIDAY, DEC 16TH',    type: 'assignment', assignmentId: 'asgn-vd-3' },
+  { id: 'ds3', courseId: 'IA', title: 'Final Sitemap',        dueDay: 'TUESDAY, DEC 20TH',   type: 'project',    assignmentId: 'asgn-ia-2' },
+  { id: 'ds4', courseId: '2D', title: 'Final Project Brief',  dueDay: 'WEDNESDAY, DEC 21ST', type: 'assignment', assignmentId: 'asgn-2d-6' },
 ]
 
 // ─── Activity Stream ───────────────────────────────────────────────────────────
@@ -928,6 +934,95 @@ export const assignments: Assignment[] = [
       'Cite at least 8 credible sources.',
     ],
     deliverables: ['Research Proposal (Word or PDF)', 'Annotated bibliography'],
+  },
+
+  // ── Upcoming assignments (status: 'upcoming') ────────────────────────────────
+  // These power the dashboard "Due Soon" widget AND the Grades page "Priority
+  // Assignments" panel (largest-weight upcoming work where the student's grade
+  // has the most room to climb). Mirrors entries in the `dueSoon` array.
+  {
+    id: 'asgn-is-5',
+    courseId: 'IS',
+    title: 'Final Presentation',
+    description: '8-minute live presentation of your interactive prototype, research findings, and usability outcomes.',
+    dueDate: 'Dec 15, 2022',
+    points: 80,
+    status: 'upcoming',
+    rubric: [
+      { name: 'Presentation Quality', weight: 30, total: 30 },
+      { name: 'Prototype Demonstration', weight: 30, total: 30 },
+      { name: 'Research Insights', weight: 20, total: 20 },
+      { name: 'Q&A Handling', weight: 20, total: 20 },
+    ],
+    instructions: [
+      'Prepare 8 minutes of slides — strict cap, no extensions.',
+      'Include a live walkthrough of your interactive Figma prototype.',
+      'Summarise your top 3 usability findings and how they shaped iteration.',
+      'Budget 2 minutes for Q&A at the end.',
+    ],
+    deliverables: ['Slide deck (PDF)', 'Figma prototype view-only link'],
+  },
+  {
+    id: 'asgn-vd-3',
+    courseId: 'VD',
+    title: 'User Manual Revision',
+    description: 'Revise and resubmit your user manual project applying the feedback from the first review round.',
+    dueDate: 'Dec 16, 2022',
+    points: 40,
+    status: 'upcoming',
+    rubric: [
+      { name: 'Application of Feedback', weight: 40, total: 40 },
+      { name: 'Visual Consistency', weight: 30, total: 30 },
+      { name: 'Information Hierarchy', weight: 30, total: 30 },
+    ],
+    instructions: [
+      'Re-read the rubric feedback from your first submission.',
+      'Address every flagged issue in the rewrite.',
+      'Submit a written change log alongside the new PDF.',
+    ],
+    deliverables: ['Revised User Manual (PDF)', 'Change log (1 page)'],
+  },
+  {
+    id: 'asgn-ia-2',
+    courseId: 'IA',
+    title: 'Final Sitemap Project',
+    description: 'Complete IA deliverable: full sitemap, taxonomy, navigation rationale, and grounded research notes.',
+    dueDate: 'Dec 20, 2022',
+    points: 100,
+    status: 'upcoming',
+    rubric: [
+      { name: 'Sitemap Structure', weight: 30, total: 30 },
+      { name: 'Taxonomy & Labelling', weight: 25, total: 25 },
+      { name: 'Research Integration', weight: 25, total: 25 },
+      { name: 'Rationale Writing', weight: 20, total: 20 },
+    ],
+    instructions: [
+      'Build a complete sitemap covering at least 4 hierarchy levels.',
+      'Reference your card sort data in the labelling decisions.',
+      'Write a 500-word rationale defending key structural choices.',
+      'Submit as a FigJam link or annotated PDF.',
+    ],
+    deliverables: ['Sitemap (FigJam or PDF)', 'Written rationale (500 words)'],
+  },
+  {
+    id: 'asgn-2d-6',
+    courseId: '2D',
+    title: 'Final Project Brief',
+    description: 'Kickoff submission for the final brand identity project — logo direction, palette, type system.',
+    dueDate: 'Dec 21, 2022',
+    points: 30,
+    status: 'upcoming',
+    rubric: [
+      { name: 'Concept Direction', weight: 40, total: 40 },
+      { name: 'Brand Strategy', weight: 30, total: 30 },
+      { name: 'Visual Exploration', weight: 30, total: 30 },
+    ],
+    instructions: [
+      'Pick a fictional startup from the brief deck.',
+      'Submit 2-3 concept directions with rationale (~300 words each).',
+      'Include initial logo sketches and a draft type/colour palette.',
+    ],
+    deliverables: ['Concept document (PDF)', 'Sketch board (Figma link)'],
   },
 ]
 
@@ -1476,6 +1571,61 @@ export function getTodayClasses(): TodayClass[] {
       }
     })
     .sort((a, b) => a.startHour - b.startHour)
+}
+
+/**
+ * getPriorityAssignments — ranks upcoming assignments by which would help
+ * Kevin's grade most. Surfaces the "if you're falling behind, do these first"
+ * recommendation on the Grades page.
+ *
+ * Ranking rules (in order):
+ *   1. Course's CURRENT grade ascending — the lower your grade, the higher the
+ *      payoff per point. A 25% course climbing to 35% feels bigger than 90%→92%.
+ *   2. Assignment point value descending — higher-weight work moves the needle
+ *      more than smaller deliverables.
+ *
+ * Inputs: reads `assignments` (filtered to status:'upcoming') and `grades`.
+ * Returns: top N enriched rows the UI can render directly.
+ */
+export interface PriorityAssignment {
+  assignment: Assignment
+  course: Course
+  currentGrade: number     // course's current % grade — drives ranking
+  weightLabel: 'High' | 'Medium' | 'Low'
+  weightColor: string      // pill colour for the weight label
+}
+
+export function getPriorityAssignments(limit = 4): PriorityAssignment[] {
+  const upcoming = assignments.filter(a => a.status === 'upcoming')
+
+  // Pair each upcoming assignment with its course + current grade
+  const enriched: PriorityAssignment[] = upcoming.map(a => {
+    const course = getCourse(a.courseId)
+    const grade  = grades.find(g => g.courseId === a.courseId)
+
+    // Bucket points → human-readable weight label
+    const points = a.points
+    const weightLabel: PriorityAssignment['weightLabel'] =
+      points >= 70 ? 'High' : points >= 35 ? 'Medium' : 'Low'
+    const weightColor =
+      weightLabel === 'High' ? '#EF4444' : weightLabel === 'Medium' ? '#F97316' : '#94A3B8'
+
+    return {
+      assignment: a,
+      course,
+      currentGrade: grade?.percentage ?? 0,
+      weightLabel,
+      weightColor,
+    }
+  })
+
+  // Sort: lowest grade first, then highest points
+  return enriched
+    .sort((a, b) => {
+      if (a.currentGrade !== b.currentGrade) return a.currentGrade - b.currentGrade
+      return b.assignment.points - a.assignment.points
+    })
+    .slice(0, limit)
 }
 
 /**

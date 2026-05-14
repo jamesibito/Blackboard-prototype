@@ -455,7 +455,16 @@ function PriorityCard({ compact = false }: { compact?: boolean }) {
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" />
           </svg>
           <div className="flex-1 min-w-0">
-            <span className="text-[10px] font-bold uppercase tracking-wide text-red-300">Due tomorrow</span>
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] font-bold uppercase tracking-wide text-red-300">Due tomorrow</span>
+              {/* Course pill — makes it obvious which course the assignment belongs to */}
+              <span
+                className="text-[9px] font-bold px-1.5 py-0.5 rounded text-white"
+                style={{ background: course.color }}
+              >
+                {course.abbr}
+              </span>
+            </div>
             <p className="text-[12.5px] font-semibold text-white truncate">{tomorrow.title}</p>
           </div>
           <ChevronRight size={13} className="text-white/50 group-hover:text-white/80 shrink-0 transition-colors" />
@@ -507,7 +516,16 @@ function PriorityCard({ compact = false }: { compact?: boolean }) {
             <polyline points="20 6 9 17 4 12" />
           </svg>
           <div className="flex-1 min-w-0">
-            <span className="text-[10px] font-bold uppercase tracking-wide text-emerald-300">New grade posted</span>
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] font-bold uppercase tracking-wide text-emerald-300">New grade posted</span>
+              {/* Course pill matches the urgency-card pattern for visual consistency */}
+              <span
+                className="text-[9px] font-bold px-1.5 py-0.5 rounded text-white"
+                style={{ background: course.color }}
+              >
+                {course.abbr}
+              </span>
+            </div>
             <p className="text-[12.5px] font-semibold text-white truncate">{unreadGrade.title}</p>
           </div>
           <ChevronRight size={13} className="text-white/50 group-hover:text-white/80 shrink-0 transition-colors" />
@@ -682,9 +700,9 @@ function DeadlineTimeline() {
         </Link>
       </div>
 
-      {/* Timeline — mx-4 keeps nodes away from card edges */}
+      {/* Timeline — mx-4 keeps nodes away from card edges.
+          Note: no horizontal connector line — the dot row alone reads as a sequence. */}
       <div className="relative pt-3 mx-4">
-        <div className="absolute left-0 right-0 top-[29px] h-px bg-gray-100 dark:bg-[#2D3A52]" />
         <div className="flex items-start justify-between pb-2">
 
           {/* Today marker */}
