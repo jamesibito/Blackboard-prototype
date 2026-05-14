@@ -115,7 +115,11 @@ export default function Notifications() {
                         setItems(prev => prev.map(item =>
                           item.id === n.id ? { ...item, unread: false } : item
                         ))
-                        if (n.linkTo) navigate(n.linkTo)
+                        if (n.linkTo) {
+                          n.linkTo.startsWith('http')
+                            ? window.open(n.linkTo, '_blank', 'noopener,noreferrer')
+                            : navigate(n.linkTo)
+                        }
                       }}
                     >
                       {/* Unread indicator dot */}

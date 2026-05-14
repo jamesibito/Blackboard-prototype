@@ -668,36 +668,43 @@ export const activityItems: ActivityItem[] = [
     id: 'a10', title: 'OSAP Deadline Reminder',
     date: '5th Dec 2022', timeRange: '9 AM – 10 AM', type: 'announcement',
     body: 'Reminder from the Financial Aid Office: the deadline to submit your OSAP application for the Winter 2023 semester is December 15th, 2022. Log in to your Ontario.ca account to check your status and upload any outstanding documentation. Late applications cannot be guaranteed funding.',
+    linkTo: 'https://www.georgebrown.ca/apply/financial-aid/osap',
   },
   {
     id: 'a11', title: 'Campus Closure – Holiday Break',
     date: '9th Dec 2022', timeRange: '8 AM – 9 AM', type: 'announcement',
     body: 'George Brown College will be closed for the holiday break from December 23rd, 2022 through January 8th, 2023. All campus facilities, libraries, and student services will be unavailable during this period. Classes resume Monday, January 9th. Have a safe and restful holiday.',
+    linkTo: 'https://www.georgebrown.ca/current-students',
   },
   {
     id: 'a12', title: 'Spring Graduation Registration Now Open',
     date: '11th Dec 2022', timeRange: '10 AM – 11 AM', type: 'announcement',
     body: 'Eligible students in their final semester are invited to register for the Spring 2023 Convocation ceremony. Log in to STU-VIEW and complete the graduation application by January 31st, 2023. For questions about eligibility, contact the Office of the Registrar at registrar@georgebrown.ca.',
+    linkTo: 'https://stuview.georgebrown.ca/',
   },
   {
     id: 'a13', title: 'Library Extended Hours – Exam Season',
     date: '6th Dec 2022', timeRange: '7 AM – 8 AM', type: 'announcement',
     body: 'The St. James Campus Library will be open extended hours during the December exam period: Monday–Friday 7 AM – 11 PM, Saturday–Sunday 9 AM – 9 PM. Quiet study rooms can be booked through the library portal up to 48 hours in advance.',
+    linkTo: 'https://www.georgebrown.ca/library-learning-commons',
   },
   {
     id: 'a14', title: 'GBC Design Hackathon 2023 – Registration Open',
     date: '13th Dec 2022', timeRange: '12 PM – 1 PM', type: 'announcement',
     body: 'George Brown\'s annual 48-hour Design Hackathon returns January 20–22, 2023. Teams of 2–4 students tackle a real brief from a local non-profit partner. Prizes include industry mentorship, portfolio features, and $500 in design software credits. Register by January 10th via the Student Life portal. All programs welcome.',
+    linkTo: 'https://www.georgebrown.ca/current-students/services',
   },
   {
     id: 'a15', title: 'Winter Career Fair – On-Campus Recruiting',
     date: '10th Dec 2022', timeRange: '9 AM – 10 AM', type: 'announcement',
     body: 'The Winter 2023 Career Fair will be held February 2nd in the Student Centre Atrium, 10 AM – 4 PM. Over 40 design, tech, and media studios will be recruiting for co-op, internship, and full-time positions. Bring printed portfolios and business cards. Register at georgebrown.ca/careerfair to receive a pre-event studio list.',
+    linkTo: 'https://www.georgebrown.ca/current-students/services/career-services',
   },
   {
     id: 'a16', title: 'UX Research Seminar Series – Session 2',
     date: '7th Dec 2022', timeRange: '3 PM – 4 PM', type: 'announcement',
     body: 'The Centre for Arts, Design & Information Technology is hosting its second UX Research Seminar on January 18th, 5:30–7:30 PM in room D301. Guest speaker: Maya Osei, Senior UX Researcher at Shopify, presenting "Mixed Methods in Practice: When to Qual, When to Quant." Free for all GBC students. RSVP via Eventbrite.',
+    linkTo: 'https://www.georgebrown.ca/current-students/services',
   },
 ]
 
@@ -1047,7 +1054,7 @@ export const notifications: Notification[] = [
   // ── This Week ──
   { id: 'n3', title: 'Reminder: Final Presentation due tomorrow', body: 'Your Interactive Systems Final Presentation is due Dec 15. Slides must be shared as a view-only Figma link by 11:59 PM.', time: 'Yesterday at 3 PM', timeGroup: 'this-week', type: 'assignment', courseId: 'IS', unread: false, linkTo: '/courses/IS' },
   { id: 'n4', title: 'Drawing Set 3 graded — 48/50', body: 'David Kim has released your grade for Drawing Set 3 – Mechanical Parts. Excellent drafting precision!', time: '2 days ago', timeGroup: 'this-week', type: 'grade', courseId: 'TD', unread: false, linkTo: '/courses/TD/assignments/asgn-td-3' },
-  { id: 'n5', title: 'OSAP deadline approaching', body: 'Your OSAP application deadline for Winter 2023 is December 15th. Log in to Ontario.ca to check your status.', time: '3 days ago', timeGroup: 'this-week', type: 'announcement', unread: false },
+  { id: 'n5', title: 'OSAP deadline approaching', body: 'Your OSAP application deadline for Winter 2023 is December 15th. Log in to Ontario.ca to check your status.', time: '3 days ago', timeGroup: 'this-week', type: 'announcement', unread: false, linkTo: 'https://www.georgebrown.ca/apply/financial-aid/osap' },
   // ── Earlier ──
   { id: 'n6', title: 'Assignment 4 – Style Guide: Perfect Score!', body: 'Jaron Stewart graded your Style Guide — 20/20. Excellent layout and professional presentation.', time: 'Dec 5', timeGroup: 'earlier', type: 'grade', courseId: '2D', unread: false, linkTo: '/courses/2D/assignments/asgn-2d-4' },
   { id: 'n7', title: 'Assignment Posted: Usability Test Report', body: 'A new assignment has been posted in Interactive Systems. Due: December 20th.', time: 'Dec 4', timeGroup: 'earlier', type: 'assignment', courseId: 'IS', unread: false, linkTo: '/courses/IS/assignments/asgn-is-4' },
@@ -1467,7 +1474,7 @@ export const tools: ToolItem[] = [
     description: 'Word, Excel, PowerPoint, Teams + 1 TB OneDrive.',
     details: 'Free for all enrolled students. Sign in with your @georgebrown.ca email to access desktop apps, web versions, and OneDrive sync. Teams is the default for group projects in CE and IS. Outlook handles your student email.',
     category: 'productivity', status: 'active', color: '#D83B01',
-    url: 'https://microsoft.com/education',
+    url: 'https://www.georgebrown.ca/current-students/websites-apps-and-technical-support/microsoft-365-onedrive',
   },
   {
     id: 'grammarly', name: 'Grammarly', abbr: 'GR',

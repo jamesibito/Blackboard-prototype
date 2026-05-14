@@ -100,15 +100,17 @@ export default function Tools() {
     })
   }
 
-  // Decorative — fakes a real launch with a toast confirmation. The link itself
-  // doesn't navigate anywhere because this is a portfolio prototype.
+  // Opens the real tool URL in a new tab and fires a toast for feedback.
+  // Inactive tools get an info toast only — no navigation.
   function handleLaunch(tool: ToolItem) {
     if (tool.status === 'inactive') {
       toast(`${tool.name} isn't active this semester`, 'info')
     } else if (tool.status === 'setup-required') {
       toast(`Opening ${tool.name} account setup…`, 'info')
+      window.open(tool.url, '_blank', 'noopener,noreferrer')
     } else {
       toast(`Launching ${tool.name}…`, 'success')
+      window.open(tool.url, '_blank', 'noopener,noreferrer')
     }
   }
 

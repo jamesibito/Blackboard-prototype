@@ -151,10 +151,10 @@ export default function ProfilePage() {
             <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100 mb-3">Account</h2>
             <div className="space-y-1">
               {[
-                { label: 'Change Password',        action: () => toast('Redirecting to account settings…', 'info') },
+                { label: 'Change Password',        action: () => { toast('Redirecting to MyGBC account settings…', 'info'); window.open('https://georgebrown.ca/portal', '_blank', 'noopener,noreferrer') } },
                 { label: 'Accessibility Settings', action: () => setA11yOpen(true) },
-                { label: 'Download Transcript',    action: () => toast('Transcript request submitted', 'success') },
-                { label: 'Help Centre',            action: () => toast('Opening GBC Help Centre…', 'info') },
+                { label: 'Download Transcript',    action: () => { toast('Opening STU-VIEW — select Unofficial Transcript', 'info'); window.open('https://stuview.georgebrown.ca/', '_blank', 'noopener,noreferrer') } },
+                { label: 'Help Centre',            action: () => { toast('Opening GBC IT Help…', 'info'); window.open('https://www.georgebrown.ca/current-students/services/it-help-index', '_blank', 'noopener,noreferrer') } },
               ].map(item => (
                 <button
                   key={item.label}

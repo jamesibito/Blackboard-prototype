@@ -274,7 +274,14 @@ export default function TopBar() {
                   <button
                     key={n.id}
                     className="flex items-start gap-3 w-full px-4 py-3 hover:bg-gray-50 dark:hover:bg-[#232d42] text-left border-b border-gray-50 dark:border-[#2D3A52] last:border-b-0 transition-colors"
-                    onClick={() => { setNotifOpen(false); if (n.linkTo) navigate(n.linkTo) }}
+                    onClick={() => {
+                      setNotifOpen(false)
+                      if (n.linkTo) {
+                        n.linkTo.startsWith('http')
+                          ? window.open(n.linkTo, '_blank', 'noopener,noreferrer')
+                          : navigate(n.linkTo)
+                      }
+                    }}
                   >
                     {/* Coloured dot: filled = unread, ring = read */}
                     <div className="w-2 h-2 rounded-full mt-1.5 shrink-0"
@@ -351,7 +358,7 @@ export default function TopBar() {
               ))}
               {/* Help Centre — external GBC student services site (opens new tab) */}
               <a
-                href="https://georgebrown.ca/student-life/student-services"
+                href="https://www.georgebrown.ca/current-students/services"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setProfileOpen(false)}
