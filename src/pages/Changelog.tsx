@@ -30,9 +30,24 @@ interface ChangelogVersion {
 
 const VERSIONS: ChangelogVersion[] = [
   {
+    version: 'v4.15.0',
+    theme: 'Multi-tenant skin — same redesign, four institutions',
+    era: 'Latest',
+    what: [
+      'TenantContext provider — 4 Canadian post-secondary institutions ship-ready (George Brown, York, Wilfrid Laurier, McMaster)',
+      'Floating TenantSwitcher (bottom-right) reskins the prototype in real-time',
+      'Each tenant: own brand colour, gradient palette, sidebar wordmark, tagline',
+      'Sidebar header: GBC keeps its rainbow stripe + logo; other tenants get a clean typeset wordmark (avoids using real institutional logos)',
+      'Dashboard welcome banner gradient, DemoBanner gradient, OnboardingModal Bb badge all driven by active tenant',
+      'Persists via localStorage; dismissable for the session',
+    ],
+    why: 'Blackboard Learn IS multi-tenant — every school skins their own instance. Demonstrating the design system holding up across four brand identities shows the prototype isn\'t a one-off skin but a system. The active tenant drives CSS custom properties (--tenant-primary, --tenant-gradient-*) so future surfaces can opt in without prop drilling.',
+    highlight: true,
+  },
+  {
     version: 'v4.14.0',
     theme: 'Documentation pass — this page',
-    era: 'Latest',
+    era: 'Documentation',
     what: [
       'Standalone /changelog route documenting every version, decision, and screenshot',
       'Sidebar logo header tightened (104px → 88px) for shorter laptop viewports',
@@ -40,7 +55,6 @@ const VERSIONS: ChangelogVersion[] = [
       'Notification timing tightened: n1 "2 hours ago" → "Yesterday" (8:45 AM demo would mean a 6:45 AM grade post)',
     ],
     why: 'A changelog page is the right place to surface the iteration story — over a dozen distinct versions, each with a real design decision. Portfolio reviewers shouldn\'t have to read git history.',
-    highlight: true,
   },
   {
     version: 'v4.13.0',

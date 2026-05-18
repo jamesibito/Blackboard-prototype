@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { X, Info } from './Icons'
+import { useTenant } from '../context/TenantContext'
 
 // localStorage key — bump if the banner copy changes meaningfully
 const DISMISS_KEY = 'gbc-bb-demo-banner-dismissed-v1'
@@ -11,6 +12,7 @@ const DISMISS_KEY = 'gbc-bb-demo-banner-dismissed-v1'
  * layout isn't affected.
  */
 export default function DemoBanner() {
+  const { tenant } = useTenant()
   // Lazy init from localStorage so we don't flash the banner for return visitors
   const [visible, setVisible] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false
@@ -36,7 +38,10 @@ export default function DemoBanner() {
     <div
       role="region"
       aria-label="Demo introduction"
-      className={`relative overflow-hidden bg-gradient-to-r from-[#1B3F89] via-[#2563EB] to-[#1B3F89] text-white transition-opacity duration-200 ${exiting ? 'opacity-0' : 'opacity-100'}`}
+      className={`relative overflow-hidden text-white transition-opacity duration-200 ${exiting ? 'opacity-0' : 'opacity-100'}`}
+      style={{
+        backgroundImage: `linear-gradient(to right, ${tenant.gradient.from}, ${tenant.gradient.to}, ${tenant.gradient.from})`,
+      }}
     >
       <div className="px-6 py-2.5 flex items-center justify-between gap-4 max-w-[1440px] mx-auto">
         <div className="flex items-start gap-3 flex-1 min-w-0">
@@ -44,7 +49,7 @@ export default function DemoBanner() {
           <p className="text-[12px] leading-snug">
             <strong className="font-semibold">This is a UX redesign prototype.</strong>
             {' '}
-            All data is fictional — designed around <em className="not-italic font-medium">Kevin H.</em>, a 2nd-year design student at George Brown College, Fall 2022. Click around freely.
+            All data is fictional — designed around <em className="not-italic font-medium">Kevin H.</em>, a 2nd-year design student at {tenant.name}, Fall 2022. Click around freely.
             {' '}
             <a
               href="https://jamesibitoye.framer.website"

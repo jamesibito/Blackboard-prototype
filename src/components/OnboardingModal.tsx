@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { X, Home, BookOpen, Activity, Library, ArrowRight, ChevronLeft } from './Icons'
+import { useTenant } from '../context/TenantContext'
 
 /**
  * OnboardingModal
@@ -41,12 +42,16 @@ interface OnboardingStep {
   body: string
 }
 
-const STEPS: OnboardingStep[] = [
+// Note: the welcome step's body references the active tenant's name dynamically.
+// All other steps are tenant-agnostic — they describe features that exist in
+// every Blackboard instance regardless of which institution is operating it.
+function makeSteps(tenantShortName: string): OnboardingStep[] {
+  return [
   {
-    icon: Home, // overridden in render — step 0 gets the special GBC Bb badge
+    icon: Home, // overridden in render — step 0 gets the special Bb badge
     eyebrow: 'Welcome',
     title: "Hi Kevin — welcome to Blackboard.",
-    body: "Your learning hub for the Fall 2022 semester at George Brown. A quick tour — under a minute, then you're in. You can skip anytime.",
+    body: `Your learning hub for the Fall 2022 semester at ${tenantShortName}. A quick tour — under a minute, then you're in. You can skip anytime.`,
   },
   {
     icon: Home,
@@ -69,14 +74,16 @@ const STEPS: OnboardingStep[] = [
   {
     icon: Library,
     eyebrow: 'Campus tools',
-    title: "Every GBC service, one click away.",
-    body: "The Tools page links you to the Library, Print Centre, Tech Lab, study rooms, Microsoft 365, Zoom, Figma, Adobe — all the apps your courses use, no separate logins to remember. Need IT help? GBC Assist lives in your profile menu.",
+    title: "Every campus service, one click away.",
+    body: "The Tools page links you to the Library, Print Centre, Tech Lab, study rooms, Microsoft 365, Zoom, Figma, Adobe — all the apps your courses use, no separate logins to remember. Need IT help? It lives in your profile menu.",
   },
-]
-
-const TOTAL = STEPS.length
+  ]
+}
 
 export default function OnboardingModal() {
+  const { tenant } = useTenant()
+  const STEPS = makeSteps(tenant.shortName)
+  const TOTAL = STEPS.length
   // ─── Visibility ────────────────────────────────────────────────────────────
   const [visible, setVisible] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false
@@ -186,8 +193,11 @@ export default function OnboardingModal() {
         {/* ── Progress bar (top edge) ───────────────────────────────────── */}
         <div className="h-1 w-full bg-gray-100 dark:bg-[#2D3A52]">
           <div
-            className="h-full bg-gradient-to-r from-[#1B3F89] to-[#2563EB] transition-all duration-300"
-            style={{ width: `${progressPct}%` }}
+            className="h-full transition-all duration-300"
+            style={{
+              width: `${progressPct}%`,
+              backgroundImage: `linear-gradient(to right, ${tenant.gradient.from}, ${tenant.gradient.to})`,
+            }}
             aria-hidden="true"
           />
         </div>
@@ -223,10 +233,15 @@ export default function OnboardingModal() {
                 : 'slide-in-left 0.32s cubic-bezier(0.22, 1, 0.36, 1)',
             }}
           >
-            {/* Visual: GBC Bb mark on welcome, icon-in-tile on others */}
+            {/* Visual: tenant-coloured Bb mark on welcome, icon-in-tile on others */}
             <div className="flex items-center justify-center mb-5">
               {isFirst ? (
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#1B3F89] to-[#2563EB] flex items-center justify-center shadow-lg">
+                <div
+                  className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg"
+                  style={{
+                    backgroundImage: `linear-gradient(to bottom right, ${tenant.gradient.from}, ${tenant.gradient.to})`,
+                  }}
+                >
                   <span className="text-white text-[26px] font-bold tracking-tight" style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.04em' }}>
                     Bb
                   </span>

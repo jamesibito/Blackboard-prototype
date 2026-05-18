@@ -4,6 +4,7 @@ import TopBar from './TopBar'
 import ToastContainer from './ToastContainer'
 import DemoBanner from './DemoBanner'
 import OnboardingModal from './OnboardingModal'
+import TenantSwitcher from './TenantSwitcher'
 
 /**
  * resetDemo
@@ -88,6 +89,9 @@ export default function Layout() {
       <ToastContainer />
       {/* First-visit onboarding overlay — gated on localStorage inside the component */}
       <OnboardingModal />
+      {/* Multi-tenant institution skin switcher — floating bottom-right.
+          Lives on Layout (not on standalone pages like /changelog or /font-vote). */}
+      <TenantSwitcher />
     </div>
   )
 }

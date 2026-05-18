@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import { ThemeProvider } from './context/ThemeContext'
 import { ToastProvider } from './context/ToastContext'
+import { TenantProvider } from './context/TenantContext'
 import Layout from './components/Layout'
 import Dashboard from './pages/Dashboard'
 import ActivityStream from './pages/ActivityStream'
@@ -21,6 +22,7 @@ import Changelog from './pages/Changelog'
 export default function App() {
   return (
     <ThemeProvider>
+      <TenantProvider>
       <ToastProvider>
         <Routes>
           {/* Standalone changelog page (no app chrome) — accessible via /changelog.
@@ -46,6 +48,7 @@ export default function App() {
           </Route>
         </Routes>
       </ToastProvider>
+      </TenantProvider>
     </ThemeProvider>
   )
 }

@@ -6,6 +6,7 @@ import {
 } from './Icons'
 import { notifications, messages } from '../data/mockData'
 import { useToast } from '../context/ToastContext'
+import { useTenant } from '../context/TenantContext'
 
 // ─── Nav items ────────────────────────────────────────────────────────────────
 // Badges derive from the source data so they never drift. Both Messages and
@@ -33,6 +34,8 @@ const navItems = [
 export default function Sidebar() {
   const navigate = useNavigate()
   const { toast } = useToast()
+  const { tenant } = useTenant()
+  const isGBC = tenant.id === 'gbc'
   // Confirmation modal visibility — gate the destructive Sign Out action
   const [confirmOpen, setConfirmOpen] = useState(false)
 
@@ -53,26 +56,54 @@ export default function Sidebar() {
   return (
     <aside aria-label="Primary" className="fixed left-0 top-0 bottom-0 w-[220px] bg-[#131825] border-r border-[#1E2A3F] flex flex-col z-30">
 
-      {/* GBC Logo Header — navy background, logo inverted to white */}
-      <div className="h-[88px] flex items-center justify-center border-b border-[#1E2A3F] bg-[#1B3F89] relative overflow-hidden shrink-0">
-        {/* Real GBC rainbow stripe — 7 segments matching the brand palette */}
-        <div className="absolute left-0 top-0 bottom-0 w-[5px] flex flex-col">
-          <div className="flex-1" style={{ background: '#3DAA35' }} />
-          <div className="flex-1" style={{ background: '#8DC63F' }} />
-          <div className="flex-1" style={{ background: '#FDD835' }} />
-          <div className="flex-1" style={{ background: '#29ABE2' }} />
-          <div className="flex-1" style={{ background: '#2E77BD' }} />
-          <div className="flex-1" style={{ background: '#9B8EC4' }} />
-          <div className="flex-1" style={{ background: '#F7941D' }} />
-        </div>
-        <div className="relative z-10 pl-3 pr-3 flex items-center w-full justify-center">
-          <img
-            src="/gbc-logo.png"
-            alt="George Brown Polytechnic"
-            className="w-auto object-contain"
-            style={{ filter: 'brightness(0) invert(1)', height: 66, maxWidth: 180 }}
-          />
-        </div>
+      {/* Tenant header — colour, wordmark, and accent stripe driven by the
+          active tenant. GBC keeps the rainbow stripe for brand fidelity;
+          other tenants get a clean single-colour header with a typeset
+          wordmark since we can't use their real institutional logos. */}
+      <div
+        className="h-[88px] flex items-center justify-center border-b border-[#1E2A3F] relative overflow-hidden shrink-0"
+        style={{ background: tenant.primary }}
+      >
+        {isGBC ? (
+          <>
+            {/* Real GBC rainbow stripe — 7 segments matching the brand palette */}
+            <div className="absolute left-0 top-0 bottom-0 w-[5px] flex flex-col">
+              <div className="flex-1" style={{ background: '#3DAA35' }} />
+              <div className="flex-1" style={{ background: '#8DC63F' }} />
+              <div className="flex-1" style={{ background: '#FDD835' }} />
+              <div className="flex-1" style={{ background: '#29ABE2' }} />
+              <div className="flex-1" style={{ background: '#2E77BD' }} />
+              <div className="flex-1" style={{ background: '#9B8EC4' }} />
+              <div className="flex-1" style={{ background: '#F7941D' }} />
+            </div>
+            <div className="relative z-10 pl-3 pr-3 flex items-center w-full justify-center">
+              <img
+                src="/gbc-logo.png"
+                alt="George Brown Polytechnic"
+                className="w-auto object-contain"
+                style={{ filter: 'brightness(0) invert(1)', height: 66, maxWidth: 180 }}
+              />
+            </div>
+          </>
+        ) : (
+          /* Typeset wordmark for non-GBC tenants. White on the tenant's
+             primary colour. The thin accent stripe on the left is a soft
+             allusion to the GBC rainbow without copying institutional marks. */
+          <>
+            <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-white/30" />
+            <div className="text-white text-center px-4">
+              <div
+                className="font-bold tracking-tight"
+                style={{ fontSize: tenant.shortName.length > 9 ? 19 : 22, letterSpacing: '-0.5px', lineHeight: 1.1 }}
+              >
+                {tenant.shortName.toUpperCase()}
+              </div>
+              <div className="text-[9px] tracking-[2px] mt-1.5 opacity-75 font-semibold">
+                {tenant.tagline}
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Nav links */}

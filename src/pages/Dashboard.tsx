@@ -6,6 +6,7 @@ import {
   getCourse, getOverallGPA, getNextClass, getTodayClasses,
 } from '../data/mockData'
 import { Skeleton, SkeletonAvatar, SkeletonCard } from '../components/Skeleton'
+import { useTenant } from '../context/TenantContext'
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -110,6 +111,7 @@ function RecentGrades() {
 // ─── Dashboard ────────────────────────────────────────────────────────────────
 
 export default function Dashboard() {
+  const { tenant } = useTenant()
   const overallGPA = getOverallGPA()
   const nextClass  = getNextClass()
 
@@ -129,7 +131,12 @@ export default function Dashboard() {
       <div className="flex gap-5 items-stretch">
 
         {/* Welcome Banner — fills remaining width */}
-        <div className="relative flex-1 bg-gradient-to-br from-[#1B3F89] via-[#1E4DA0] to-[#2563EB] rounded-2xl p-6 text-white overflow-hidden min-w-0">
+        <div
+          className="relative flex-1 rounded-2xl p-6 text-white overflow-hidden min-w-0"
+          style={{
+            backgroundImage: `linear-gradient(to bottom right, ${tenant.gradient.from}, ${tenant.gradient.via}, ${tenant.gradient.to})`,
+          }}
+        >
           {/* Decorative circles */}
           <div className="absolute -right-8 -top-8 w-40 h-40 rounded-full bg-white/[0.06] pointer-events-none" />
           <div className="absolute right-16 -bottom-12 w-44 h-44 rounded-full bg-white/[0.04] pointer-events-none" />

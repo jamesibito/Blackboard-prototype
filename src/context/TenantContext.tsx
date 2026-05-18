@@ -1,0 +1,136 @@
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+
+/**
+ * TenantContext
+ * ─────────────
+ * Multi-tenant theming system. Blackboard Learn is licensed to thousands of
+ * institutions worldwide, each of which skins the product in their own brand.
+ * This system simulates that — the same redesign as it would look for four
+ * Canadian post-secondary institutions:
+ *
+ *   - George Brown College   — navy + action blue (the default / case study)
+ *   - York University        — York red
+ *   - Wilfrid Laurier        — purple + accent
+ *   - McMaster University    — Mac maroon
+ *
+ * What it skins:
+ *  - Sidebar header colour + wordmark
+ *  - Welcome banner gradient on the Dashboard
+ *  - The "Bb" mark in the OnboardingModal welcome step
+ *  - References to the institution name throughout (DemoBanner, modal copy)
+ *  - Primary brand pill colour in a handful of high-visibility surfaces
+ *
+ * What it does NOT skin (intentional):
+ *  - Per-course accent colours (2D orange, IS pink, etc.) — these are
+ *    course-level, not institution-level
+ *  - Dark-mode chrome (sidebar bg, page bg) — these are theme-level
+ *  - Action-blue everywhere — would be a project-wide refactor; the most
+ *    impactful surfaces use the tenant primary; secondary buttons keep blue
+ *
+ * Persists via localStorage so the choice survives navigation.
+ */
+
+export interface Tenant {
+  id: string
+  name: string           // Full official name
+  shortName: string      // For inline references ("George Brown", "York")
+  abbr: string           // 2-3 letter ("GBC", "YU", "WLU", "Mac")
+  tagline: string        // Small text under sidebar wordmark (always uppercase)
+  primary: string        // Replaces #1B3F89 (institution dark/brand)
+  accent: string         // Replaces #2563EB (action) where visible
+  gradient: {            // Welcome banner gradient
+    from: string
+    via: string
+    to: string
+  }
+}
+
+export const TENANTS: Record<string, Tenant> = {
+  gbc: {
+    id: 'gbc',
+    name:      'George Brown College',
+    shortName: 'George Brown',
+    abbr:      'GBC',
+    tagline:   'POLYTECHNIC',
+    primary:   '#1B3F89',
+    accent:    '#2563EB',
+    gradient:  { from: '#1B3F89', via: '#1E4DA0', to: '#2563EB' },
+  },
+  york: {
+    id: 'york',
+    name:      'York University',
+    shortName: 'York',
+    abbr:      'YU',
+    tagline:   'TORONTO · KEELE CAMPUS',
+    primary:   '#E31837',
+    accent:    '#C8102E',
+    gradient:  { from: '#8B0F1F', via: '#C8102E', to: '#E31837' },
+  },
+  laurier: {
+    id: 'laurier',
+    name:      'Wilfrid Laurier University',
+    shortName: 'Laurier',
+    abbr:      'WLU',
+    tagline:   'WATERLOO',
+    primary:   '#582C83',
+    accent:    '#7B3FB7',
+    gradient:  { from: '#3C1D5C', via: '#582C83', to: '#7B3FB7' },
+  },
+  mcmaster: {
+    id: 'mcmaster',
+    name:      'McMaster University',
+    shortName: 'McMaster',
+    abbr:      'Mac',
+    tagline:   'HAMILTON',
+    primary:   '#7A003C',
+    accent:    '#A2105E',
+    gradient:  { from: '#5A002B', via: '#7A003C', to: '#A2105E' },
+  },
+}
+
+const STORAGE_KEY = 'gbc-bb-tenant'
+const DEFAULT_TENANT_ID = 'gbc'
+
+interface TenantContextType {
+  tenant: Tenant
+  tenantId: string
+  setTenantId: (id: string) => void
+  tenants: typeof TENANTS
+}
+
+const TenantContext = createContext<TenantContextType | null>(null)
+
+export function TenantProvider({ children }: { children: ReactNode }) {
+  const [tenantId, setTenantId] = useState<string>(() => {
+    if (typeof window === 'undefined') return DEFAULT_TENANT_ID
+    const stored = localStorage.getItem(STORAGE_KEY)
+    return stored && TENANTS[stored] ? stored : DEFAULT_TENANT_ID
+  })
+
+  const tenant = TENANTS[tenantId] ?? TENANTS[DEFAULT_TENANT_ID]
+
+  // Persist + sync CSS custom properties on the root element. Components that
+  // want tenant-aware colors can use `var(--tenant-primary)` etc. in className
+  // (Tailwind v4 supports arbitrary CSS variable references).
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, tenantId)
+    const root = document.documentElement
+    root.style.setProperty('--tenant-primary',       tenant.primary)
+    root.style.setProperty('--tenant-accent',        tenant.accent)
+    root.style.setProperty('--tenant-gradient-from', tenant.gradient.from)
+    root.style.setProperty('--tenant-gradient-via',  tenant.gradient.via)
+    root.style.setProperty('--tenant-gradient-to',   tenant.gradient.to)
+  }, [tenant, tenantId])
+
+  return (
+    <TenantContext.Provider value={{ tenant, tenantId, setTenantId, tenants: TENANTS }}>
+      {children}
+    </TenantContext.Provider>
+  )
+}
+
+export function useTenant() {
+  const ctx = useContext(TenantContext)
+  if (!ctx) throw new Error('useTenant must be used within TenantProvider')
+  return ctx
+}
