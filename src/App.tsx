@@ -16,12 +16,18 @@ import Communities from './pages/Communities'
 import Tools from './pages/Tools'
 import ProfilePage from './pages/ProfilePage'
 import NotFound from './pages/NotFound'
+import FontComparison from './pages/FontComparison'
 
 export default function App() {
   return (
     <ThemeProvider>
       <ToastProvider>
         <Routes>
+          {/* Standalone comparison page (no app chrome) — lives on the
+              `type-comparison-3way` branch only. Shareable URL for collecting
+              typography feedback. Not present on main. */}
+          <Route path="/font-vote" element={<FontComparison />} />
+
           <Route element={<Layout />}>
             <Route path="/"                                    element={<Dashboard />} />
             <Route path="/courses"                             element={<Courses />} />
