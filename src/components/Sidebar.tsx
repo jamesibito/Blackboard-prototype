@@ -4,10 +4,12 @@ import {
   Home, BookOpen, BarChart3, Activity, CalendarDays,
   MessageCircle, Users, Library, Settings, LogOut, Bell, X,
 } from './Icons'
-import { notifications } from '../data/mockData'
+import { notifications, messages } from '../data/mockData'
 import { useToast } from '../context/ToastContext'
 
 // ─── Nav items ────────────────────────────────────────────────────────────────
+// Badges derive from the source data so they never drift. Both Messages and
+// Notifications count items where `isRead/unread` indicates user attention.
 
 const navItems = [
   { to: '/',                icon: Home,          label: 'Home' },
@@ -15,7 +17,8 @@ const navItems = [
   { to: '/grades',          icon: BarChart3,      label: 'Grades' },
   { to: '/activity-stream', icon: Activity,       label: 'Activity Stream' },
   { to: '/calendar',        icon: CalendarDays,   label: 'Calendar' },
-  { to: '/messages',        icon: MessageCircle,  label: 'Messages', badge: 2 },
+  { to: '/messages',        icon: MessageCircle,  label: 'Messages',
+    badge: messages.filter(m => !m.isRead).length || undefined },
   { to: '/notifications',   icon: Bell,           label: 'Notifications',
     badge: notifications.filter(n => n.unread).length || undefined },
   { to: '/communities',     icon: Users,          label: 'Communities' },

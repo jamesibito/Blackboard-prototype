@@ -51,14 +51,26 @@ export default function ProfilePage() {
           <p className="text-[14px] text-gray-500 dark:text-gray-400 mt-0.5">Interaction Design · Year 2 · George Brown College</p>
 
           <div className="flex items-center gap-4 mt-3 flex-wrap">
-            <span className="flex items-center gap-1.5 text-[13px] text-gray-500 dark:text-gray-400">
+            <a
+              href="mailto:kevin.h@georgebrown.ca"
+              className="flex items-center gap-1.5 text-[13px] text-gray-500 dark:text-gray-400 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors"
+              title="Open in mail client"
+            >
               <Mail size={13} />
               kevin.h@georgebrown.ca
-            </span>
-            <span className="flex items-center gap-1.5 text-[13px] text-gray-500 dark:text-gray-400">
+            </a>
+            <button
+              type="button"
+              onClick={() => {
+                navigator.clipboard?.writeText('101-847-293')
+                toast('Student ID copied to clipboard', 'success')
+              }}
+              className="flex items-center gap-1.5 text-[13px] text-gray-500 dark:text-gray-400 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors"
+              title="Copy student ID"
+            >
               <CheckCircle size={13} />
               Student ID: 101-847-293
-            </span>
+            </button>
           </div>
         </div>
       </div>

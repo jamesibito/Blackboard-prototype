@@ -5,14 +5,20 @@ import { useToast } from '../context/ToastContext'
 
 interface Props {
   onClose: () => void
+  /** Pre-fill the recipient (e.g. when opened from a course sidebar "Send Message to Instructor") */
+  prefillTo?: string
+  /** Pre-fill the course context */
+  prefillCourseId?: string
+  /** Pre-fill the subject line (optional, useful for "Re: …" flows) */
+  prefillSubject?: string
 }
 
-export default function ComposeModal({ onClose }: Props) {
+export default function ComposeModal({ onClose, prefillTo, prefillCourseId, prefillSubject }: Props) {
   const { toast } = useToast()
-  const [to, setTo] = useState('')
-  const [subject, setSubject] = useState('')
+  const [to, setTo] = useState(prefillTo ?? '')
+  const [subject, setSubject] = useState(prefillSubject ?? '')
   const [body, setBody] = useState('')
-  const [courseId, setCourseId] = useState('')
+  const [courseId, setCourseId] = useState(prefillCourseId ?? '')
 
   // Decorative — no message is actually persisted (this is a portfolio prototype).
   // We still fire a realistic success toast and close so the interaction feels real.
@@ -26,9 +32,12 @@ export default function ComposeModal({ onClose }: Props) {
   // form validation a student would expect from a real LMS.
   const canSend = to.trim().length > 0 && body.trim().length > 0
 
-  const toInputRef = useRef<HTMLInputElement>(null)
+  const toInputRef   = useRef<HTMLInputElement>(null)
+  const bodyInputRef = useRef<HTMLTextAreaElement>(null)
 
-  // a11y: Escape to close, body scroll lock, autofocus first input
+  // a11y: Escape to close, body scroll lock, autofocus first empty input.
+  // If recipient is pre-filled (e.g. messaging an instructor from a course page),
+  // skip the To field and focus the body so the user can start typing.
   useEffect(() => {
     const prevOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
@@ -38,14 +47,17 @@ export default function ComposeModal({ onClose }: Props) {
     }
     document.addEventListener('keydown', onKey)
 
-    // Focus the first field once the modal mounts
-    toInputRef.current?.focus()
+    if (prefillTo) {
+      bodyInputRef.current?.focus()
+    } else {
+      toInputRef.current?.focus()
+    }
 
     return () => {
       document.body.style.overflow = prevOverflow
       document.removeEventListener('keydown', onKey)
     }
-  }, [onClose])
+  }, [onClose, prefillTo])
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -128,6 +140,7 @@ export default function ComposeModal({ onClose }: Props) {
               Message
             </label>
             <textarea
+              ref={bodyInputRef}
               id="compose-body"
               value={body}
               onChange={e => setBody(e.target.value)}

@@ -3,3 +3,6 @@ dist
 .DS_Store
 *.local
 .vite
+
+# Scratch / exploration artifacts (typography samples, onboarding captures, etc.)
+tmp/

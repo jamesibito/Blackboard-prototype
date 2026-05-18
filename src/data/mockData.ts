@@ -221,7 +221,7 @@ export const courses: Course[] = [
     description: 'Human-computer interaction principles, UX research methods, wireframing, usability testing, and interactive prototyping using industry tools.',
     credits: 3, schedule: 'Tue / Thu  1:00 PM – 3:00 PM', room: 'SFC B112',
     completion: 88, moduleCount: 15, completedModules: 13,
-    lastActivity: 'Today',
+    lastActivity: 'Yesterday',
     zoomLink: 'https://georgebrown.zoom.us/j/84512093761',
     officeHours: 'Wed 3:00–5:00 PM · Online via Zoom (book via email)',
     syllabus: {
@@ -308,7 +308,7 @@ export const courses: Course[] = [
     description: 'Academic writing, critical reading, and research skills for design professionals. Emphasis on portfolio writing, case studies, and professional communication.',
     credits: 3, schedule: 'Tue  9:00 AM – 12:00 PM', room: 'SFC A105',
     completion: 80, moduleCount: 14, completedModules: 11,
-    lastActivity: 'Yesterday',
+    lastActivity: 'Dec 8',
     zoomLink: 'https://georgebrown.zoom.us/j/82910374652',
     officeHours: 'Mon & Wed 10:00–11:00 AM · SFC A105',
     syllabus: {
@@ -711,19 +711,23 @@ export const activityItems: ActivityItem[] = [
 // ─── Calendar Events ───────────────────────────────────────────────────────────
 
 export const calendarEvents: CalendarEvent[] = [
-  { id: 'e1', courseId: 'IS', title: 'Ideation Jam', day: 3, color: '#EC4899', type: 'event' },
-  { id: 'e2', courseId: 'IA', title: 'Wireframes Due', day: 3, color: '#EF4444', type: 'deadline' },
+  { id: 'e1', courseId: 'IS', title: 'Ideation Jam', day: 1, color: '#EC4899', type: 'event' },
+  // e2 was Dec 3 (Sat) — IA is a Friday class. Renamed to a sitemap-specific deliverable.
+  { id: 'e2', courseId: 'IA', title: 'Sitemap Draft Due', day: 2, color: '#EF4444', type: 'deadline' },
   { id: 'e3', courseId: 'CE', title: 'Peer Review', day: 5, color: '#06B6D4', type: 'event' },
-  { id: 'e4', courseId: 'VD', title: 'User Manual Due', day: 7, color: '#8B5CF6', type: 'deadline' },
   { id: 'e5', courseId: 'CE', title: 'Research Proposal', day: 8, color: '#06B6D4', type: 'deadline' },
-  { id: 'e6', courseId: 'TD', title: 'Rendering Pin-up', day: 9, color: '#22C55E', type: 'deadline' },
+  // e6 was Dec 9 (Fri) — TD is a Thursday class. Moved to Dec 8 (Thu) and tied to drawings content.
+  { id: 'e6', courseId: 'TD', title: 'Drawing Set 3 Critique', day: 8, color: '#22C55E', type: 'event' },
   { id: 'e7', courseId: '2D', title: 'Branding Guide', day: 12, color: '#F97316', type: 'deadline' },
   { id: 'e8', courseId: '2D', title: 'Logo Critique', day: 14, color: '#F97316', type: 'event' },
+  // e4 was Dec 7 — but ann-vd-2 and dueSoon both say User Manual Revision is due Dec 16.
+  { id: 'e4', courseId: 'VD', title: 'User Manual Revision Due', day: 16, color: '#8B5CF6', type: 'deadline' },
   { id: 'e9', courseId: '2D', title: 'Branded Design Due', day: 20, color: '#F97316', type: 'deadline' },
   { id: 'e10', courseId: 'IS', title: 'Prototypes Due', day: 20, color: '#EC4899', type: 'deadline' },
   { id: 'e11', courseId: 'IA', title: 'Final Sitemap', day: 20, color: '#EF4444', type: 'deadline' },
   { id: 'e12', courseId: 'VD', title: 'Campaign Layout', day: 20, color: '#8B5CF6', type: 'deadline' },
-  { id: 'e13', courseId: 'IS', title: 'Prototypes Review', day: 28, color: '#EC4899', type: 'event' },
+  // e13 was Dec 28 — college is closed Dec 23–Jan 8. Moved to Dec 22, last IS class before break.
+  { id: 'e13', courseId: 'IS', title: 'Prototypes Review', day: 22, color: '#EC4899', type: 'event' },
 ]
 
 // ─── Class Schedule Blocks ────────────────────────────────────────────────
@@ -1054,12 +1058,12 @@ export const notifications: Notification[] = [
   // ── This Week ──
   { id: 'n3', title: 'Reminder: Final Presentation due tomorrow', body: 'Your Interactive Systems Final Presentation is due Dec 15. Slides must be shared as a view-only Figma link by 11:59 PM.', time: 'Yesterday at 3 PM', timeGroup: 'this-week', type: 'assignment', courseId: 'IS', unread: false, linkTo: '/courses/IS' },
   { id: 'n4', title: 'Drawing Set 3 graded — 48/50', body: 'David Kim has released your grade for Drawing Set 3 – Mechanical Parts. Excellent drafting precision!', time: '2 days ago', timeGroup: 'this-week', type: 'grade', courseId: 'TD', unread: false, linkTo: '/courses/TD/assignments/asgn-td-3' },
+  { id: 'n9', title: 'New resource: Navigation Design Patterns', body: 'A.J. Singh uploaded a reference document for the Sitemap Revision. Check it out on the IA course page.', time: '2 days ago', timeGroup: 'this-week', type: 'resource', courseId: 'IA', unread: true, linkTo: '/courses/IA' },
   { id: 'n5', title: 'OSAP deadline approaching', body: 'Your OSAP application deadline for Winter 2023 is December 15th. Log in to Ontario.ca to check your status.', time: '3 days ago', timeGroup: 'this-week', type: 'announcement', unread: false, linkTo: 'https://www.georgebrown.ca/apply/financial-aid/osap' },
   // ── Earlier ──
   { id: 'n6', title: 'Assignment 4 – Style Guide: Perfect Score!', body: 'Jaron Stewart graded your Style Guide — 20/20. Excellent layout and professional presentation.', time: 'Dec 5', timeGroup: 'earlier', type: 'grade', courseId: '2D', unread: false, linkTo: '/courses/2D/assignments/asgn-2d-4' },
   { id: 'n7', title: 'Assignment Posted: Usability Test Report', body: 'A new assignment has been posted in Interactive Systems. Due: December 20th.', time: 'Dec 4', timeGroup: 'earlier', type: 'assignment', courseId: 'IS', unread: false, linkTo: '/courses/IS/assignments/asgn-is-4' },
   { id: 'n8', title: 'Sitemap Draft graded — 5/20', body: 'A.J. Singh has released your grade for Assignment 1 – Sitemap Draft. Please book office hours before the next submission.', time: 'Dec 3', timeGroup: 'earlier', type: 'grade', courseId: 'IA', unread: false, linkTo: '/courses/IA/assignments/asgn-ia-1' },
-  { id: 'n9', title: 'New resource: Navigation Design Patterns', body: 'A.J. Singh uploaded a reference document for the Sitemap Revision. Check it out on the IA course page.', time: '2 days ago', timeGroup: 'this-week', type: 'resource', courseId: 'IA', unread: true, linkTo: '/courses/IA' },
   { id: 'n10', title: 'Research Proposal graded — 82/100', body: 'Your Essay 3 – Research Proposal has been marked. Strong sources and good academic references. Minor comma splice issues noted.', time: 'Dec 2', timeGroup: 'earlier', type: 'grade', courseId: 'CE', unread: false, linkTo: '/courses/CE/assignments/asgn-ce-3' },
 ]
 
@@ -1269,7 +1273,7 @@ export const winterCourses: PastCourse[] = [
     description: 'Human-centred design methodology covering empathy mapping, ideation, rapid prototyping, and iterative testing. Students ship a tested prototype by end of term.',
   },
   {
-    id: 'UR', abbr: 'UR', name: 'UX Research Foundations', code: 'INTR 1001',
+    id: 'UR', abbr: 'UR', name: 'UX Research Foundations', code: 'INTR 1004',
     instructor: 'Carlos Reyes', color: '#4338CA', credits: 3,
     description: 'Core qualitative and quantitative research methods: user interviews, surveys, diary studies, affinity diagramming, and usability testing with real participants.',
   },

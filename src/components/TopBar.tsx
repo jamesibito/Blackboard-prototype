@@ -181,11 +181,22 @@ export default function TopBar() {
                     </div>
                     {activityResults.map(a => {
                       const course = a.courseId ? getCourse(a.courseId) : undefined
+                      const isExternal = a.linkTo?.startsWith('http')
+                      const dest = a.linkTo ?? '/activity-stream'
+                      const handleSelect = () => {
+                        setSearchQuery('')
+                        setSearchFocused(false)
+                        if (isExternal) {
+                          window.open(dest, '_blank', 'noopener,noreferrer')
+                        } else {
+                          navigate(dest)
+                        }
+                      }
                       return (
                         <button
                           key={a.id}
                           className="flex items-center gap-3 w-full px-3 py-2.5 hover:bg-gray-50 dark:hover:bg-[#232d42] transition text-left"
-                          onClick={() => { setSearchQuery(''); setSearchFocused(false); navigate('/activity-stream') }}
+                          onClick={handleSelect}
                         >
                           <div
                             className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-[11px] font-bold shrink-0"
@@ -346,10 +357,9 @@ export default function TopBar() {
                 <p className="text-[13px] font-semibold text-gray-900 dark:text-gray-100">{user.displayName}</p>
                 <p className="text-[11px] text-gray-400 dark:text-gray-500">Student · Fall 2022</p>
               </div>
-              {/* Internal nav items — go to in-app pages */}
+              {/* Internal nav items — single canonical destination per item */}
               {[
-                { label: 'My Profile',       to: '/profile' },
-                { label: 'Account Settings', to: '/profile' },
+                { label: 'Profile & Settings', to: '/profile' },
               ].map((item, i) => (
                 <button
                   key={i}

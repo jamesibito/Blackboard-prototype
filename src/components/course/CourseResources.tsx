@@ -1,5 +1,6 @@
 import type { CourseResource } from '../../data/mockData'
 import { FileText } from '../Icons'
+import { useToast } from '../../context/ToastContext'
 
 interface Props {
   resources: CourseResource[]
@@ -15,13 +16,14 @@ const fileTypeLabel: Record<string, string> = {
 }
 
 export default function CourseResources({ resources, courseColor }: Props) {
+  const { toast } = useToast()
   return (
     <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden">
       <div className="px-5 pt-5 pb-3">
         <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Resources</h2>
       </div>
       {resources.length > 0 ? (
-        <div className="divide-y divide-gray-50 dark:divide-[#232d42]">
+        <div className="divide-y divide-gray-100 dark:divide-[#232d42]">
           {resources.map(r => (
             <div
               key={r.id}
@@ -54,12 +56,20 @@ export default function CourseResources({ resources, courseColor }: Props) {
               <div className="flex items-center gap-3 shrink-0">
                 <span className="text-[11px] text-gray-400 dark:text-gray-500">{r.uploadedOn}</span>
                 <button
-                  className="text-[11px] font-semibold px-3 py-1.5 rounded-lg border transition-colors hover:opacity-80"
+                  className="text-[11px] font-semibold px-3 py-1.5 rounded-lg border transition-colors hover:opacity-80 focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:ring-offset-1"
                   style={{ borderColor: courseColor, color: courseColor }}
-                  onClick={e => e.stopPropagation()}
-                  title={`Download ${r.filename}`}
+                  onClick={e => {
+                    e.stopPropagation()
+                    toast(
+                      r.type === 'link'
+                        ? `Opening ${r.title}…`
+                        : `Downloading ${r.filename}…`,
+                      'info',
+                    )
+                  }}
+                  title={r.type === 'link' ? `Open ${r.title}` : `Download ${r.filename}`}
                 >
-                  Download
+                  {r.type === 'link' ? 'Open' : 'Download'}
                 </button>
               </div>
             </div>

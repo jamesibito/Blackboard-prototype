@@ -125,7 +125,7 @@ export default function CourseSidebar({ course, courseGrade, lg, courseActivity 
       <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden">
         <div className="px-5 pt-5 pb-3 flex items-center justify-between">
           <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Recent Activity</h2>
-          <Link to="/activity-stream" className="text-[11px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline">See all</Link>
+          <Link to="/activity-stream" className="text-[11px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline">View all</Link>
         </div>
         {courseActivity.length > 0 ? (
           <div className="px-5 pb-5 space-y-3">
@@ -176,7 +176,14 @@ export default function CourseSidebar({ course, courseGrade, lg, courseActivity 
           </div>
         )}
         <button
-          onClick={() => navigate('/messages')}
+          onClick={() => navigate('/messages', {
+            state: {
+              openCompose: true,
+              prefillTo: course.instructor,
+              prefillCourseId: course.id,
+              prefillSubject: `${course.code} — `,
+            },
+          })}
           className="w-full mt-4 py-2.5 rounded-xl text-[13px] font-semibold border-2 transition-colors hover:opacity-90"
           style={{ borderColor: course.color, color: course.color }}
         >

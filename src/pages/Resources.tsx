@@ -128,7 +128,7 @@ export default function Resources() {
               </div>
 
               {/* Resource rows */}
-              <div className="divide-y divide-gray-50 dark:divide-[#232d42]">
+              <div className="divide-y divide-gray-100 dark:divide-[#232d42]">
                 {filtered.map(r => {
                   const cfg = typeConfig[r.type] ?? { label: r.type.toUpperCase(), bg: '#F3F4F6', text: '#6B7280' }
                   return (
@@ -165,7 +165,7 @@ export default function Resources() {
                             ? toast(`Opening ${r.title}…`, 'info')
                             : toast(`Downloading ${r.filename}…`, 'info')
                         }
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold border transition-all opacity-0 group-hover:opacity-100 shrink-0"
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold border transition-all opacity-0 group-hover:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-offset-1 shrink-0"
                         style={{ borderColor: course.color, color: course.color }}
                         title={r.type === 'link' ? 'Open link' : 'Download'}
                       >

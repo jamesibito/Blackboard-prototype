@@ -100,7 +100,7 @@ export default function Notifications() {
                 {groupLabels[group]}
               </h2>
 
-              <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden divide-y divide-gray-50 dark:divide-[#232d42]">
+              <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden divide-y divide-gray-100 dark:divide-[#232d42]">
                 {groupItems.map(n => {
                   const cfg    = typeConfig[n.type]
                   const Icon   = cfg.icon

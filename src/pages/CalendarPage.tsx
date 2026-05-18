@@ -220,22 +220,29 @@ export default function CalendarPage() {
                         </div>
                       </div>
 
-                      {/* Events */}
+                      {/* Events — each chip jumps to its course; +N more selects the day */}
                       {visible.length > 0 && (
                         <div className="space-y-0.5">
                           {visible.map(evt => (
-                            <div
+                            <Link
                               key={evt.id}
-                              className="text-[10px] font-semibold px-1.5 py-0.5 rounded-md truncate"
+                              to={`/courses/${evt.courseId}`}
+                              onClick={e => e.stopPropagation()}
+                              className="block text-[10px] font-semibold px-1.5 py-0.5 rounded-md truncate hover:opacity-80 transition-opacity"
                               style={{ color: evt.color, background: `${evt.color}18`, borderLeft: `2px solid ${evt.color}` }}
+                              title={`${evt.title} — open course`}
                             >
                               {evt.title}
-                            </div>
+                            </Link>
                           ))}
                           {more > 0 && (
-                            <span className="text-[10px] text-gray-400 dark:text-gray-500 pl-1">
+                            <button
+                              type="button"
+                              onClick={e => { e.stopPropagation(); setSelectedDay(cell.day) }}
+                              className="text-[10px] text-gray-400 dark:text-gray-500 pl-1 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors"
+                            >
                               +{more} more
-                            </span>
+                            </button>
                           )}
                         </div>
                       )}
@@ -297,10 +304,16 @@ export default function CalendarPage() {
                         {selectedEvents.map(evt => {
                           const course = getCourse(evt.courseId)
                           return (
-                            <div key={evt.id} className="p-3 rounded-xl border" style={{ borderColor: `${evt.color}40`, background: `${evt.color}0A` }}>
+                            <Link
+                              key={evt.id}
+                              to={`/courses/${evt.courseId}`}
+                              className="block p-3 rounded-xl border transition-all hover:scale-[1.02] hover:shadow-sm"
+                              style={{ borderColor: `${evt.color}40`, background: `${evt.color}0A` }}
+                              title={`Open ${course.name}`}
+                            >
                               <p className="text-[12px] font-semibold" style={{ color: evt.color }}>{evt.title}</p>
                               <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{course.name}</p>
-                            </div>
+                            </Link>
                           )
                         })}
                       </div>
@@ -334,7 +347,7 @@ export default function CalendarPage() {
               )
             }
             return (
-              <div className="divide-y divide-gray-50 dark:divide-[#2D3A52]">
+              <div className="divide-y divide-gray-100 dark:divide-[#2D3A52]">
                 {events.map(evt => {
                   const course = getCourse(evt.courseId)
                   const isToday = evt.day === TODAY

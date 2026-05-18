@@ -166,7 +166,7 @@ export default function Courses() {
                     {courseModules[selected.id].map(m => (
                       <div
                         key={m.id}
-                        className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-[#131825] transition-colors cursor-pointer"
+                        className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl"
                       >
                         <CheckCircle
                           size={14}

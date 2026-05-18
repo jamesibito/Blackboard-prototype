@@ -21,7 +21,7 @@ export default function CourseAssignments({ courseAssignments, course }: Props) 
         <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Assignments</h2>
       </div>
       {courseAssignments.length > 0 ? (
-        <div className="divide-y divide-gray-50 dark:divide-[#232d42]">
+        <div className="divide-y divide-gray-100 dark:divide-[#232d42]">
           {courseAssignments.map(a => {
             const sc = statusColors[a.status]
             const totalScore    = a.rubric.reduce((sum, r) => sum + (r.score || 0), 0)

@@ -1,103 +1,128 @@
 import { useEffect, useRef, useState } from 'react'
-import { X, Home, BookOpen, Bell, ArrowRight } from './Icons'
+import { X, Home, BookOpen, Activity, Library, ArrowRight, ChevronLeft } from './Icons'
 
 /**
  * OnboardingModal
  * ───────────────
- * First-visit "how to use this site" walkthrough. Teaches the three main
- * navigation surfaces (sidebar, course pages, top bar) so a brand-new user
- * isn't hunting for where things live.
+ * First-time-student onboarding tutorial for Blackboard, in-character for the
+ * Kevin H. persona. Five-step carousel walking through what each major surface
+ * does — Dashboard, course pages, Activity Stream + Notifications, Tools.
  *
- * What this is NOT: a meta-explanation of the prototype/persona — that's
- * the DemoBanner's job. Keeping the two messages separate lets each do
- * one thing well: the banner sets context, the modal teaches the UI.
+ * What this is NOT: a meta-explanation of the prototype or case study — that's
+ * the DemoBanner's job. This onboarding is in-narrative: a first-time GBC
+ * student logging into Blackboard for the Fall 2022 semester.
  *
- * Persistence: dismissal is stored in localStorage so the modal only appears
- * once per browser. The version suffix (`-v2`) re-prompts past visitors who
- * saw the older meta-only copy.
+ * Multi-step pattern (Notion / Linear / Slack-style):
+ *   - Step 1/5: Welcome
+ *   - Step 2/5: Dashboard
+ *   - Step 3/5: Course pages
+ *   - Step 4/5: Activity Stream + Notifications
+ *   - Step 5/5: Tools + Help
+ *
+ * Persistence: dismissal stored in localStorage. Version-suffix bumped to v3
+ * so past visitors who saw v1 (meta) or v2 (navigation surfaces) get the new
+ * feature-led tour.
  *
  * Accessibility:
  *   - role="dialog" + aria-modal + aria-labelledby on the title
- *   - ESC key dismisses
+ *   - ESC dismisses
  *   - Click on backdrop dismisses
  *   - Body scroll locked while open
- *   - Initial focus on the primary CTA
+ *   - Initial focus on the Next CTA
+ *   - Step indicator announced via aria-live
  */
 
-// localStorage key — v2 forces past v1 visitors to see the new how-to copy
-const DISMISS_KEY = 'gbc-bb-onboarding-seen-v2'
+const DISMISS_KEY = 'gbc-bb-onboarding-seen-v3'
 
-interface OnboardingBullet {
+interface OnboardingStep {
   icon: React.FC<{ size?: number; className?: string }>
+  eyebrow: string
   title: string
   body: string
 }
 
-// Centralised content so it's easy to edit copy without hunting through JSX
-const BULLETS: OnboardingBullet[] = [
+const STEPS: OnboardingStep[] = [
+  {
+    icon: Home, // overridden in render — step 0 gets the special GBC Bb badge
+    eyebrow: 'Welcome',
+    title: "Hi Kevin — welcome to Blackboard.",
+    body: "Your learning hub for the Fall 2022 semester at George Brown. A quick tour — under a minute, then you're in. You can skip anytime.",
+  },
   {
     icon: Home,
-    title: 'Start on the Dashboard',
-    body: 'Your day at a glance — today\'s classes, what\'s due soon, and the priority assignments to tackle next. Everything else is one click away in the sidebar.',
+    eyebrow: 'Your Dashboard',
+    title: "Open Blackboard, know what to do next.",
+    body: "Today's classes, upcoming deadlines, recent grades, and a Priority Card surfacing the single most urgent thing. The Dashboard answers 'what now?' before you have to look for it.",
   },
   {
     icon: BookOpen,
-    title: 'Open any course to drill in',
-    body: 'Each course has its own modules, assignments, resources, syllabus, and instructor info. Click a course card on the Dashboard or use the Courses tab in the sidebar.',
+    eyebrow: 'Course pages',
+    title: "Every course is laid out the same way.",
+    body: "Same sections in every course: announcements, modules, assignments, and resources on the left — syllabus, grades, and instructor info in the sidebar. Learn one course page, you know them all.",
   },
   {
-    icon: Bell,
-    title: 'Notifications and account live up top',
-    body: 'The bell shows new grades, deadlines, and announcements. Your avatar opens settings, transcripts, and the Help Centre. The Tools page bundles every external app — Figma, Zoom, the Library, and more.',
+    icon: Activity,
+    eyebrow: 'Staying current',
+    title: "Don't miss an announcement again.",
+    body: "The Activity Stream feeds new grades, announcements, and resources across all your courses in one place. The bell up top flags what specifically needs you. No hunting through sidebars.",
+  },
+  {
+    icon: Library,
+    eyebrow: 'Campus tools',
+    title: "Every GBC service, one click away.",
+    body: "The Tools page links you to the Library, Print Centre, Tech Lab, study rooms, Microsoft 365, Zoom, Figma, Adobe — all the apps your courses use, no separate logins to remember. Need IT help? GBC Assist lives in your profile menu.",
   },
 ]
 
+const TOTAL = STEPS.length
+
 export default function OnboardingModal() {
-  // ─── Visibility state ──────────────────────────────────────────────────────
-  // Lazy init from localStorage so we never flash the modal for return visitors.
+  // ─── Visibility ────────────────────────────────────────────────────────────
   const [visible, setVisible] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false
     return localStorage.getItem(DISMISS_KEY) !== '1'
   })
 
-  // Tracks whether we're in the fade-out animation (200ms) before unmounting
+  // ─── Step state ────────────────────────────────────────────────────────────
+  const [step, setStep] = useState(0)
   const [exiting, setExiting] = useState(false)
+  // Direction tracks which way we're sliding for the cross-fade animation
+  const [direction, setDirection] = useState<1 | -1>(1)
 
-  const ctaRef = useRef<HTMLButtonElement>(null)
+  const nextRef = useRef<HTMLButtonElement>(null)
+  const dialogRef = useRef<HTMLDivElement>(null)
 
   // ─── Effects ───────────────────────────────────────────────────────────────
 
-  // Auto-focus the primary CTA on first paint so keyboard users land on
-  // the most likely action ("Start exploring")
+  // Focus the primary CTA on first paint and on step change
   useEffect(() => {
     if (visible && !exiting) {
-      // Delay one frame so the focus ring lands AFTER the open transition
-      const t = setTimeout(() => ctaRef.current?.focus(), 50)
+      const t = setTimeout(() => nextRef.current?.focus(), 60)
       return () => clearTimeout(t)
     }
-  }, [visible, exiting])
+  }, [visible, exiting, step])
 
-  // ESC key dismisses the modal
+  // ESC dismisses
   useEffect(() => {
     if (!visible) return
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') dismiss()
+      else if (e.key === 'ArrowRight' && step < TOTAL - 1) goNext()
+      else if (e.key === 'ArrowLeft'  && step > 0)         goPrev()
     }
     window.addEventListener('keydown', handleKey)
     return () => window.removeEventListener('keydown', handleKey)
-  }, [visible])
+  }, [visible, step])
 
-  // Lock body scroll while the modal is open so background can't be scrolled
+  // Lock body scroll while open
   useEffect(() => {
     if (!visible) return
     const prevOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
-    return () => {
-      document.body.style.overflow = prevOverflow
-    }
+    return () => { document.body.style.overflow = prevOverflow }
   }, [visible])
 
-  // Handle the exit animation → unmount sequence
+  // Exit animation → unmount
   useEffect(() => {
     if (!exiting) return
     const t = setTimeout(() => setVisible(false), 200)
@@ -111,16 +136,35 @@ export default function OnboardingModal() {
     setExiting(true)
   }
 
-  // Backdrop click — only dismiss when the click lands on the backdrop itself,
-  // not bubbled up from inside the modal panel
+  function goNext() {
+    if (step === TOTAL - 1) { dismiss(); return }
+    setDirection(1)
+    setStep(s => Math.min(s + 1, TOTAL - 1))
+  }
+
+  function goPrev() {
+    setDirection(-1)
+    setStep(s => Math.max(s - 1, 0))
+  }
+
+  function goToStep(i: number) {
+    setDirection(i > step ? 1 : -1)
+    setStep(i)
+  }
+
   function onBackdropClick(e: React.MouseEvent<HTMLDivElement>) {
     if (e.target === e.currentTarget) dismiss()
   }
 
   if (!visible) return null
 
-  // ─── Render ────────────────────────────────────────────────────────────────
+  // ─── Derived ───────────────────────────────────────────────────────────────
+  const current = STEPS[step]
+  const isFirst = step === 0
+  const isLast  = step === TOTAL - 1
+  const progressPct = ((step + 1) / TOTAL) * 100
 
+  // ─── Render ────────────────────────────────────────────────────────────────
   return (
     <div
       role="dialog"
@@ -128,76 +172,153 @@ export default function OnboardingModal() {
       aria-labelledby="onboarding-title"
       onClick={onBackdropClick}
       className={`fixed inset-0 z-[100] flex items-center justify-center px-4 transition-opacity duration-200
-        bg-black/50 backdrop-blur-sm
+        bg-black/55 backdrop-blur-sm
         ${exiting ? 'opacity-0' : 'opacity-100'}`}
     >
       {/* Modal panel */}
       <div
-        className={`relative w-full max-w-[480px] bg-white dark:bg-[#1A2236] rounded-2xl shadow-2xl
+        ref={dialogRef}
+        className={`relative w-full max-w-[500px] bg-white dark:bg-[#1A2236] rounded-2xl shadow-2xl
           border border-gray-100 dark:border-[#2D3A52] overflow-hidden
           transition-all duration-200
           ${exiting ? 'scale-95 opacity-0' : 'scale-100 opacity-100'}`}
       >
-        {/* Gradient header strip — matches the welcome banner palette */}
-        <div className="h-1 w-full bg-gradient-to-r from-[#1B3F89] via-[#2563EB] to-[#1B3F89]" />
+        {/* ── Progress bar (top edge) ───────────────────────────────────── */}
+        <div className="h-1 w-full bg-gray-100 dark:bg-[#2D3A52]">
+          <div
+            className="h-full bg-gradient-to-r from-[#1B3F89] to-[#2563EB] transition-all duration-300"
+            style={{ width: `${progressPct}%` }}
+            aria-hidden="true"
+          />
+        </div>
 
-        {/* Close button (top right) — secondary dismissal path */}
+        {/* ── Skip button (top right) ──────────────────────────────────── */}
         <button
           onClick={dismiss}
-          aria-label="Close onboarding"
-          className="absolute top-3 right-3 p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-[#232d42] transition-colors text-gray-400 dark:text-gray-500"
+          aria-label="Skip tour"
+          className="absolute top-3.5 right-3.5 p-1.5 rounded-lg text-gray-400 dark:text-gray-500
+            hover:bg-gray-100 dark:hover:bg-[#232d42] hover:text-gray-600 dark:hover:text-gray-300
+            transition-colors"
         >
           <X size={16} aria-hidden="true" />
         </button>
 
-        {/* Content */}
-        <div className="px-7 pt-6 pb-6">
-          {/* Title + subtitle */}
-          <h2
-            id="onboarding-title"
-            className="text-[18px] font-bold text-gray-900 dark:text-gray-100 tracking-tight"
-          >
-            Welcome — quick tour
-          </h2>
-          <p className="text-[13px] text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
-            Three quick things, then you're set.
-          </p>
+        {/* ── Step indicator (top left) ────────────────────────────────── */}
+        <div
+          className="absolute top-3.5 left-5 text-[11px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 tabular-nums"
+          aria-live="polite"
+        >
+          {String(step + 1).padStart(2, '0')} / {String(TOTAL).padStart(2, '0')}
+        </div>
 
-          {/* Bullet list */}
-          <ul className="mt-5 space-y-4">
-            {BULLETS.map((bullet, i) => (
-              <li key={i} className="flex items-start gap-3">
+        {/* ── Content (with sliding animation) ─────────────────────────── */}
+        <div className="px-7 pt-14 pb-5 relative overflow-hidden">
+          <div
+            key={step}
+            className="animate-onboarding-slide"
+            style={{
+              // Inline keyframe via CSS variable for direction-aware slide
+              animation: direction === 1
+                ? 'slide-in-right 0.32s cubic-bezier(0.22, 1, 0.36, 1)'
+                : 'slide-in-left 0.32s cubic-bezier(0.22, 1, 0.36, 1)',
+            }}
+          >
+            {/* Visual: GBC Bb mark on welcome, icon-in-tile on others */}
+            <div className="flex items-center justify-center mb-5">
+              {isFirst ? (
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#1B3F89] to-[#2563EB] flex items-center justify-center shadow-lg">
+                  <span className="text-white text-[26px] font-bold tracking-tight" style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.04em' }}>
+                    Bb
+                  </span>
+                </div>
+              ) : (
                 <div
-                  className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 mt-0.5"
-                  style={{ background: '#2563EB15', color: '#2563EB' }}
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center"
+                  style={{ background: '#2563EB18', color: '#2563EB' }}
                 >
-                  <bullet.icon size={15} />
+                  <current.icon size={26} />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-[13px] font-semibold text-gray-900 dark:text-gray-100">
-                    {bullet.title}
-                  </h3>
-                  <p className="text-[12.5px] text-gray-500 dark:text-gray-400 leading-relaxed mt-0.5">
-                    {bullet.body}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ul>
+              )}
+            </div>
 
-          {/* CTA */}
-          <button
-            ref={ctaRef}
-            onClick={dismiss}
-            className="mt-6 w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl
-              bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[13px] font-semibold
-              transition-colors"
-          >
-            Got it — start exploring
-            <ArrowRight size={14} aria-hidden="true" />
-          </button>
+            {/* Eyebrow */}
+            <p className="text-center text-[11px] font-bold uppercase tracking-[1.4px] text-[#2563EB] dark:text-[#60A5FA] mb-2">
+              {current.eyebrow}
+            </p>
+
+            {/* Title */}
+            <h2
+              id="onboarding-title"
+              className="text-center text-[20px] font-bold text-gray-900 dark:text-gray-100 tracking-tight leading-tight mb-3"
+            >
+              {current.title}
+            </h2>
+
+            {/* Body */}
+            <p className="text-center text-[13.5px] text-gray-500 dark:text-gray-400 leading-relaxed max-w-[400px] mx-auto">
+              {current.body}
+            </p>
+          </div>
+        </div>
+
+        {/* ── Footer: step dots + nav buttons ──────────────────────────── */}
+        <div className="px-7 pb-6 pt-2">
+          {/* Step dots */}
+          <div className="flex items-center justify-center gap-2 mb-5" role="tablist" aria-label="Tour steps">
+            {STEPS.map((_, i) => (
+              <button
+                key={i}
+                role="tab"
+                aria-selected={i === step}
+                aria-label={`Go to step ${i + 1}`}
+                onClick={() => goToStep(i)}
+                className={`h-1.5 rounded-full transition-all
+                  ${i === step
+                    ? 'w-6 bg-[#2563EB]'
+                    : 'w-1.5 bg-gray-200 dark:bg-[#2D3A52] hover:bg-gray-300 dark:hover:bg-[#3a4761]'}`}
+              />
+            ))}
+          </div>
+
+          {/* Nav buttons */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={goPrev}
+              disabled={isFirst}
+              className={`flex items-center gap-1 px-3 py-2 rounded-xl text-[13px] font-semibold transition-colors
+                ${isFirst
+                  ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
+                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-[#232d42]'}`}
+            >
+              <ChevronLeft size={14} aria-hidden="true" />
+              Back
+            </button>
+
+            <button
+              ref={nextRef}
+              onClick={goNext}
+              className="ml-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl
+                bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[13px] font-semibold
+                transition-colors shadow-sm"
+            >
+              {isLast ? 'Open my Dashboard' : 'Next'}
+              <ArrowRight size={14} aria-hidden="true" />
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* ── Inline keyframes for slide animation ───────────────────────── */}
+      <style>{`
+        @keyframes slide-in-right {
+          from { opacity: 0; transform: translateX(16px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slide-in-left {
+          from { opacity: 0; transform: translateX(-16px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+      `}</style>
     </div>
   )
 }

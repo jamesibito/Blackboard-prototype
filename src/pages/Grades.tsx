@@ -330,7 +330,7 @@ function PriorityAssignmentsCard() {
       </div>
 
       {/* Assignment rows */}
-      <div className="divide-y divide-gray-50 dark:divide-[#232d42]">
+      <div className="divide-y divide-gray-100 dark:divide-[#232d42]">
         {priority.map(p => (
           <PriorityRow key={p.assignment.id} item={p} />
         ))}
@@ -377,7 +377,7 @@ function PriorityRow({ item }: { item: PriorityAssignment }) {
       {/* Weight badge — High / Medium / Low */}
       <div className="flex items-center gap-2 shrink-0">
         <span
-          className="text-[10px] font-bold px-2 py-1 rounded-lg tabular-nums"
+          className="text-[10px] font-bold px-2 py-1 rounded-lg"
           style={{ background: `${weightColor}15`, color: weightColor }}
           title={`${assignment.points} points`}
         >

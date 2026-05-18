@@ -29,7 +29,7 @@ export default function CourseAnnouncements({ announcements, courseColor }: Prop
       <div className="px-5 pt-5 pb-3">
         <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Announcements</h2>
       </div>
-      <div className="divide-y divide-gray-50 dark:divide-[#232d42]">
+      <div className="divide-y divide-gray-100 dark:divide-[#232d42]">
         {sorted.map(ann => (
           <div key={ann.id} className="px-5 py-4 hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors">
             <div className="flex items-start justify-between gap-3 mb-1">

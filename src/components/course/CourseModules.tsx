@@ -22,13 +22,13 @@ export default function CourseModules({ modules }: Props) {
         <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Modules</h2>
       </div>
       {modules.length > 0 ? (
-        <div className="divide-y divide-gray-50 dark:divide-[#232d42]">
+        <div className="divide-y divide-gray-100 dark:divide-[#232d42]">
           {modules.map(m => {
             const tc = typeConfig[m.type] ?? typeConfig.lecture
             return (
               <div
                 key={m.id}
-                className="flex items-center gap-3 px-5 py-3.5 hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors cursor-pointer"
+                className="flex items-center gap-3 px-5 py-3.5"
               >
                 <CheckCircle
                   size={16}

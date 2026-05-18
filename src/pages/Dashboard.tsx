@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronRight, Clock, TrendingUp } from '../components/Icons'
 import {
-  courses, dueSoon, activityItems, assignments,
+  courses, dueSoon, activityItems, assignments, calendarEvents,
   getCourse, getOverallGPA, getNextClass, getTodayClasses,
 } from '../data/mockData'
 import { Skeleton, SkeletonAvatar, SkeletonCard } from '../components/Skeleton'
@@ -59,7 +59,7 @@ function RecentGrades() {
           View all
         </Link>
       </div>
-      <div className="divide-y divide-gray-50 dark:divide-[#232d42]">
+      <div className="divide-y divide-gray-100 dark:divide-[#232d42]">
         {recent.map(a => {
           const course = getCourse(a.courseId)
           const { score, total, pct } = gradeFor(a.id)
@@ -187,7 +187,7 @@ export default function Dashboard() {
               View all
             </Link>
           </div>
-          <div className="divide-y divide-gray-50 dark:divide-[#232d42]">
+          <div className="divide-y divide-gray-100 dark:divide-[#232d42]">
             {courses.map(c => (
               <Link
                 key={c.id}
@@ -234,7 +234,7 @@ export default function Dashboard() {
             <div className="flex items-center justify-between px-5 pt-5 pb-3">
               <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Activity Stream</h2>
               <Link to="/activity-stream" className="text-[12px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline">
-                See all
+                View all
               </Link>
             </div>
             <div className="px-5 pb-5 space-y-3.5">
@@ -242,12 +242,10 @@ export default function Dashboard() {
                 const course     = a.courseId ? getCourse(a.courseId) : undefined
                 const avatarAbbr  = course ? course.abbr  : 'GBC'
                 const avatarColor = course ? course.color : '#1B3F89'
-                return (
-                  <Link
-                    key={a.id}
-                    to="/activity-stream"
-                    className="flex items-center gap-3 group cursor-pointer"
-                  >
+                const isExternal = a.linkTo?.startsWith('http')
+                const dest = a.linkTo ?? '/activity-stream'
+                const inner = (
+                  <>
                     <CourseAvatar abbr={avatarAbbr} color={avatarColor} size={36} />
                     <div className="flex-1 min-w-0">
                       <p className="text-[13px] font-medium text-gray-900 dark:text-gray-100 truncate group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors">
@@ -256,6 +254,25 @@ export default function Dashboard() {
                       <p className="text-[11px] text-gray-400 dark:text-gray-500 truncate">{a.date}</p>
                     </div>
                     <ChevronRight size={14} className="text-gray-300 dark:text-gray-600 shrink-0" />
+                  </>
+                )
+                return isExternal ? (
+                  <a
+                    key={a.id}
+                    href={dest}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 group cursor-pointer"
+                  >
+                    {inner}
+                  </a>
+                ) : (
+                  <Link
+                    key={a.id}
+                    to={dest}
+                    className="flex items-center gap-3 group cursor-pointer"
+                  >
+                    {inner}
                   </Link>
                 )
               })}
@@ -339,7 +356,7 @@ function DashboardSkeleton() {
             <Skeleton className="h-4 w-20" />
             <Skeleton className="h-3.5 w-14" />
           </div>
-          <div className="divide-y divide-gray-50 dark:divide-[#232d42]">
+          <div className="divide-y divide-gray-100 dark:divide-[#232d42]">
             {[...Array(6)].map((_, i) => (
               <div key={i} className="flex items-start gap-3 px-5 py-3.5">
                 <SkeletonAvatar size={38} />
@@ -362,7 +379,7 @@ function DashboardSkeleton() {
             </div>
             <Skeleton className="h-3.5 w-14" />
           </div>
-          <div className="divide-y divide-gray-50 dark:divide-[#232d42]">
+          <div className="divide-y divide-gray-100 dark:divide-[#232d42]">
             {[...Array(5)].map((_, i) => (
               <div key={i} className="flex items-center gap-3 px-5 py-3">
                 <div className="flex-1 space-y-1.5">
@@ -628,7 +645,7 @@ function TodaySchedule() {
       </div>
 
       {todayClasses.length > 0 ? (
-        <div className="divide-y divide-gray-50 dark:divide-[#232d42]">
+        <div className="divide-y divide-gray-100 dark:divide-[#232d42]">
           {todayClasses.map(cls => {
             const sc = statusConfig[cls.status]
             return (
@@ -742,8 +759,21 @@ function MiniCalendar() {
     [19, 20, 21, 22, 23, 24, 25],
     [26, 27, 28, 29, 30, 31, null],
   ]
-  const today      = 14
-  const highlights: Record<number, string> = { 8: '#06B6D4', 12: '#F97316', 20: '#EC4899', 28: '#22C55E' }
+  const today = 14
+  // Derive highlights from the actual calendar events. When multiple events fall
+  // on the same day, deadlines outrank events and we pick the first colour we
+  // see — good enough for a tiny-pixel dot. Keeps the mini cal in sync with the
+  // full Calendar page automatically.
+  const highlights: Record<number, string> = (() => {
+    const out: Record<number, string> = {}
+    const sorted = [...calendarEvents].sort((a, b) =>
+      (a.type === 'deadline' ? 0 : 1) - (b.type === 'deadline' ? 0 : 1),
+    )
+    for (const evt of sorted) {
+      if (!out[evt.day]) out[evt.day] = evt.color
+    }
+    return out
+  })()
 
   return (
     <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] p-5">

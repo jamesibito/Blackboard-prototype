@@ -188,7 +188,7 @@ export default function AssignmentPage() {
                     <th className="text-left px-5 py-2.5 text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">Feedback</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-50 dark:divide-[#232d42]">
+                <tbody className="divide-y divide-gray-100 dark:divide-[#232d42]">
                   {assignment.rubric.map((r, i) => {
                     const scorePct = r.score !== undefined ? Math.round((r.score / r.total) * 100) : null
                     const barColor = scorePct !== null
@@ -277,7 +277,7 @@ export default function AssignmentPage() {
                 {/* Replies added this session */}
                 {extraReplies.map((r, i) => (
                   <div key={i} className="flex gap-3 flex-row-reverse">
-                    <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-[11px] font-bold shrink-0 bg-gray-400">KH</div>
+                    <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-[11px] font-bold shrink-0 bg-[#2563EB]">KH</div>
                     <div className="flex-1 max-w-[85%] flex flex-col items-end">
                       <div className="rounded-2xl rounded-tr-sm px-4 py-3 bg-[#2563EB]/[0.08] dark:bg-[#2563EB]/[0.12]">
                         <p className="text-[12px] font-semibold text-gray-900 dark:text-gray-100 mb-1">Kevin H.</p>
@@ -290,7 +290,7 @@ export default function AssignmentPage() {
 
                 {/* Functional reply input */}
                 <div className="flex gap-2 pt-2 border-t border-gray-100 dark:border-[#2D3A52]">
-                  <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-[11px] font-bold shrink-0 bg-gray-400">KH</div>
+                  <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-[11px] font-bold shrink-0 bg-[#2563EB]">KH</div>
                   <div className="flex-1 flex gap-2 items-end">
                     <textarea
                       value={feedbackText}

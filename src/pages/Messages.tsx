@@ -1,9 +1,20 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { messages, getCourse } from '../data/mockData'
 import type { Message } from '../data/mockData'
 import { Mail, Star, Inbox, Send } from '../components/Icons'
 import ComposeModal from '../components/ComposeModal'
 import { useToast } from '../context/ToastContext'
+
+/** Shape of optional state passed by `navigate('/messages', { state })` from
+ *  surfaces that want to compose a new message with the recipient pre-filled
+ *  (e.g. CourseSidebar's "Send Message" button on a course page). */
+interface MessagesNavState {
+  openCompose?: boolean
+  prefillTo?: string
+  prefillCourseId?: string
+  prefillSubject?: string
+}
 
 const tagConfig = {
   assignment:    { label: 'Assignment',    color: '#F97316', bg: '#F9731618' },
@@ -22,6 +33,31 @@ export default function Messages() {
     new Set(messages.filter(m => m.isRead).map(m => m.id))
   )
   const [composeOpen, setComposeOpen] = useState(false)
+  // Compose prefill (when arriving via state from a course page's "Send Message"
+  // button). We snapshot it in state so dismissing + reopening compose locally
+  // doesn't re-trigger from stale router state.
+  const [composePrefill, setComposePrefill] = useState<{
+    to?: string; courseId?: string; subject?: string
+  }>({})
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  // If we arrived with state asking us to open compose, do it once and then
+  // clear the state from history so a refresh/back doesn't reopen the modal.
+  useEffect(() => {
+    const st = location.state as MessagesNavState | null
+    if (st?.openCompose) {
+      setComposePrefill({
+        to: st.prefillTo,
+        courseId: st.prefillCourseId,
+        subject: st.prefillSubject,
+      })
+      setComposeOpen(true)
+      navigate(location.pathname, { replace: true, state: null })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.state])
+
   const [replyText, setReplyText] = useState('')
   // Track replies sent per message: messageId → reply string[]
   const [replies, setReplies] = useState<Record<string, string[]>>({})
@@ -90,7 +126,7 @@ export default function Messages() {
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto divide-y divide-gray-50 dark:divide-[#232d42]">
+          <div className="flex-1 overflow-y-auto divide-y divide-gray-100 dark:divide-[#232d42]">
             {messages.map(msg => {
               const isSelected = selectedId === msg.id
               const isRead = read.has(msg.id)
@@ -281,7 +317,17 @@ export default function Messages() {
         )}
       </div>
 
-      {composeOpen && <ComposeModal onClose={() => setComposeOpen(false)} />}
+      {composeOpen && (
+        <ComposeModal
+          onClose={() => {
+            setComposeOpen(false)
+            setComposePrefill({})
+          }}
+          prefillTo={composePrefill.to}
+          prefillCourseId={composePrefill.courseId}
+          prefillSubject={composePrefill.subject}
+        />
+      )}
     </div>
   )
 }
