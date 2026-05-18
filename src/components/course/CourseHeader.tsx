@@ -1,5 +1,7 @@
+import { useNavigate } from 'react-router-dom'
 import type { Course, CourseGrade } from '../../data/mockData'
 import type { LetterGrade } from '../../utils/grades'
+import { Mail } from '../Icons'
 
 interface Props {
   course: Course
@@ -8,6 +10,7 @@ interface Props {
 }
 
 export default function CourseHeader({ course, courseGrade, lg }: Props) {
+  const navigate = useNavigate()
   return (
     <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden mb-6">
       {/* Top colour accent strip */}
@@ -53,9 +56,9 @@ export default function CourseHeader({ course, courseGrade, lg }: Props) {
           ))}
         </div>
 
-        {/* Zoom button */}
-        {course.zoomLink && (
-          <div className="mt-4">
+        {/* Primary action row — Join Zoom + Email Instructor */}
+        <div className="mt-4 flex items-center gap-2 flex-wrap">
+          {course.zoomLink && (
             <a
               href={course.zoomLink}
               target="_blank"
@@ -69,8 +72,25 @@ export default function CourseHeader({ course, courseGrade, lg }: Props) {
               </svg>
               Join Zoom Session
             </a>
-          </div>
-        )}
+          )}
+          <button
+            type="button"
+            onClick={() => navigate('/messages', {
+              state: {
+                openCompose: true,
+                prefillTo: course.instructor,
+                prefillCourseId: course.id,
+                prefillSubject: `${course.code} — `,
+              },
+            })}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-semibold border-2 transition-colors hover:bg-gray-50 dark:hover:bg-[#232d42]"
+            style={{ borderColor: course.color, color: course.color }}
+            title={`Email ${course.instructor}`}
+          >
+            <Mail size={14} aria-hidden="true" />
+            Email {course.instructor.split(' ')[0]}
+          </button>
+        </div>
 
         {/* Progress bar */}
         <div className="mt-5">

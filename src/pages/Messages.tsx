@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { messages, getCourse } from '../data/mockData'
 import type { Message } from '../data/mockData'
-import { Mail, Star, Inbox, Send } from '../components/Icons'
+import { Mail, MailOpen, Star, Inbox, Send, Archive, Trash2 } from '../components/Icons'
 import ComposeModal from '../components/ComposeModal'
 import { useToast } from '../context/ToastContext'
 
@@ -39,6 +39,10 @@ export default function Messages() {
   const [composePrefill, setComposePrefill] = useState<{
     to?: string; courseId?: string; subject?: string
   }>({})
+  // Archive + delete are session-only — they don't actually mutate mockData,
+  // just hide the message from the inbox list and skip to the next.
+  const [archivedIds, setArchivedIds] = useState<Set<string>>(new Set())
+  const [deletedIds, setDeletedIds] = useState<Set<string>>(new Set())
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -63,7 +67,10 @@ export default function Messages() {
   const [replies, setReplies] = useState<Record<string, string[]>>({})
   const replyRef = useRef<HTMLTextAreaElement>(null)
 
-  const selected = messages.find(m => m.id === selectedId)!
+  // The "selected" message — falls back to the first visible message if the
+  // currently selected id has been archived/deleted (a defensive read; the
+  // advance* helpers usually update selectedId first).
+  const selected = messages.find(m => m.id === selectedId) ?? messages[0]
 
   function selectMessage(msg: Message) {
     setSelectedId(msg.id)
@@ -88,7 +95,39 @@ export default function Messages() {
     })
   }
 
-  const unreadCount = messages.filter(m => !read.has(m.id)).length
+  // ─── Inbox actions ─────────────────────────────────────────────────────────
+  // Both archive + delete remove the message from the list and advance to the
+  // next visible message. The mutation is session-only so a refresh restores
+  // the message — appropriate for a portfolio prototype.
+
+  function advanceToNextVisible(removedId: string) {
+    const visible = visibleMessages.filter(m => m.id !== removedId)
+    if (visible.length > 0) setSelectedId(visible[0].id)
+  }
+
+  function archiveCurrent() {
+    setArchivedIds(prev => new Set([...prev, selectedId]))
+    toast(`Archived "${selected.subject}"`, 'info')
+    advanceToNextVisible(selectedId)
+  }
+
+  function deleteCurrent() {
+    setDeletedIds(prev => new Set([...prev, selectedId]))
+    toast(`Deleted "${selected.subject}"`, 'info')
+    advanceToNextVisible(selectedId)
+  }
+
+  function markCurrentUnread() {
+    setRead(prev => {
+      const next = new Set(prev)
+      next.delete(selectedId)
+      return next
+    })
+    toast('Marked as unread', 'info')
+  }
+
+  const visibleMessages = messages.filter(m => !archivedIds.has(m.id) && !deletedIds.has(m.id))
+  const unreadCount = visibleMessages.filter(m => !read.has(m.id)).length
 
   return (
     <div className="max-w-[1200px]">
@@ -127,7 +166,7 @@ export default function Messages() {
           </div>
 
           <div className="flex-1 overflow-y-auto divide-y divide-gray-100 dark:divide-[#232d42]">
-            {messages.map(msg => {
+            {visibleMessages.map(msg => {
               const isSelected = selectedId === msg.id
               const isRead = read.has(msg.id)
               const isStarred = starred.has(msg.id)
@@ -247,15 +286,41 @@ export default function Messages() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-1.5 shrink-0">
+              <div className="flex items-center gap-0.5 shrink-0">
                 <button
                   onClick={e => toggleStar(selected.id, e)}
                   className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#232d42] transition text-gray-400"
+                  title={starred.has(selected.id) ? 'Unstar' : 'Star'}
+                  aria-label={starred.has(selected.id) ? 'Unstar message' : 'Star message'}
                 >
                   <Star
                     size={16}
                     className={starred.has(selected.id) ? 'text-amber-400 fill-current' : ''}
                   />
+                </button>
+                <button
+                  onClick={markCurrentUnread}
+                  className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#232d42] transition text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  title="Mark as unread"
+                  aria-label="Mark message as unread"
+                >
+                  <MailOpen size={16} />
+                </button>
+                <button
+                  onClick={archiveCurrent}
+                  className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#232d42] transition text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  title="Archive"
+                  aria-label="Archive message"
+                >
+                  <Archive size={16} />
+                </button>
+                <button
+                  onClick={deleteCurrent}
+                  className="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 transition text-gray-400 hover:text-red-500"
+                  title="Delete"
+                  aria-label="Delete message"
+                >
+                  <Trash2 size={16} />
                 </button>
               </div>
             </div>

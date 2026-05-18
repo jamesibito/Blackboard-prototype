@@ -319,16 +319,45 @@ export default function AssignmentPage() {
 
         {/* Right sidebar */}
         <div className="space-y-6">
-          {/* Deliverables */}
+          {/* Deliverables — when a previous submission exists, each deliverable is
+              "ticked" with an Open link to the matching file. Best-effort match by
+              extension first (PDF deliverable → PDF file). If no match, just shows
+              the first file. Unmatched deliverables render as plain check items. */}
           <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] p-5">
             <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100 mb-3">Deliverables</h2>
             <div className="space-y-2">
-              {assignment.deliverables.map((d, i) => (
-                <div key={i} className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-gray-50 dark:bg-[#131825] border border-gray-100 dark:border-[#2D3A52]">
-                  <FileText size={14} className="text-gray-400 dark:text-gray-500 shrink-0" />
-                  <span className="text-[12px] text-gray-700 dark:text-gray-300 flex-1">{d}</span>
-                </div>
-              ))}
+              {assignment.deliverables.map((d, i) => {
+                // Match deliverable to submitted file by extension when possible
+                const submittedFiles = assignment.previousSubmissions?.[0]?.files ?? []
+                const extMatch = d.match(/\(([A-Za-z0-9.]+)\)$/)?.[1]?.toLowerCase()
+                const matched = extMatch
+                  ? submittedFiles.find(f => f.toLowerCase().includes(extMatch))
+                  : submittedFiles[i]
+                const isGradedOrSubmitted = assignment.status === 'graded' || assignment.status === 'submitted'
+
+                return (
+                  <div
+                    key={i}
+                    className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-gray-50 dark:bg-[#131825] border border-gray-100 dark:border-[#2D3A52]"
+                  >
+                    {isGradedOrSubmitted && matched ? (
+                      <CheckCircle size={14} className="text-emerald-500 shrink-0" />
+                    ) : (
+                      <FileText size={14} className="text-gray-400 dark:text-gray-500 shrink-0" />
+                    )}
+                    <span className="text-[12px] text-gray-700 dark:text-gray-300 flex-1">{d}</span>
+                    {isGradedOrSubmitted && matched && (
+                      <button
+                        onClick={() => toast(`Opening ${matched}`, 'info')}
+                        className="text-[11px] font-semibold text-[#2563EB] dark:text-[#60A5FA] hover:underline shrink-0"
+                        title={`Open ${matched}`}
+                      >
+                        Open
+                      </button>
+                    )}
+                  </div>
+                )
+              })}
             </div>
           </div>
 

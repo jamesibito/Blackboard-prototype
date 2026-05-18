@@ -51,15 +51,18 @@ export default function CourseSidebar({ course, courseGrade, lg, courseActivity 
                       </div>
                     </Link>
                   ) : (
-                    <div>
+                    // Inert mark — visually muted so it doesn't read as clickable.
+                    // (Mark exists in the gradebook but doesn't have a corresponding
+                    // assignment detail page in this prototype.)
+                    <div className="opacity-60 cursor-default" title="Read-only mark — no detail page">
                       <div className="flex items-center justify-between">
-                        <span className="text-[12px] text-gray-700 dark:text-gray-300 truncate flex-1 mr-3">{m.name}</span>
-                        <span className="text-[12px] font-bold tabular-nums shrink-0" style={{ color: course.color }}>
+                        <span className="text-[12px] text-gray-600 dark:text-gray-400 truncate flex-1 mr-3">{m.name}</span>
+                        <span className="text-[12px] font-bold tabular-nums shrink-0 text-gray-500 dark:text-gray-400">
                           {m.score}/{m.total}
                         </span>
                       </div>
                       <div className="h-1 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden mt-1">
-                        <div className="h-full rounded-full" style={{ width: `${pct}%`, background: course.color, opacity: 0.6 }} />
+                        <div className="h-full rounded-full bg-gray-300 dark:bg-gray-600" style={{ width: `${pct}%` }} />
                       </div>
                     </div>
                   )}

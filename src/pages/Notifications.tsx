@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { notifications, getCourse } from '../data/mockData'
 import type { Notification } from '../data/mockData'
-import { Award, ClipboardList, FileText, Megaphone } from '../components/Icons'
+import { Award, ClipboardList, FileText, Megaphone, X } from '../components/Icons'
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
@@ -106,21 +106,41 @@ export default function Notifications() {
                   const Icon   = cfg.icon
                   const course = n.courseId ? getCourse(n.courseId) : undefined
 
+                  // Mark this notification as read + (optionally) navigate.
+                  const openNotification = () => {
+                    setItems(prev => prev.map(item =>
+                      item.id === n.id ? { ...item, unread: false } : item
+                    ))
+                    if (n.linkTo) {
+                      n.linkTo.startsWith('http')
+                        ? window.open(n.linkTo, '_blank', 'noopener,noreferrer')
+                        : navigate(n.linkTo)
+                    }
+                  }
+                  // Dismiss-only: mark read without navigating. Used by the
+                  // hover-× button so a user can clear a notification without
+                  // committing to its destination.
+                  const dismissNotification = (e: React.MouseEvent) => {
+                    e.stopPropagation()
+                    setItems(prev => prev.map(item =>
+                      item.id === n.id ? { ...item, unread: false } : item
+                    ))
+                  }
+
                   return (
-                    <button
+                    <div
                       key={n.id}
-                      className="flex items-start gap-4 w-full px-5 py-4 text-left hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors"
-                      onClick={() => {
-                        // Mark this notification as read, then navigate if it has a link
-                        setItems(prev => prev.map(item =>
-                          item.id === n.id ? { ...item, unread: false } : item
-                        ))
-                        if (n.linkTo) {
-                          n.linkTo.startsWith('http')
-                            ? window.open(n.linkTo, '_blank', 'noopener,noreferrer')
-                            : navigate(n.linkTo)
+                      role="button"
+                      tabIndex={0}
+                      onClick={openNotification}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault()
+                          openNotification()
                         }
                       }}
+                      aria-label={`${cfg.label}: ${n.title}`}
+                      className="group relative flex items-start gap-4 w-full px-5 py-4 text-left cursor-pointer hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:outline-none"
                     >
                       {/* Unread indicator dot */}
                       <div className="flex flex-col items-center gap-2 shrink-0 pt-1">
@@ -147,7 +167,7 @@ export default function Notifications() {
                           {/* Course pill (if course-specific) */}
                           {course && (
                             <span
-                              className="text-[9px] font-bold px-1.5 py-0.5 rounded"
+                              className="text-[10px] font-bold px-1.5 py-0.5 rounded"
                               style={{ background: `${course.color}18`, color: course.color }}
                             >
                               {course.abbr}
@@ -155,7 +175,7 @@ export default function Notifications() {
                           )}
                           {/* Type badge */}
                           <span
-                            className="text-[9px] font-bold px-1.5 py-0.5 rounded"
+                            className="text-[10px] font-bold px-1.5 py-0.5 rounded"
                             style={{ background: cfg.bg, color: cfg.color }}
                           >
                             {cfg.label.toUpperCase()}
@@ -176,7 +196,20 @@ export default function Notifications() {
 
                         <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1.5">{n.time}</p>
                       </div>
-                    </button>
+
+                      {/* Hover-only dismiss button — mark read without navigating */}
+                      {n.unread && (
+                        <button
+                          type="button"
+                          onClick={dismissNotification}
+                          aria-label="Mark as read"
+                          title="Mark as read"
+                          className="absolute top-3 right-3 p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-200/70 dark:text-gray-500 dark:hover:text-gray-200 dark:hover:bg-[#2D3A52]/80 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
+                        >
+                          <X size={13} />
+                        </button>
+                      )}
+                    </div>
                   )
                 })}
               </div>

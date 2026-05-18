@@ -285,7 +285,7 @@ function ToolCard({ tool, expanded, onToggleExpand, onLaunch }: ToolCardProps) {
           disabled={isInactive}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-all ${
             isInactive
-              ? 'bg-gray-100 dark:bg-[#232d42] text-gray-400 dark:text-gray-500 cursor-default'
+              ? 'bg-gray-100 dark:bg-[#232d42] text-gray-400 dark:text-gray-500 cursor-not-allowed'
               : isSetup
                 ? 'border hover:opacity-90'
                 : 'text-white hover:opacity-90'

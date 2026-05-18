@@ -4,6 +4,7 @@ import { discussionThreads, courses } from '../data/mockData'
 import type { DiscussionThread } from '../data/mockData'
 import { MessageCircle, Plus, ChevronRight, X, Send } from '../components/Icons'
 import { useToast } from '../context/ToastContext'
+import ThreadDetailModal from '../components/ThreadDetailModal'
 
 // ─── Tag config ───────────────────────────────────────────────────────────────
 
@@ -34,6 +35,10 @@ export default function Communities() {
   const [draftTag, setDraftTag]         = useState<DiscussionThread['tag']>('discussion')
   const [draftCourseId, setDraftCourseId] = useState<string>('')   // '' = college-wide
   const [localThreads, setLocalThreads] = useState<DiscussionThread[]>([])
+  // Thread detail modal — opens when a thread card is clicked. Replies added in
+  // the modal live here, keyed by thread id, so they persist across reopens.
+  const [openThreadId, setOpenThreadId] = useState<string | null>(null)
+  const [threadReplies, setThreadReplies] = useState<Record<string, string[]>>({})
 
   // Combined list — newly composed threads appear at the top so the user sees
   // the result of their action immediately
@@ -273,8 +278,18 @@ export default function Communities() {
             return (
               <div
                 key={thread.id}
-                onClick={() => { markRead(thread.id); toast(`Opening "${thread.title.slice(0, 40)}…"`, 'info') }}
-                className={`bg-white dark:bg-[#1A2236] rounded-2xl border transition-all cursor-pointer hover:shadow-sm dark:hover:shadow-[0_2px_16px_rgba(0,0,0,0.2)] ${
+                onClick={() => { markRead(thread.id); setOpenThreadId(thread.id) }}
+                role="button"
+                tabIndex={0}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    markRead(thread.id)
+                    setOpenThreadId(thread.id)
+                  }
+                }}
+                aria-label={`Open thread: ${thread.title}`}
+                className={`bg-white dark:bg-[#1A2236] rounded-2xl border transition-all cursor-pointer hover:shadow-sm dark:hover:shadow-[0_2px_16px_rgba(0,0,0,0.2)] focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:outline-none ${
                   isRead
                     ? 'border-gray-100 dark:border-[#2D3A52]'
                     : 'border-[#2563EB]/20 dark:border-[#60A5FA]/15'
@@ -350,6 +365,25 @@ export default function Communities() {
           })}
         </div>
       )}
+
+      {/* Thread detail modal — renders only when openThreadId is set */}
+      {openThreadId && (() => {
+        const thread = allThreads.find(t => t.id === openThreadId)
+        if (!thread) return null
+        return (
+          <ThreadDetailModal
+            thread={thread}
+            sessionReplies={threadReplies[thread.id] ?? []}
+            onClose={() => setOpenThreadId(null)}
+            onReplySubmit={text =>
+              setThreadReplies(prev => ({
+                ...prev,
+                [thread.id]: [...(prev[thread.id] ?? []), text],
+              }))
+            }
+          />
+        )
+      })()}
     </div>
   )
 }
