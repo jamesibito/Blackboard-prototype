@@ -4,6 +4,7 @@ import TopBar from './TopBar'
 import ToastContainer from './ToastContainer'
 import DemoBanner from './DemoBanner'
 import OnboardingModal from './OnboardingModal'
+import TypographySwitcher from './TypographySwitcher'
 
 /**
  * resetDemo
@@ -88,6 +89,9 @@ export default function Layout() {
       <ToastContainer />
       {/* First-visit onboarding overlay — gated on localStorage inside the component */}
       <OnboardingModal />
+      {/* Typography test switcher — branch-only. Lives in `type-exploration`
+          and is intentionally NOT on main. Remove this line when merging back. */}
+      <TypographySwitcher />
     </div>
   )
 }
