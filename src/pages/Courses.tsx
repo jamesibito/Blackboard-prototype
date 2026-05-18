@@ -19,7 +19,7 @@ export default function Courses() {
       <div className="flex items-center justify-between mb-5">
         <div>
           <h1 className="text-[24px] font-bold text-gray-900 dark:text-gray-100 tracking-tight">Courses</h1>
-          <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-0.5">Fall 2022 · {courses.length} enrolled</p>
+          <p className="text-[13px] text-gray-400 dark:text-gray-400 mt-0.5">Fall 2022 · {courses.length} enrolled</p>
         </div>
       </div>
 
@@ -56,8 +56,8 @@ export default function Courses() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3 className="font-bold text-[14px] text-gray-900 dark:text-gray-100 leading-snug">{c.name}</h3>
-                      <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{c.code}</p>
-                      <p className="text-[11px] text-gray-400 dark:text-gray-500">{c.instructor}</p>
+                      <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">{c.code}</p>
+                      <p className="text-[11px] text-gray-400 dark:text-gray-400">{c.instructor}</p>
                     </div>
                     {lg && (
                       <span
@@ -72,7 +72,7 @@ export default function Courses() {
                   {/* Progress */}
                   <div className="mb-4">
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-[11px] font-medium text-gray-400 dark:text-gray-500">Completion</span>
+                      <span className="text-[11px] font-medium text-gray-400 dark:text-gray-400">Completion</span>
                       <span className="text-[11px] font-bold text-gray-600 dark:text-gray-400">{c.completion}%</span>
                     </div>
                     <div className="h-1.5 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
@@ -82,27 +82,27 @@ export default function Courses() {
                       />
                     </div>
                     <div className="flex items-center justify-between mt-1">
-                      <span className="text-[10px] text-gray-400 dark:text-gray-500">
+                      <span className="text-[10px] text-gray-400 dark:text-gray-400">
                         {c.completedModules}/{c.moduleCount} modules
                       </span>
-                      <span className="text-[10px] text-gray-400 dark:text-gray-500">{c.credits} cr.</span>
+                      <span className="text-[10px] text-gray-400 dark:text-gray-400">{c.credits} cr.</span>
                     </div>
                   </div>
 
                   {/* Footer */}
                   <div className="flex items-center justify-between pt-3 border-t border-gray-50 dark:border-[#232d42]">
-                    <div className="flex items-center gap-1.5 text-[11px] text-gray-400 dark:text-gray-500">
+                    <div className="flex items-center gap-1.5 text-[11px] text-gray-400 dark:text-gray-400">
                       <Clock size={11} />
                       <span>{c.lastActivity}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       {c.files.length > 0 && (
-                        <div className="flex items-center gap-1 text-[11px] text-gray-400 dark:text-gray-500">
+                        <div className="flex items-center gap-1 text-[11px] text-gray-400 dark:text-gray-400">
                           <Folder size={11} />
                           <span>{c.files.length}</span>
                         </div>
                       )}
-                      <ChevronRight size={14} className={`text-gray-300 dark:text-gray-600 transition-transform duration-200 ${isSelected ? 'rotate-90' : ''}`} />
+                      <ChevronRight size={14} className={`text-gray-300 dark:text-gray-500 transition-transform duration-200 ${isSelected ? 'rotate-90' : ''}`} />
                     </div>
                   </div>
                 </div>
@@ -127,7 +127,7 @@ export default function Courses() {
                   </div>
                   <div>
                     <h2 className="font-bold text-[15px] text-gray-900 dark:text-gray-100 leading-tight">{selected.name}</h2>
-                    <p className="text-[12px] text-gray-400 dark:text-gray-500">{selected.code}</p>
+                    <p className="text-[12px] text-gray-400 dark:text-gray-400">{selected.code}</p>
                   </div>
                 </div>
                 <button
@@ -150,7 +150,7 @@ export default function Courses() {
                   { label: 'Credits',    value: `${selected.credits} credit hrs` },
                 ].map(({ label, value }) => (
                   <div key={label} className="bg-gray-50 dark:bg-[#131825] rounded-xl px-3 py-2.5">
-                    <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">{label}</p>
+                    <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide">{label}</p>
                     <p className="text-[12px] font-medium text-gray-800 dark:text-gray-200 mt-0.5 leading-snug">{value}</p>
                   </div>
                 ))}
@@ -158,7 +158,7 @@ export default function Courses() {
 
               {/* Modules */}
               <div>
-                <h3 className="text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2">
+                <h3 className="text-[11px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide mb-2">
                   Course Modules
                 </h3>
                 {courseModules[selected.id] ? (
@@ -170,16 +170,16 @@ export default function Courses() {
                       >
                         <CheckCircle
                           size={14}
-                          className={m.completed ? 'text-emerald-500 shrink-0' : 'text-gray-300 dark:text-gray-600 shrink-0'}
+                          className={m.completed ? 'text-emerald-500 shrink-0' : 'text-gray-300 dark:text-gray-500 shrink-0'}
                         />
                         <span className={`text-[12px] flex-1 leading-snug ${
                           m.completed
-                            ? 'text-gray-400 dark:text-gray-500'
+                            ? 'text-gray-400 dark:text-gray-400'
                             : 'text-gray-900 dark:text-gray-100 font-medium'
                         }`}>
                           {m.title}
                         </span>
-                        <span className="text-[10px] text-gray-400 dark:text-gray-500 shrink-0">
+                        <span className="text-[10px] text-gray-400 dark:text-gray-400 shrink-0">
                           {m.itemCount}
                         </span>
                       </div>
@@ -187,8 +187,8 @@ export default function Courses() {
                   </div>
                 ) : (
                   <div className="text-center py-5">
-                    <BookOpen size={24} className="text-gray-300 dark:text-gray-600 mx-auto mb-2" />
-                    <p className="text-[12px] text-gray-400 dark:text-gray-500">Modules will appear here when published</p>
+                    <BookOpen size={24} className="text-gray-300 dark:text-gray-500 mx-auto mb-2" />
+                    <p className="text-[12px] text-gray-400 dark:text-gray-400">Modules will appear here when published</p>
                   </div>
                 )}
               </div>

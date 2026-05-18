@@ -28,7 +28,7 @@ export default function CoursePage() {
       <div className="flex items-center justify-center h-[60vh]">
         <div className="text-center max-w-[320px] mx-auto">
           <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-[#1A2236] border border-gray-100 dark:border-[#2D3A52] flex items-center justify-center mx-auto mb-5">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 dark:text-gray-500">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 dark:text-gray-400">
               <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
             </svg>
           </div>

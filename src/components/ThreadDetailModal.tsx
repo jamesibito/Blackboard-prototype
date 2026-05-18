@@ -180,13 +180,13 @@ export default function ThreadDetailModal({ thread, sessionReplies, onClose, onR
                 </span>
               )}
               {thread.isPinned && (
-                <span className="text-[11px] font-bold text-gray-400 dark:text-gray-500">📌 Pinned</span>
+                <span className="text-[11px] font-bold text-gray-400 dark:text-gray-400">📌 Pinned</span>
               )}
             </div>
             <button
               onClick={onClose}
               aria-label="Close thread"
-              className="p-1.5 rounded-lg text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-[#232d42] hover:text-gray-600 dark:hover:text-gray-300 transition-colors shrink-0 -mt-1 -mr-1"
+              className="p-1.5 rounded-lg text-gray-400 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-[#232d42] hover:text-gray-600 dark:hover:text-gray-300 transition-colors shrink-0 -mt-1 -mr-1"
             >
               <X size={16} aria-hidden="true" />
             </button>
@@ -222,7 +222,7 @@ export default function ThreadDetailModal({ thread, sessionReplies, onClose, onR
           {/* Replies section */}
           {(baseReplies.length > 0 || sessionReplies.length > 0) && (
             <section className="border-t border-gray-100 dark:border-[#2D3A52] pt-5">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 flex items-center gap-1.5">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-400 mb-3 flex items-center gap-1.5">
                 <Reply size={11} />
                 Replies
               </p>
@@ -239,7 +239,7 @@ export default function ThreadDetailModal({ thread, sessionReplies, onClose, onR
                     <div className="flex-1 min-w-0">
                       <div className="flex items-baseline gap-2 mb-0.5">
                         <span className="text-[13px] font-semibold text-gray-900 dark:text-gray-100">{r.authorName}</span>
-                        <span className="text-[11px] text-gray-400 dark:text-gray-500">
+                        <span className="text-[11px] text-gray-400 dark:text-gray-400">
                           {r.daysAgo === 0 ? 'today' : r.daysAgo === 1 ? 'yesterday' : `${r.daysAgo} days ago`}
                         </span>
                       </div>
@@ -250,7 +250,7 @@ export default function ThreadDetailModal({ thread, sessionReplies, onClose, onR
 
                 {/* "And N more replies" — implies a deeper thread without rendering them all */}
                 {moreCount > 0 && (
-                  <p className="text-[12px] text-gray-400 dark:text-gray-500 italic pl-11 py-1">
+                  <p className="text-[12px] text-gray-400 dark:text-gray-400 italic pl-11 py-1">
                     …and {moreCount} more {moreCount === 1 ? 'reply' : 'replies'} in this thread.
                   </p>
                 )}
@@ -266,7 +266,7 @@ export default function ThreadDetailModal({ thread, sessionReplies, onClose, onR
                         <p className="text-[12px] font-semibold text-gray-900 dark:text-gray-100 mb-0.5">Kevin H.</p>
                         <p className="text-[13px] text-gray-700 dark:text-gray-300 leading-relaxed">{r}</p>
                       </div>
-                      <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1 px-1">Just now</p>
+                      <p className="text-[10px] text-gray-400 dark:text-gray-400 mt-1 px-1">Just now</p>
                     </div>
                   </div>
                 ))}
@@ -296,14 +296,14 @@ export default function ThreadDetailModal({ thread, sessionReplies, onClose, onR
               className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-semibold transition-all shrink-0 ${
                 draft.trim()
                   ? 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white'
-                  : 'bg-gray-100 dark:bg-[#232d42] text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                  : 'bg-gray-100 dark:bg-[#232d42] text-gray-400 dark:text-gray-400 cursor-not-allowed'
               }`}
             >
               <Send size={14} />
               Reply
             </button>
           </div>
-          <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1.5 pl-10">⌘ + Enter to send · ESC to close</p>
+          <p className="text-[10px] text-gray-400 dark:text-gray-400 mt-1.5 pl-10">⌘ + Enter to send · ESC to close</p>
         </footer>
       </div>
     </div>

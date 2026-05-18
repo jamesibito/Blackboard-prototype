@@ -47,7 +47,7 @@ export default function CourseAnnouncements({ announcements, courseColor }: Prop
               )}
             </div>
             <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-2">{ann.body}</p>
-            <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1.5">{ann.author} · {ann.date}</p>
+            <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-1.5">{ann.author} · {ann.date}</p>
           </div>
         ))}
       </div>

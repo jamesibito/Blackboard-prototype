@@ -36,9 +36,18 @@ function RecentGrades() {
     return { score, total, pct: total > 0 ? Math.round((score / total) * 100) : 0 }
   }
 
-  // Pull all graded assignments, newest first. Assignments are already in
-  // reverse-chronological order in mockData, so we just slice the top 5.
-  const recent = assignments.filter(a => a.status === 'graded').slice(0, 5)
+  // Pull all graded assignments, newest first. Explicit sort by submittedDate
+  // descending — don't rely on mockData array order, which isn't guaranteed
+  // strictly chronological (e.g. asgn-vd-2 dated Nov 28 sits between Dec 20 items).
+  const recent = assignments
+    .filter(a => a.status === 'graded' && !!a.submittedDate)
+    .sort((a, b) => {
+      // Parse "Dec 18, 2022" → epoch ms for a stable comparison
+      const aT = Date.parse(a.submittedDate ?? '') || 0
+      const bT = Date.parse(b.submittedDate ?? '') || 0
+      return bT - aT
+    })
+    .slice(0, 5)
 
   // Pct → swatch colour. Mirrors the Grades page convention.
   function pctTone(pct: number) {
@@ -53,7 +62,7 @@ function RecentGrades() {
       <div className="flex items-center justify-between px-5 pt-5 pb-3">
         <div>
           <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Recent Grades</h2>
-          <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">Latest returned work</p>
+          <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">Latest returned work</p>
         </div>
         <Link to="/grades" className="text-[12px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline">
           View all
@@ -81,7 +90,7 @@ function RecentGrades() {
                   >
                     {course.abbr}
                   </span>
-                  <span className="text-[10px] text-gray-400 dark:text-gray-500 tabular-nums">{score}/{total}</span>
+                  <span className="text-[10px] text-gray-400 dark:text-gray-400 tabular-nums">{score}/{total}</span>
                 </div>
               </div>
               <div
@@ -200,14 +209,14 @@ export default function Dashboard() {
                     <h3 className="font-semibold text-[13px] text-gray-900 dark:text-gray-100 truncate group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors">
                       {c.name}
                     </h3>
-                    <span className="text-[11px] text-gray-400 dark:text-gray-500 shrink-0">{c.instructor.split(' ')[1]}</span>
+                    <span className="text-[11px] text-gray-400 dark:text-gray-400 shrink-0">{c.instructor.split(' ')[1]}</span>
                   </div>
-                  <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{c.code}</p>
+                  <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">{c.code}</p>
                   <div className="mt-2 flex items-center gap-2">
                     <div className="flex-1 h-1 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
                       <div className="h-full rounded-full" style={{ width: `${c.completion}%`, background: c.color }} />
                     </div>
-                    <span className="text-[10px] text-gray-400 dark:text-gray-500 shrink-0 tabular-nums">{c.completion}%</span>
+                    <span className="text-[10px] text-gray-400 dark:text-gray-400 shrink-0 tabular-nums">{c.completion}%</span>
                     {c.resources && c.resources.length > 0 && (
                       <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-gray-100 dark:bg-[#232d42] text-gray-500 dark:text-gray-400 shrink-0 font-medium">
                         {c.resources.length} files
@@ -251,9 +260,9 @@ export default function Dashboard() {
                       <p className="text-[13px] font-medium text-gray-900 dark:text-gray-100 truncate group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors">
                         {a.title}
                       </p>
-                      <p className="text-[11px] text-gray-400 dark:text-gray-500 truncate">{a.date}</p>
+                      <p className="text-[11px] text-gray-400 dark:text-gray-400 truncate">{a.date}</p>
                     </div>
-                    <ChevronRight size={14} className="text-gray-300 dark:text-gray-600 shrink-0" />
+                    <ChevronRight size={14} className="text-gray-300 dark:text-gray-500 shrink-0" />
                   </>
                 )
                 return isExternal ? (
@@ -496,7 +505,7 @@ function PriorityCard({ compact = false }: { compact?: boolean }) {
           <p className="text-[14px] font-semibold text-gray-900 dark:text-gray-100 mt-0.5 group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors">
             {tomorrow.title}
           </p>
-          <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{tomorrow.dueDay} · {course.name}</p>
+          <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">{tomorrow.dueDay} · {course.name}</p>
         </div>
         <ChevronRight size={16} className="text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 shrink-0" />
       </Link>
@@ -552,7 +561,7 @@ function PriorityCard({ compact = false }: { compact?: boolean }) {
           <p className="text-[14px] font-semibold text-gray-900 dark:text-gray-100 mt-0.5 group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors truncate">
             {unreadGrade.title}
           </p>
-          <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{course.name}</p>
+          <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">{course.name}</p>
         </div>
         <ChevronRight size={16} className="text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 shrink-0" />
       </Link>
@@ -623,7 +632,7 @@ function TodaySchedule() {
   const statusConfig = {
     upcoming: { label: 'Up next',    bg: 'bg-emerald-50 dark:bg-emerald-500/10', text: 'text-emerald-600 dark:text-emerald-400' },
     later:    { label: 'Later today', bg: 'bg-gray-100 dark:bg-[#232d42]',        text: 'text-gray-500 dark:text-gray-400' },
-    done:     { label: 'Done',        bg: 'bg-gray-100 dark:bg-[#232d42]',        text: 'text-gray-400 dark:text-gray-500' },
+    done:     { label: 'Done',        bg: 'bg-gray-100 dark:bg-[#232d42]',        text: 'text-gray-400 dark:text-gray-400' },
   }
 
   const fmt = (h: number) => {
@@ -637,7 +646,7 @@ function TodaySchedule() {
       <div className="flex items-center justify-between px-5 pt-5 pb-3">
         <div>
           <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Today</h2>
-          <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">Wed, Dec 14</p>
+          <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">Wed, Dec 14</p>
         </div>
         <Link to="/calendar" className="text-[12px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline">
           Full schedule
@@ -652,31 +661,47 @@ function TodaySchedule() {
               <Link
                 key={cls.course.id}
                 to={`/courses/${cls.course.id}`}
-                className={`flex items-center gap-3 px-5 py-3 transition-colors hover:bg-gray-50 dark:hover:bg-[#232d42] group ${cls.status === 'done' ? 'opacity-50' : ''}`}
+                className={`relative flex items-center gap-3 px-5 py-3 transition-colors hover:bg-gray-50 dark:hover:bg-[#232d42] group`}
               >
                 {/* Colour dot */}
                 <div
-                  className="w-2.5 h-2.5 rounded-full shrink-0"
+                  className={`w-2.5 h-2.5 rounded-full shrink-0 ${cls.status === 'done' ? 'opacity-50' : ''}`}
                   style={{ background: cls.status === 'done' ? '#94A3B8' : cls.course.color }}
                 />
-                <div className="flex-1 min-w-0">
-                  <p className={`text-[13px] font-semibold leading-snug group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors truncate ${cls.status === 'done' ? 'text-gray-400 dark:text-gray-500' : 'text-gray-900 dark:text-gray-100'}`}>
+                <div className={`flex-1 min-w-0 ${cls.status === 'done' ? 'opacity-60' : ''}`}>
+                  <p className={`text-[13px] font-semibold leading-snug group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors truncate ${cls.status === 'done' ? 'text-gray-400 dark:text-gray-400' : 'text-gray-900 dark:text-gray-100'}`}>
                     {cls.course.name}
                   </p>
-                  <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">
+                  <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">
                     {fmt(cls.startHour)} – {fmt(cls.endHour)} · {cls.room}
                   </p>
                 </div>
-                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0 ${sc.bg} ${sc.text}`}>
-                  {sc.label}
-                </span>
+                {/* Done classes get a "Review" hover-action overlay; up next /
+                    later stick with the static status pill */}
+                {cls.status === 'done' ? (
+                  <>
+                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0 transition-opacity group-hover:opacity-0 ${sc.bg} ${sc.text}`}>
+                      {sc.label}
+                    </span>
+                    <span
+                      className="absolute right-5 text-[10px] font-semibold px-2 py-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity bg-[#2563EB]/10 text-[#2563EB] dark:bg-[#2563EB]/20 dark:text-[#60A5FA] pointer-events-none"
+                      aria-hidden="true"
+                    >
+                      Review →
+                    </span>
+                  </>
+                ) : (
+                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0 ${sc.bg} ${sc.text}`}>
+                    {sc.label}
+                  </span>
+                )}
               </Link>
             )
           })}
         </div>
       ) : (
         <div className="px-5 pb-5 text-center py-6">
-          <p className="text-[13px] text-gray-400 dark:text-gray-500">No classes scheduled today.</p>
+          <p className="text-[13px] text-gray-400 dark:text-gray-400">No classes scheduled today.</p>
         </div>
       )}
     </div>
@@ -731,14 +756,14 @@ function DeadlineTimeline() {
                 />
                 <span
                   className="text-[10.5px] font-semibold text-gray-800 dark:text-gray-200 group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors text-center max-w-[80px] leading-tight mt-0.5"
-                  style={{ minHeight: 28, display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}
+                  style={{ minHeight: 28, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                 >
                   {d.title}
                 </span>
                 <span className="text-[9px] font-bold px-1.5 py-0.5 rounded" style={{ background: `${course.color}18`, color: course.color }}>
                   {course.abbr}
                 </span>
-                <span className="text-[9px] text-gray-400 dark:text-gray-500 tabular-nums">Dec {dayNum} · {daysOut}d</span>
+                <span className="text-[9px] text-gray-400 dark:text-gray-400 tabular-nums">Dec {dayNum} · {daysOut}d</span>
               </Link>
             )
           })}
@@ -785,7 +810,7 @@ function MiniCalendar() {
       </div>
       <div className="grid grid-cols-7 gap-y-1.5 text-center">
         {days.map(d => (
-          <div key={d} className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 pb-1">{d}</div>
+          <div key={d} className="text-[10px] font-semibold text-gray-400 dark:text-gray-400 pb-1">{d}</div>
         ))}
         {weeks.flat().map((day, i) => {
           const hl      = day ? highlights[day] : undefined

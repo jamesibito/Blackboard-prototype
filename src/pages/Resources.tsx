@@ -38,7 +38,7 @@ export default function Resources() {
       <div className="flex items-center justify-between mb-5">
         <div>
           <h1 className="text-[24px] font-bold text-gray-900 dark:text-gray-100 tracking-tight">Resources</h1>
-          <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-0.5">
+          <p className="text-[13px] text-gray-400 dark:text-gray-400 mt-0.5">
             Fall 2022 · {totalFiles} files across {coursesWithResources.length} courses
           </p>
         </div>
@@ -116,7 +116,7 @@ export default function Resources() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <h2 className="font-bold text-[14px] text-gray-900 dark:text-gray-100 leading-tight">{course.name}</h2>
-                  <p className="text-[11px] text-gray-400 dark:text-gray-500">{course.code} · {course.instructor}</p>
+                  <p className="text-[11px] text-gray-400 dark:text-gray-400">{course.code} · {course.instructor}</p>
                 </div>
                 <Link
                   to={`/courses/${course.id}`}
@@ -149,11 +149,11 @@ export default function Resources() {
                         <p className="text-[13px] font-semibold text-gray-900 dark:text-gray-100 truncate group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors">
                           {r.title}
                         </p>
-                        <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">
+                        <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">
                           {r.filename}
-                          {r.size && <span className="ml-2 text-gray-300 dark:text-gray-600">·</span>}
+                          {r.size && <span className="ml-2 text-gray-300 dark:text-gray-500">·</span>}
                           {r.size && <span className="ml-2">{r.size}</span>}
-                          <span className="ml-2 text-gray-300 dark:text-gray-600">·</span>
+                          <span className="ml-2 text-gray-300 dark:text-gray-500">·</span>
                           <span className="ml-2">Uploaded {r.uploadedOn}</span>
                         </p>
                       </div>
@@ -192,10 +192,10 @@ export default function Resources() {
       ) && (
         <div className="flex flex-col items-center justify-center py-20 px-6">
           <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-[#232d42] flex items-center justify-center mb-4">
-            <Search size={26} className="text-gray-400 dark:text-gray-500" />
+            <Search size={26} className="text-gray-400 dark:text-gray-400" />
           </div>
           <p className="text-[15px] font-semibold text-gray-700 dark:text-gray-300">No files found</p>
-          <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-1 text-center max-w-[240px]">
+          <p className="text-[13px] text-gray-400 dark:text-gray-400 mt-1 text-center max-w-[240px]">
             Try a different search term or file type.
           </p>
           {(query || activeType !== 'all') && (

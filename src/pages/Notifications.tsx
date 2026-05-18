@@ -48,7 +48,7 @@ export default function Notifications() {
       <div className="flex items-start justify-between mb-6">
         <div>
           <h1 className="text-[24px] font-bold text-gray-900 dark:text-gray-100 tracking-tight">Notifications</h1>
-          <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-0.5">
+          <p className="text-[13px] text-gray-400 dark:text-gray-400 mt-0.5">
             {unreadCount > 0 ? `${unreadCount} unread` : 'All caught up'}
           </p>
         </div>
@@ -74,7 +74,7 @@ export default function Notifications() {
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium border transition-all duration-150 ${
                 active
                   ? ''
-                  : 'border-gray-200 dark:border-[#2D3A52] text-gray-400 dark:text-gray-500 hover:bg-gray-50 dark:hover:bg-[#232d42] hover:text-gray-700 dark:hover:text-gray-300'
+                  : 'border-gray-200 dark:border-[#2D3A52] text-gray-400 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#232d42] hover:text-gray-700 dark:hover:text-gray-300'
               }`}
               style={active && cfg ? { background: cfg.bg, borderColor: cfg.color, color: cfg.color }
                 : active ? { background: '#2563EB18', borderColor: '#2563EB', color: '#2563EB' }
@@ -96,7 +96,7 @@ export default function Notifications() {
           return (
             <div key={group}>
               {/* Group heading */}
-              <h2 className="text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2 px-1">
+              <h2 className="text-[11px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide mb-2 px-1">
                 {groupLabels[group]}
               </h2>
 
@@ -194,7 +194,7 @@ export default function Notifications() {
                           {n.body}
                         </p>
 
-                        <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1.5">{n.time}</p>
+                        <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-1.5">{n.time}</p>
                       </div>
 
                       {/* Hover-only dismiss button — mark read without navigating */}
@@ -204,7 +204,7 @@ export default function Notifications() {
                           onClick={dismissNotification}
                           aria-label="Mark as read"
                           title="Mark as read"
-                          className="absolute top-3 right-3 p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-200/70 dark:text-gray-500 dark:hover:text-gray-200 dark:hover:bg-[#2D3A52]/80 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
+                          className="absolute top-3 right-3 p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-200/70 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-[#2D3A52]/80 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
                         >
                           <X size={13} />
                         </button>
@@ -221,12 +221,12 @@ export default function Notifications() {
         {filtered.length === 0 && typeFilter !== 'All' && (
           <div className="flex flex-col items-center justify-center py-20 px-6">
             <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-[#232d42] flex items-center justify-center mb-4">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 dark:text-gray-500">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 dark:text-gray-400">
                 <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" />
               </svg>
             </div>
             <p className="text-[15px] font-semibold text-gray-700 dark:text-gray-300">No {typeFilter.toLowerCase()} notifications</p>
-            <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-1 text-center max-w-[240px]">
+            <p className="text-[13px] text-gray-400 dark:text-gray-400 mt-1 text-center max-w-[240px]">
               Nothing here right now. Check back later or broaden your filter.
             </p>
             <button
@@ -247,7 +247,7 @@ export default function Notifications() {
               </svg>
             </div>
             <p className="text-[15px] font-semibold text-gray-700 dark:text-gray-300">You're all caught up</p>
-            <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-1 text-center max-w-[240px]">
+            <p className="text-[13px] text-gray-400 dark:text-gray-400 mt-1 text-center max-w-[240px]">
               No new notifications. We'll let you know when something needs your attention.
             </p>
           </div>

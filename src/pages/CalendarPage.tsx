@@ -179,7 +179,7 @@ export default function CalendarPage() {
             {/* Day headers */}
             <div className="grid grid-cols-7 border-b border-gray-100 dark:border-[#2D3A52]">
               {DAY_HEADERS.map(d => (
-                <div key={d} className="px-3 py-2.5 text-[12px] font-semibold text-gray-400 dark:text-gray-500 text-center">
+                <div key={d} className="px-3 py-2.5 text-[12px] font-semibold text-gray-400 dark:text-gray-400 text-center">
                   {d}
                 </div>
               ))}
@@ -239,7 +239,7 @@ export default function CalendarPage() {
                             <button
                               type="button"
                               onClick={e => { e.stopPropagation(); setSelectedDay(cell.day) }}
-                              className="text-[10px] text-gray-400 dark:text-gray-500 pl-1 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors"
+                              className="text-[10px] text-gray-400 dark:text-gray-400 pl-1 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors"
                             >
                               +{more} more
                             </button>
@@ -260,7 +260,7 @@ export default function CalendarPage() {
                 <>
                   <div className="flex items-center justify-between mb-3">
                     <div>
-                      <p className="text-[12px] text-gray-400 dark:text-gray-500 font-medium">{MONTHS[month]}</p>
+                      <p className="text-[12px] text-gray-400 dark:text-gray-400 font-medium">{MONTHS[month]}</p>
                       <p className="text-[28px] font-bold text-gray-900 dark:text-gray-100 leading-none">{selectedDay}</p>
                     </div>
                     {selectedDay === TODAY && (
@@ -273,7 +273,7 @@ export default function CalendarPage() {
                   {/* Class schedule */}
                   {selectedClasses.length > 0 && (
                     <div className="mb-3">
-                      <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2">Classes</p>
+                      <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide mb-2">Classes</p>
                       <div className="space-y-1.5">
                         {selectedClasses.map((cb, i) => {
                           const course = getCourse(cb.courseId)
@@ -282,8 +282,8 @@ export default function CalendarPage() {
                             <div key={i} className="p-2.5 rounded-xl border" style={{ borderColor: `${course.color}30`, background: `${course.color}08` }}>
                               <p className="text-[11px] font-semibold" style={{ color: course.color }}>{course.name}</p>
                               <div className="flex items-center gap-1 mt-0.5">
-                                <Clock size={10} className="text-gray-400 dark:text-gray-500" />
-                                <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                                <Clock size={10} className="text-gray-400 dark:text-gray-400" />
+                                <p className="text-[10px] text-gray-400 dark:text-gray-400">
                                   {formatHour(cb.startHour)} – {formatHour(cb.endHour)} · {cb.room}
                                 </p>
                               </div>
@@ -298,7 +298,7 @@ export default function CalendarPage() {
                   {selectedEvents.length > 0 ? (
                     <div>
                       {selectedClasses.length > 0 && (
-                        <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2">Events & Deadlines</p>
+                        <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide mb-2">Events & Deadlines</p>
                       )}
                       <div className="space-y-2">
                         {selectedEvents.map(evt => {
@@ -312,18 +312,18 @@ export default function CalendarPage() {
                               title={`Open ${course.name}`}
                             >
                               <p className="text-[12px] font-semibold" style={{ color: evt.color }}>{evt.title}</p>
-                              <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{course.name}</p>
+                              <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">{course.name}</p>
                             </Link>
                           )
                         })}
                       </div>
                     </div>
                   ) : selectedClasses.length === 0 ? (
-                    <p className="text-[12px] text-gray-400 dark:text-gray-500 text-center py-4">No events</p>
+                    <p className="text-[12px] text-gray-400 dark:text-gray-400 text-center py-4">No events</p>
                   ) : null}
                 </>
               ) : (
-                <p className="text-[12px] text-gray-400 dark:text-gray-500 text-center py-6">Select a day to see events</p>
+                <p className="text-[12px] text-gray-400 dark:text-gray-400 text-center py-6">Select a day to see events</p>
               )}
             </div>
           </div>
@@ -340,7 +340,7 @@ export default function CalendarPage() {
             if (events.length === 0) {
               return (
                 <div className="text-center py-12 px-5">
-                  <p className="text-[13px] text-gray-400 dark:text-gray-500">
+                  <p className="text-[13px] text-gray-400 dark:text-gray-400">
                     No events match the active filter.
                   </p>
                 </div>
@@ -362,12 +362,12 @@ export default function CalendarPage() {
                         <div className={`text-[22px] font-bold leading-none ${isToday ? 'text-[#2563EB] dark:text-[#60A5FA]' : 'text-gray-900 dark:text-gray-100'}`}>
                           {evt.day}
                         </div>
-                        <div className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-medium mt-0.5">Dec</div>
+                        <div className="text-[10px] text-gray-400 dark:text-gray-400 uppercase font-medium mt-0.5">Dec</div>
                       </div>
                       <div className="w-1 h-8 rounded-full shrink-0" style={{ background: evt.color }} />
                       <div className="flex-1">
                         <h3 className="text-[14px] font-semibold text-gray-900 dark:text-gray-100">{evt.title}</h3>
-                        <p className="text-[12px] text-gray-400 dark:text-gray-500 mt-0.5">{course.name} · {course.code}</p>
+                        <p className="text-[12px] text-gray-400 dark:text-gray-400 mt-0.5">{course.name} · {course.code}</p>
                       </div>
                       {isToday && (
                         <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#2563EB]/10 text-[#2563EB] dark:text-[#60A5FA]">
@@ -431,7 +431,7 @@ function WeekView() {
           const isToday = date === TODAY
           return (
             <div key={dow} className="py-3 text-center border-l border-gray-50 dark:border-[#1E2A3F] first:border-l-0">
-              <p className="text-[11px] font-medium text-gray-400 dark:text-gray-500">{SHORT_DAYS[dow]}</p>
+              <p className="text-[11px] font-medium text-gray-400 dark:text-gray-400">{SHORT_DAYS[dow]}</p>
               <div className={`w-7 h-7 rounded-full flex items-center justify-center mx-auto mt-0.5 text-[13px] font-bold ${
                 isToday ? 'bg-[#2563EB] text-white' : 'text-gray-700 dark:text-gray-300'
               }`}>
@@ -446,7 +446,7 @@ function WeekView() {
       {weekDeadlines.length > 0 && (
         <div className="grid border-b border-gray-100 dark:border-[#2D3A52]" style={{ gridTemplateColumns: '56px repeat(7, 1fr)' }}>
           <div className="flex items-center justify-end pr-2 py-1.5">
-            <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">Due</span>
+            <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide">Due</span>
           </div>
           {WEEK_DATES.map((date, dow) => {
             const deadlinesOnDay = weekDeadlines.filter(d => parseDec(d.dueDay) === date)
@@ -481,7 +481,7 @@ function WeekView() {
           <div>
             {hours.map(h => (
               <div key={h} className="flex items-start justify-end pr-2 pt-0.5" style={{ height: HOUR_HEIGHT }}>
-                <span className="text-[10px] text-gray-400 dark:text-gray-500 font-medium tabular-nums">{fmt12(h)}</span>
+                <span className="text-[10px] text-gray-400 dark:text-gray-400 font-medium tabular-nums">{fmt12(h)}</span>
               </div>
             ))}
           </div>
@@ -578,7 +578,7 @@ function DayView({ selectedDay, month, year }: { selectedDay: number; month: num
       {/* Deadlines strip */}
       {dayDeadlines.length > 0 && (
         <div className="px-5 py-3 border-b border-gray-50 dark:border-[#1E2A3F] flex gap-2 flex-wrap">
-          <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wide self-center">Due</span>
+          <span className="text-[10px] font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wide self-center">Due</span>
           {dayDeadlines.map(d => {
             const course = getCourse(d.courseId)
             const target = d.assignmentId ? `/courses/${d.courseId}/assignments/${d.assignmentId}` : `/courses/${d.courseId}`
@@ -597,7 +597,7 @@ function DayView({ selectedDay, month, year }: { selectedDay: number; month: num
         <div className="shrink-0 w-14">
           {hours.map(h => (
             <div key={h} className="flex items-start justify-end pr-2 pt-0.5" style={{ height: HOUR_HEIGHT }}>
-              <span className="text-[10px] text-gray-400 dark:text-gray-500 tabular-nums">{fmt12(h)}</span>
+              <span className="text-[10px] text-gray-400 dark:text-gray-400 tabular-nums">{fmt12(h)}</span>
             </div>
           ))}
         </div>
@@ -637,7 +637,7 @@ function DayView({ selectedDay, month, year }: { selectedDay: number; month: num
 
           {dayBlocks.length === 0 && (
             <div className="flex items-center justify-center h-full">
-              <p className="text-[13px] text-gray-400 dark:text-gray-500">No classes scheduled</p>
+              <p className="text-[13px] text-gray-400 dark:text-gray-400">No classes scheduled</p>
             </div>
           )}
         </div>

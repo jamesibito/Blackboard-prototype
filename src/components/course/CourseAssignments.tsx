@@ -43,9 +43,9 @@ export default function CourseAssignments({ courseAssignments, course }: Props) 
                     {a.title}
                   </h3>
                   <div className="flex items-center gap-2 mt-0.5">
-                    <span className="text-[11px] text-gray-400 dark:text-gray-500">Due {a.dueDate}</span>
-                    <span className="text-[11px] text-gray-300 dark:text-gray-600">·</span>
-                    <span className="text-[11px] text-gray-400 dark:text-gray-500">{a.points} pts</span>
+                    <span className="text-[11px] text-gray-400 dark:text-gray-400">Due {a.dueDate}</span>
+                    <span className="text-[11px] text-gray-300 dark:text-gray-500">·</span>
+                    <span className="text-[11px] text-gray-400 dark:text-gray-400">{a.points} pts</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-2.5 shrink-0">
@@ -57,7 +57,7 @@ export default function CourseAssignments({ courseAssignments, course }: Props) 
                   <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-md capitalize ${sc.bg} ${sc.text}`}>
                     {a.status}
                   </span>
-                  <ChevronRight size={14} className="text-gray-300 dark:text-gray-600" />
+                  <ChevronRight size={14} className="text-gray-300 dark:text-gray-500" />
                 </div>
               </Link>
             )
@@ -65,8 +65,8 @@ export default function CourseAssignments({ courseAssignments, course }: Props) 
         </div>
       ) : (
         <div className="text-center py-10 px-5">
-          <Folder size={28} className="text-gray-300 dark:text-gray-600 mx-auto mb-2" />
-          <p className="text-[13px] text-gray-400 dark:text-gray-500">No assignments yet for this course.</p>
+          <Folder size={28} className="text-gray-300 dark:text-gray-500 mx-auto mb-2" />
+          <p className="text-[13px] text-gray-400 dark:text-gray-400">No assignments yet for this course.</p>
         </div>
       )}
     </div>

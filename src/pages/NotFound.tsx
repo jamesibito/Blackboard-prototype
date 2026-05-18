@@ -38,7 +38,7 @@ export default function NotFound() {
         <p className="text-[14px] text-gray-500 dark:text-gray-400 mb-1 leading-relaxed">
           We couldn't find <code className="text-[13px] font-mono bg-gray-100 dark:bg-[#232d42] px-1.5 py-0.5 rounded">{location.pathname}</code> in this prototype.
         </p>
-        <p className="text-[13px] text-gray-400 dark:text-gray-500 mb-6 leading-relaxed">
+        <p className="text-[13px] text-gray-400 dark:text-gray-400 mb-6 leading-relaxed">
           Try one of the links below, or use the sidebar to navigate.
         </p>
 

@@ -121,7 +121,7 @@ export default function Tools() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-[24px] font-bold text-gray-900 dark:text-gray-100 tracking-tight">Tools</h1>
-          <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-0.5">
+          <p className="text-[13px] text-gray-400 dark:text-gray-400 mt-0.5">
             {activeCount} of {tools.length} integrations active this semester
           </p>
         </div>
@@ -139,7 +139,7 @@ export default function Tools() {
                 <h2 id={`tools-${cat}`} className="text-[12px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   {cfg.label}
                 </h2>
-                <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{cfg.description}</p>
+                <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">{cfg.description}</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 {catTools.map(tool => (
@@ -158,7 +158,7 @@ export default function Tools() {
       </div>
 
       {/* ── Footer note ── Real mailto so the link actually does something. */}
-      <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-8 text-center">
+      <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-8 text-center">
         Need a tool added? Contact your instructor or{' '}
         <a
           href="mailto:gbcassist@georgebrown.ca?subject=Blackboard%20tool%20request"
@@ -262,7 +262,7 @@ function ToolCard({ tool, expanded, onToggleExpand, onLaunch }: ToolCardProps) {
       {/* Linked courses */}
       {linkedCourseObjs.length > 0 ? (
         <div className="flex flex-wrap items-center gap-1.5">
-          <span className="text-[10px] text-gray-400 dark:text-gray-500 font-medium">Used in:</span>
+          <span className="text-[10px] text-gray-400 dark:text-gray-400 font-medium">Used in:</span>
           {linkedCourseObjs.map(c => c && (
             <span
               key={c.id}
@@ -274,7 +274,7 @@ function ToolCard({ tool, expanded, onToggleExpand, onLaunch }: ToolCardProps) {
           ))}
         </div>
       ) : (
-        <p className="text-[10px] text-gray-400 dark:text-gray-500">Available to all students</p>
+        <p className="text-[10px] text-gray-400 dark:text-gray-400">Available to all students</p>
       )}
 
       {/* CTA — pinned to bottom of the card */}
@@ -285,7 +285,7 @@ function ToolCard({ tool, expanded, onToggleExpand, onLaunch }: ToolCardProps) {
           disabled={isInactive}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-all ${
             isInactive
-              ? 'bg-gray-100 dark:bg-[#232d42] text-gray-400 dark:text-gray-500 cursor-not-allowed'
+              ? 'bg-gray-100 dark:bg-[#232d42] text-gray-400 dark:text-gray-400 cursor-not-allowed'
               : isSetup
                 ? 'border hover:opacity-90'
                 : 'text-white hover:opacity-90'

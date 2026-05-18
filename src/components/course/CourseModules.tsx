@@ -32,18 +32,18 @@ export default function CourseModules({ modules }: Props) {
               >
                 <CheckCircle
                   size={16}
-                  className={m.completed ? 'text-emerald-500 shrink-0' : 'text-gray-300 dark:text-gray-600 shrink-0'}
+                  className={m.completed ? 'text-emerald-500 shrink-0' : 'text-gray-300 dark:text-gray-500 shrink-0'}
                 />
                 <div className="flex-1 min-w-0">
                   <span className={`text-[13px] leading-snug ${
                     m.completed
-                      ? 'text-gray-400 dark:text-gray-500'
+                      ? 'text-gray-400 dark:text-gray-400'
                       : 'text-gray-900 dark:text-gray-100 font-medium'
                   }`}>
                     {m.title}
                   </span>
                 </div>
-                <span className="text-[11px] text-gray-400 dark:text-gray-500 shrink-0 px-2 py-0.5 bg-gray-100 dark:bg-[#232d42] rounded-md">
+                <span className="text-[11px] text-gray-400 dark:text-gray-400 shrink-0 px-2 py-0.5 bg-gray-100 dark:bg-[#232d42] rounded-md">
                   {m.itemCount} items
                 </span>
                 <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-md ${tc.bg} ${tc.text}`}>
@@ -55,8 +55,8 @@ export default function CourseModules({ modules }: Props) {
         </div>
       ) : (
         <div className="text-center py-10 px-5">
-          <BookOpen size={28} className="text-gray-300 dark:text-gray-600 mx-auto mb-2" />
-          <p className="text-[13px] text-gray-400 dark:text-gray-500">Modules will appear here when published by the instructor.</p>
+          <BookOpen size={28} className="text-gray-300 dark:text-gray-500 mx-auto mb-2" />
+          <p className="text-[13px] text-gray-400 dark:text-gray-400">Modules will appear here when published by the instructor.</p>
         </div>
       )}
     </div>

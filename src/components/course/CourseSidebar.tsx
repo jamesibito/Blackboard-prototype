@@ -111,7 +111,7 @@ export default function CourseSidebar({ course, courseGrade, lg, courseActivity 
           </div>
           {/* Policies */}
           <div className="px-5 pb-5">
-            <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2">Key Policies</p>
+            <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide mb-2">Key Policies</p>
             <ul className="space-y-1.5">
               {course.syllabus.policies.map((p, i) => (
                 <li key={i} className="flex items-start gap-2">
@@ -144,7 +144,7 @@ export default function CourseSidebar({ course, courseGrade, lg, courseActivity 
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-[12px] font-medium text-gray-800 dark:text-gray-200 leading-snug">{a.title}</p>
-                    <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{a.date}</p>
+                    <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">{a.date}</p>
                   </div>
                 </div>
               )
@@ -152,7 +152,7 @@ export default function CourseSidebar({ course, courseGrade, lg, courseActivity 
           </div>
         ) : (
           <div className="px-5 pb-5">
-            <p className="text-[12px] text-gray-400 dark:text-gray-500 text-center py-4">No recent activity</p>
+            <p className="text-[12px] text-gray-400 dark:text-gray-400 text-center py-4">No recent activity</p>
           </div>
         )}
       </div>
@@ -169,12 +169,12 @@ export default function CourseSidebar({ course, courseGrade, lg, courseActivity 
           </div>
           <div>
             <p className="text-[13px] font-semibold text-gray-800 dark:text-gray-200">{course.instructor}</p>
-            <p className="text-[11px] text-gray-400 dark:text-gray-500">{course.room}</p>
+            <p className="text-[11px] text-gray-400 dark:text-gray-400">{course.room}</p>
           </div>
         </div>
         {course.officeHours && (
           <div className="mt-3 px-3 py-2.5 rounded-xl bg-gray-50 dark:bg-[#131825]">
-            <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">Office Hours</p>
+            <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide">Office Hours</p>
             <p className="text-[12px] text-gray-700 dark:text-gray-300 mt-0.5">{course.officeHours}</p>
           </div>
         )}

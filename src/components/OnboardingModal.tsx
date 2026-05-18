@@ -196,7 +196,7 @@ export default function OnboardingModal() {
         <button
           onClick={dismiss}
           aria-label="Skip tour"
-          className="absolute top-3.5 right-3.5 p-1.5 rounded-lg text-gray-400 dark:text-gray-500
+          className="absolute top-3.5 right-3.5 p-1.5 rounded-lg text-gray-400 dark:text-gray-400
             hover:bg-gray-100 dark:hover:bg-[#232d42] hover:text-gray-600 dark:hover:text-gray-300
             transition-colors"
         >
@@ -205,7 +205,7 @@ export default function OnboardingModal() {
 
         {/* ── Step indicator (top left) ────────────────────────────────── */}
         <div
-          className="absolute top-3.5 left-5 text-[11px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 tabular-nums"
+          className="absolute top-3.5 left-5 text-[11px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-400 tabular-nums"
           aria-live="polite"
         >
           {String(step + 1).padStart(2, '0')} / {String(TOTAL).padStart(2, '0')}
@@ -287,7 +287,7 @@ export default function OnboardingModal() {
               disabled={isFirst}
               className={`flex items-center gap-1 px-3 py-2 rounded-xl text-[13px] font-semibold transition-colors
                 ${isFirst
-                  ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
+                  ? 'text-gray-300 dark:text-gray-500 cursor-not-allowed'
                   : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-[#232d42]'}`}
             >
               <ChevronLeft size={14} aria-hidden="true" />

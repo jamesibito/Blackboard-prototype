@@ -50,7 +50,7 @@ export default function CourseHeader({ course, courseGrade, lg }: Props) {
             { label: 'Last Activity', value: course.lastActivity },
           ].map(({ label, value }) => (
             <div key={label} className="bg-gray-50 dark:bg-[#131825] rounded-xl px-3.5 py-3">
-              <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">{label}</p>
+              <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide">{label}</p>
               <p className="text-[12px] font-medium text-gray-800 dark:text-gray-200 mt-1 leading-snug">{value}</p>
             </div>
           ))}
@@ -101,7 +101,7 @@ export default function CourseHeader({ course, courseGrade, lg }: Props) {
           <div className="h-2 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
             <div className="h-full rounded-full transition-all duration-500" style={{ width: `${course.completion}%`, background: course.color }} />
           </div>
-          <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1">{course.completedModules} of {course.moduleCount} modules complete</p>
+          <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-1">{course.completedModules} of {course.moduleCount} modules complete</p>
         </div>
       </div>
     </div>

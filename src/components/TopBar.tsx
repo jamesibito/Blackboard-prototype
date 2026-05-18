@@ -88,7 +88,7 @@ export default function TopBar() {
       {/* Search */}
       <div ref={searchRef} role="search" className="relative w-[380px]">
         <label htmlFor="global-search" className="sr-only">Search courses, resources, and activities</label>
-        <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 pointer-events-none" aria-hidden="true" />
+        <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-400 pointer-events-none" aria-hidden="true" />
         <input
           id="global-search"
           type="text"
@@ -109,7 +109,7 @@ export default function TopBar() {
             <X size={14} aria-hidden="true" />
           </button>
         ) : (
-          <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden sm:flex items-center gap-0.5 text-[10px] text-gray-400 dark:text-gray-500 font-medium">
+          <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden sm:flex items-center gap-0.5 text-[10px] text-gray-400 dark:text-gray-400 font-medium">
             <span className="px-1 py-0.5 bg-gray-100 dark:bg-[#232d42] rounded border border-gray-200 dark:border-[#2D3A52]">⌘</span>
             <span className="px-1 py-0.5 bg-gray-100 dark:bg-[#232d42] rounded border border-gray-200 dark:border-[#2D3A52]">K</span>
           </kbd>
@@ -123,7 +123,7 @@ export default function TopBar() {
                 {/* Courses */}
                 {courseResults.length > 0 && (
                   <>
-                    <div className="px-3 pt-2.5 pb-1 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+                    <div className="px-3 pt-2.5 pb-1 text-[10px] font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wider">
                       Courses
                     </div>
                     {courseResults.map(c => (
@@ -138,7 +138,7 @@ export default function TopBar() {
                         </div>
                         <div>
                           <p className="text-[13px] font-medium text-gray-900 dark:text-gray-100">{c.name}</p>
-                          <p className="text-[11px] text-gray-400 dark:text-gray-500">{c.code} · {c.instructor}</p>
+                          <p className="text-[11px] text-gray-400 dark:text-gray-400">{c.code} · {c.instructor}</p>
                         </div>
                       </button>
                     ))}
@@ -148,7 +148,7 @@ export default function TopBar() {
                 {/* Assignments */}
                 {assignmentResults.length > 0 && (
                   <>
-                    <div className={`px-3 pb-1 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider ${courseResults.length > 0 ? 'pt-2 border-t border-gray-100 dark:border-[#2D3A52]' : 'pt-2.5'}`}>
+                    <div className={`px-3 pb-1 text-[10px] font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wider ${courseResults.length > 0 ? 'pt-2 border-t border-gray-100 dark:border-[#2D3A52]' : 'pt-2.5'}`}>
                       Assignments
                     </div>
                     {assignmentResults.map(a => {
@@ -165,7 +165,7 @@ export default function TopBar() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-[13px] font-medium text-gray-900 dark:text-gray-100 truncate">{a.title}</p>
-                            <p className="text-[11px] text-gray-400 dark:text-gray-500 truncate">{course.name} · Due {a.dueDate}</p>
+                            <p className="text-[11px] text-gray-400 dark:text-gray-400 truncate">{course.name} · Due {a.dueDate}</p>
                           </div>
                         </button>
                       )
@@ -176,7 +176,7 @@ export default function TopBar() {
                 {/* Activity stream */}
                 {activityResults.length > 0 && (
                   <>
-                    <div className={`px-3 pb-1 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider ${(courseResults.length > 0 || assignmentResults.length > 0) ? 'pt-2 border-t border-gray-100 dark:border-[#2D3A52]' : 'pt-2.5'}`}>
+                    <div className={`px-3 pb-1 text-[10px] font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wider ${(courseResults.length > 0 || assignmentResults.length > 0) ? 'pt-2 border-t border-gray-100 dark:border-[#2D3A52]' : 'pt-2.5'}`}>
                       Activity Stream
                     </div>
                     {activityResults.map(a => {
@@ -206,7 +206,7 @@ export default function TopBar() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-[13px] font-medium text-gray-900 dark:text-gray-100 truncate">{a.title}</p>
-                            <p className="text-[11px] text-gray-400 dark:text-gray-500">{a.date}</p>
+                            <p className="text-[11px] text-gray-400 dark:text-gray-400">{a.date}</p>
                           </div>
                         </button>
                       )
@@ -215,7 +215,7 @@ export default function TopBar() {
                 )}
               </>
             ) : (
-              <div className="px-4 py-5 text-center text-[13px] text-gray-400 dark:text-gray-500">
+              <div className="px-4 py-5 text-center text-[13px] text-gray-400 dark:text-gray-400">
                 No results for "{searchQuery}"
               </div>
             )}
@@ -310,7 +310,7 @@ export default function TopBar() {
                       <span className={`text-[13px] leading-snug line-clamp-2 ${isUnread ? 'text-gray-900 dark:text-gray-100 font-medium' : 'text-gray-600 dark:text-gray-400'}`}>
                         {n.title}
                       </span>
-                      <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{n.time}</p>
+                      <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">{n.time}</p>
                     </div>
                   </button>
                 )
@@ -355,7 +355,7 @@ export default function TopBar() {
             <div className="absolute right-0 top-[calc(100%+6px)] w-[190px] bg-white dark:bg-[#1A2236] border border-gray-200 dark:border-[#2D3A52] rounded-xl shadow-xl z-50 overflow-hidden py-1">
               <div className="px-4 py-2.5 border-b border-gray-100 dark:border-[#2D3A52] mb-1">
                 <p className="text-[13px] font-semibold text-gray-900 dark:text-gray-100">{user.displayName}</p>
-                <p className="text-[11px] text-gray-400 dark:text-gray-500">Student · Fall 2022</p>
+                <p className="text-[11px] text-gray-400 dark:text-gray-400">Student · Fall 2022</p>
               </div>
               {/* Internal nav items — single canonical destination per item */}
               {[

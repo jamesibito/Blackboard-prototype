@@ -44,13 +44,13 @@ export default function Layout() {
           <Outlet />
         </main>
         {/* Footer — portfolio attribution + external links to the real products */}
-        <footer className="px-8 py-3 text-[11px] text-gray-400 dark:text-gray-600 border-t border-gray-100 dark:border-[#1E2A3F]">
+        <footer className="px-8 py-3 text-[11px] text-gray-400 dark:text-gray-500 border-t border-gray-100 dark:border-[#1E2A3F]">
           Redesign concept by{' '}
           <a
             href="https://jamesibitoye.framer.website"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-500 dark:text-gray-500 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors font-medium"
+            className="text-gray-500 dark:text-gray-400 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors font-medium"
           >
             James Ibitoye
           </a>
@@ -59,7 +59,7 @@ export default function Layout() {
             href="https://blackboard.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-400 dark:text-gray-600 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors"
+            className="text-gray-400 dark:text-gray-500 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors"
           >
             Blackboard
           </a>
@@ -68,7 +68,7 @@ export default function Layout() {
             href="https://georgebrown.ca"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-400 dark:text-gray-600 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors"
+            className="text-gray-400 dark:text-gray-500 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors"
           >
             George Brown College
           </a>
@@ -78,7 +78,7 @@ export default function Layout() {
           <button
             type="button"
             onClick={resetDemo}
-            className="text-gray-400 dark:text-gray-600 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors cursor-pointer"
+            className="text-gray-400 dark:text-gray-500 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors cursor-pointer"
             aria-label="Reset demo — restores the first-visit onboarding modal and demo banner"
           >
             Reset demo

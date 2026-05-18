@@ -65,7 +65,7 @@ export default function Grades() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-[24px] font-bold text-gray-900 dark:text-gray-100 tracking-tight">Grades</h1>
-          <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-0.5">
+          <p className="text-[13px] text-gray-400 dark:text-gray-400 mt-0.5">
             {semester.label} · George Brown College
             {semester.isCurrent && (
               <span className="ml-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#2563EB]/10 text-[#2563EB] dark:bg-[#2563EB]/20 dark:text-[#60A5FA] align-middle">
@@ -102,7 +102,7 @@ export default function Grades() {
           {/* Hide/show toggle */}
           <button
             onClick={() => setHideGrades(h => !h)}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#232d42] transition text-gray-400 dark:text-gray-500"
+            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#232d42] transition text-gray-400 dark:text-gray-400"
             title={hideGrades ? 'Show grades' : 'Hide grades'}
           >
             {hideGrades ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -119,7 +119,7 @@ export default function Grades() {
             <TrendingUp size={24} style={{ color: overallColor }} />
           </div>
           <div>
-            <p className="text-[12px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">Semester Average</p>
+            <p className="text-[12px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide">Semester Average</p>
             {hideGrades ? (
               <div className="h-8 w-20 rounded-lg bg-gray-200 dark:bg-[#232d42] mt-1" />
             ) : (
@@ -189,7 +189,7 @@ export default function Grades() {
       {isFall && !hideGrades && <PriorityAssignmentsCard />}
 
       {/* ── Expand hint ── */}
-      <p className="text-[11px] text-gray-400 dark:text-gray-500 mb-4 flex items-center gap-1">
+      <p className="text-[11px] text-gray-400 dark:text-gray-400 mb-4 flex items-center gap-1">
         <Eye size={12} />
         <span>Click any card to expand full mark breakdown · Use the eye icon above to hide all grades</span>
       </p>
@@ -223,7 +223,7 @@ export default function Grades() {
                       <ChevronRight size={12} className={`text-gray-400 shrink-0 transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`} />
                     </div>
                     <div className="flex items-center gap-2 mt-0.5">
-                      <p className="text-[11px] text-gray-400 dark:text-gray-500">{course.code}</p>
+                      <p className="text-[11px] text-gray-400 dark:text-gray-400">{course.code}</p>
                       {!hideGrades && (
                         <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: `${letterColor}15`, color: letterColor }}>
                           {letter}
@@ -242,7 +242,7 @@ export default function Grades() {
                 <div className="pt-3 border-t border-gray-100 dark:border-[#2D3A52]">
                   {isExpanded ? (
                     <div className="space-y-2.5">
-                      <h4 className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2">
+                      <h4 className="text-[10px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide mb-2">
                         {isFall ? 'Recent marks' : 'Final marks'}
                       </h4>
                       {g.marks.map((m, i) => {
@@ -277,7 +277,7 @@ export default function Grades() {
                       })}
                     </div>
                   ) : (
-                    <p className="text-[11px] text-gray-400 dark:text-gray-500">
+                    <p className="text-[11px] text-gray-400 dark:text-gray-400">
                       {g.marks.length} mark{g.marks.length !== 1 ? 's' : ''} · tap to expand
                     </p>
                   )}
@@ -369,7 +369,7 @@ function PriorityRow({ item }: { item: PriorityAssignment }) {
             {course.abbr}
           </span>
         </div>
-        <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">
+        <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">
           {course.name} · currently <strong className="text-gray-600 dark:text-gray-300">{currentGrade}%</strong> · due {assignment.dueDate}
         </p>
       </div>
@@ -383,7 +383,7 @@ function PriorityRow({ item }: { item: PriorityAssignment }) {
         >
           {weightLabel} · {assignment.points}pts
         </span>
-        <ArrowRight size={13} className="text-gray-300 dark:text-gray-600 group-hover:text-gray-500 dark:group-hover:text-gray-400 transition-colors" />
+        <ArrowRight size={13} className="text-gray-300 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-400 transition-colors" />
       </div>
     </Link>
   )

@@ -99,7 +99,7 @@ export default function ProfilePage() {
                 { label: 'Credits (Fall)',  value: `${totalCredits}`,                sub: 'enrolled',   color: '#2563EB' },
               ].map(stat => (
                 <div key={stat.label} className="bg-gray-50 dark:bg-[#131825] rounded-xl p-3.5">
-                  <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">{stat.label}</p>
+                  <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide">{stat.label}</p>
                   <p className="text-[22px] font-bold leading-tight mt-1" style={{ color: stat.color }}>{stat.value}</p>
                   <p className="text-[11px] font-semibold mt-0.5" style={{ color: stat.color }}>{stat.sub}</p>
                 </div>
@@ -107,7 +107,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Current courses list */}
-            <h3 className="text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2">Enrolled Courses — Fall 2022</h3>
+            <h3 className="text-[11px] font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wide mb-2">Enrolled Courses — Fall 2022</h3>
             <div className="space-y-1">
               {courses.map(c => {
                 const cg = grades.find(g => g.courseId === c.id)
@@ -123,10 +123,10 @@ export default function ProfilePage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-[13px] font-medium text-gray-800 dark:text-gray-200 truncate group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors">{c.name}</p>
-                      <p className="text-[11px] text-gray-400 dark:text-gray-500">{c.code}</p>
+                      <p className="text-[11px] text-gray-400 dark:text-gray-400">{c.code}</p>
                     </div>
                     <span className="text-[11px] font-bold shrink-0" style={{ color: lc }}>{hideGPA ? '—' : letter}</span>
-                    <ChevronRight size={13} className="text-gray-300 dark:text-gray-600" />
+                    <ChevronRight size={13} className="text-gray-300 dark:text-gray-500" />
                   </Link>
                 )
               })}
@@ -174,7 +174,7 @@ export default function ProfilePage() {
                   className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors group"
                 >
                   <span className="text-[13px] text-gray-700 dark:text-gray-300 group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors">{item.label}</span>
-                  <ChevronRight size={13} className="text-gray-300 dark:text-gray-600" />
+                  <ChevronRight size={13} className="text-gray-300 dark:text-gray-500" />
                 </button>
               ))}
             </div>

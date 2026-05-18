@@ -100,7 +100,7 @@ export default function Communities() {
       <div className="flex items-center justify-between mb-5">
         <div>
           <h1 className="text-[24px] font-bold text-gray-900 dark:text-gray-100 tracking-tight">Communities</h1>
-          <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-0.5">
+          <p className="text-[13px] text-gray-400 dark:text-gray-400 mt-0.5">
             {filtered.length} threads · {unreadCount > 0 ? `${unreadCount} unread` : 'all caught up'}
           </p>
         </div>
@@ -197,7 +197,7 @@ export default function Communities() {
 
         {/* Tag chips */}
         <div className="flex items-center gap-3 flex-wrap">
-          <span className="text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide w-10 shrink-0">Type</span>
+          <span className="text-[11px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide w-10 shrink-0">Type</span>
           <div className="flex gap-1.5 flex-wrap">
             {(Object.entries(tagConfig) as [DiscussionThread['tag'], typeof tagConfig[DiscussionThread['tag']]][]).map(([tag, cfg]) => {
               const active = tagFilter === tag
@@ -206,7 +206,7 @@ export default function Communities() {
                   key={tag}
                   onClick={() => setTagFilter(active ? null : tag)}
                   className={`px-3 py-1 rounded-full text-[12px] font-medium border transition-all duration-150 ${
-                    active ? '' : 'border-gray-200 dark:border-[#2D3A52] text-gray-400 dark:text-gray-500 hover:bg-gray-50 dark:hover:bg-[#232d42]'
+                    active ? '' : 'border-gray-200 dark:border-[#2D3A52] text-gray-400 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#232d42]'
                   }`}
                   style={active ? { background: cfg.bg, borderColor: cfg.color, color: cfg.color } : undefined}
                 >
@@ -219,7 +219,7 @@ export default function Communities() {
 
         {/* Course chips */}
         <div className="flex items-center gap-3 flex-wrap">
-          <span className="text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide w-10 shrink-0">Course</span>
+          <span className="text-[11px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide w-10 shrink-0">Course</span>
           <div className="flex gap-1.5 flex-wrap">
             <button
               onClick={() => setCourseFilter(courseFilter === COLLEGE_ID ? null : COLLEGE_ID)}
@@ -253,10 +253,10 @@ export default function Communities() {
       {filtered.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 px-6">
           <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-[#232d42] flex items-center justify-center mb-4">
-            <MessageCircle size={26} className="text-gray-400 dark:text-gray-500" />
+            <MessageCircle size={26} className="text-gray-400 dark:text-gray-400" />
           </div>
           <p className="text-[15px] font-semibold text-gray-700 dark:text-gray-300">No threads match your filters</p>
-          <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-1 text-center max-w-[240px]">
+          <p className="text-[13px] text-gray-400 dark:text-gray-400 mt-1 text-center max-w-[240px]">
             Try a different tag or course, or start a new thread.
           </p>
           <button
@@ -328,7 +328,7 @@ export default function Communities() {
                           {tagCfg.label}
                         </span>
                       </div>
-                      <ChevronRight size={14} className="text-gray-300 dark:text-gray-600 shrink-0 mt-0.5" />
+                      <ChevronRight size={14} className="text-gray-300 dark:text-gray-500 shrink-0 mt-0.5" />
                     </div>
 
                     <p className="text-[12px] text-gray-500 dark:text-gray-400 mt-1 leading-relaxed line-clamp-2">
@@ -337,16 +337,16 @@ export default function Communities() {
 
                     <div className="flex items-center gap-3 mt-2.5 flex-wrap">
                       <span className="text-[11px] font-medium text-gray-500 dark:text-gray-400">{thread.author}</span>
-                      <span className="text-gray-300 dark:text-gray-600 text-[10px]">·</span>
-                      <span className="text-[11px] text-gray-400 dark:text-gray-500">{thread.date}</span>
-                      <span className="text-gray-300 dark:text-gray-600 text-[10px]">·</span>
-                      <span className="flex items-center gap-1 text-[11px] text-gray-400 dark:text-gray-500">
+                      <span className="text-gray-300 dark:text-gray-500 text-[10px]">·</span>
+                      <span className="text-[11px] text-gray-400 dark:text-gray-400">{thread.date}</span>
+                      <span className="text-gray-300 dark:text-gray-500 text-[10px]">·</span>
+                      <span className="flex items-center gap-1 text-[11px] text-gray-400 dark:text-gray-400">
                         <MessageCircle size={11} />
                         {thread.replyCount} {thread.replyCount === 1 ? 'reply' : 'replies'}
                       </span>
                       {course && (
                         <>
-                          <span className="text-gray-300 dark:text-gray-600 text-[10px]">·</span>
+                          <span className="text-gray-300 dark:text-gray-500 text-[10px]">·</span>
                           <Link
                             to={`/courses/${course.id}`}
                             onClick={e => e.stopPropagation()}

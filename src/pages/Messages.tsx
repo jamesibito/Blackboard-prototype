@@ -136,7 +136,7 @@ export default function Messages() {
       <div className="flex items-center justify-between mb-5">
         <div>
           <h1 className="text-[24px] font-bold text-gray-900 dark:text-gray-100 tracking-tight">Messages</h1>
-          <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-0.5">
+          <p className="text-[13px] text-gray-400 dark:text-gray-400 mt-0.5">
             {unreadCount > 0 ? `${unreadCount} unread` : 'All caught up'}
           </p>
         </div>
@@ -154,7 +154,7 @@ export default function Messages() {
         {/* Message list */}
         <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden flex flex-col">
           <div className="px-4 py-3 border-b border-gray-50 dark:border-[#232d42]">
-            <div className="flex items-center gap-2 text-[12px] font-semibold text-gray-400 dark:text-gray-500">
+            <div className="flex items-center gap-2 text-[12px] font-semibold text-gray-400 dark:text-gray-400">
               <Inbox size={14} />
               Inbox
               {unreadCount > 0 && (
@@ -201,12 +201,12 @@ export default function Messages() {
                         <span className={`text-[13px] truncate ${isRead ? 'text-gray-600 dark:text-gray-400 font-medium' : 'text-gray-900 dark:text-gray-100 font-semibold'}`}>
                           {msg.senderName}
                         </span>
-                        <span className="text-[10px] text-gray-400 dark:text-gray-500 shrink-0">{msg.time}</span>
+                        <span className="text-[10px] text-gray-400 dark:text-gray-400 shrink-0">{msg.time}</span>
                       </div>
-                      <p className={`text-[12px] truncate mt-0.5 ${isRead ? 'text-gray-500 dark:text-gray-500' : 'text-gray-700 dark:text-gray-300 font-medium'}`}>
+                      <p className={`text-[12px] truncate mt-0.5 ${isRead ? 'text-gray-500 dark:text-gray-400' : 'text-gray-700 dark:text-gray-300 font-medium'}`}>
                         {msg.subject}
                       </p>
-                      <p className="text-[11px] text-gray-400 dark:text-gray-500 truncate mt-0.5">{msg.preview}</p>
+                      <p className="text-[11px] text-gray-400 dark:text-gray-400 truncate mt-0.5">{msg.preview}</p>
 
                       <div className="flex items-center gap-2 mt-1.5">
                         <span
@@ -216,7 +216,7 @@ export default function Messages() {
                           {tag.label}
                         </span>
                         {msg.courseId && (
-                          <span className="text-[10px] text-gray-400 dark:text-gray-500">
+                          <span className="text-[10px] text-gray-400 dark:text-gray-400">
                             {getCourse(msg.courseId).abbr}
                           </span>
                         )}
@@ -226,7 +226,7 @@ export default function Messages() {
                     {/* Star */}
                     <button
                       onClick={e => toggleStar(msg.id, e)}
-                      className="p-0.5 shrink-0 mt-0.5 text-gray-300 dark:text-gray-600 hover:text-amber-400 transition-colors"
+                      className="p-0.5 shrink-0 mt-0.5 text-gray-300 dark:text-gray-500 hover:text-amber-400 transition-colors"
                     >
                       <Star
                         size={13}
@@ -244,10 +244,10 @@ export default function Messages() {
         {!selected ? (
           <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] flex flex-col items-center justify-center">
             <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-[#232d42] flex items-center justify-center mb-4">
-              <Mail size={26} className="text-gray-400 dark:text-gray-500" />
+              <Mail size={26} className="text-gray-400 dark:text-gray-400" />
             </div>
             <p className="text-[15px] font-semibold text-gray-700 dark:text-gray-300">No message selected</p>
-            <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-1 text-center max-w-[220px]">
+            <p className="text-[13px] text-gray-400 dark:text-gray-400 mt-1 text-center max-w-[220px]">
               Choose a message from your inbox to read it here.
             </p>
           </div>
@@ -267,11 +267,11 @@ export default function Messages() {
                     {selected.senderAbbr}
                   </div>
                   <span className="text-[13px] font-semibold text-gray-700 dark:text-gray-300">{selected.senderName}</span>
-                  <span className="text-[12px] text-gray-400 dark:text-gray-500">·</span>
-                  <span className="text-[12px] text-gray-400 dark:text-gray-500">{selected.date}</span>
+                  <span className="text-[12px] text-gray-400 dark:text-gray-400">·</span>
+                  <span className="text-[12px] text-gray-400 dark:text-gray-400">{selected.date}</span>
                   {selected.courseId && (
                     <>
-                      <span className="text-[12px] text-gray-400 dark:text-gray-500">·</span>
+                      <span className="text-[12px] text-gray-400 dark:text-gray-400">·</span>
                       <span
                         className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
                         style={{
@@ -343,7 +343,7 @@ export default function Messages() {
                 <div key={i} className="flex justify-end">
                   <div className="max-w-[80%] bg-[#2563EB]/[0.08] dark:bg-[#2563EB]/[0.12] border border-[#2563EB]/20 rounded-2xl rounded-br-md px-4 py-3">
                     <p className="text-[13px] text-gray-800 dark:text-gray-200 leading-relaxed whitespace-pre-line">{r}</p>
-                    <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1.5 text-right">You · Just now</p>
+                    <p className="text-[10px] text-gray-400 dark:text-gray-400 mt-1.5 text-right">You · Just now</p>
                   </div>
                 </div>
               ))}
@@ -369,14 +369,14 @@ export default function Messages() {
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-semibold transition-all shrink-0 ${
                   replyText.trim()
                     ? 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white'
-                    : 'bg-gray-100 dark:bg-[#232d42] text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                    : 'bg-gray-100 dark:bg-[#232d42] text-gray-400 dark:text-gray-400 cursor-not-allowed'
                 }`}
               >
                 <Send size={14} />
                 Send
               </button>
             </div>
-            <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1.5">⌘ + Enter to send</p>
+            <p className="text-[10px] text-gray-400 dark:text-gray-400 mt-1.5">⌘ + Enter to send</p>
           </div>
         </div>
         )}

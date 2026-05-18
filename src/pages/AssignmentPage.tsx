@@ -104,7 +104,7 @@ export default function AssignmentPage() {
                 >
                   {sc.label}
                 </span>
-                <span className="text-[11px] text-gray-400 dark:text-gray-500">{course.code}</span>
+                <span className="text-[11px] text-gray-400 dark:text-gray-400">{course.code}</span>
               </div>
               <h1 className="text-[22px] font-bold text-gray-900 dark:text-gray-100 tracking-tight leading-snug">{assignment.title}</h1>
               <p className="text-[14px] text-gray-500 dark:text-gray-400 leading-relaxed mt-2">{assignment.description}</p>
@@ -118,7 +118,7 @@ export default function AssignmentPage() {
                     {lg.letter}
                   </span>
                 </div>
-                <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-2">{totalScore}/{totalPossible} pts</p>
+                <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-2">{totalScore}/{totalPossible} pts</p>
               </div>
             )}
           </div>
@@ -127,15 +127,15 @@ export default function AssignmentPage() {
           <div className="grid grid-cols-3 gap-3 mt-5">
             <div className="bg-gray-50 dark:bg-[#131825] rounded-xl px-3.5 py-3">
               <div className="flex items-center gap-1.5 mb-1">
-                <Clock size={12} className="text-gray-400 dark:text-gray-500" />
-                <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">Due Date</p>
+                <Clock size={12} className="text-gray-400 dark:text-gray-400" />
+                <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide">Due Date</p>
               </div>
               <p className="text-[12px] font-medium text-gray-800 dark:text-gray-200">{assignment.dueDate}</p>
             </div>
             <div className="bg-gray-50 dark:bg-[#131825] rounded-xl px-3.5 py-3">
               <div className="flex items-center gap-1.5 mb-1">
-                <FileText size={12} className="text-gray-400 dark:text-gray-500" />
-                <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">Points</p>
+                <FileText size={12} className="text-gray-400 dark:text-gray-400" />
+                <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide">Points</p>
               </div>
               <p className="text-[12px] font-medium text-gray-800 dark:text-gray-200">{assignment.points} points</p>
             </div>
@@ -143,7 +143,7 @@ export default function AssignmentPage() {
               <div className="bg-gray-50 dark:bg-[#131825] rounded-xl px-3.5 py-3">
                 <div className="flex items-center gap-1.5 mb-1">
                   <CheckCircle size={12} className="text-emerald-500" />
-                  <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">Submitted</p>
+                  <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide">Submitted</p>
                 </div>
                 <p className="text-[12px] font-medium text-gray-800 dark:text-gray-200">{assignment.submittedDate}</p>
               </div>
@@ -165,7 +165,7 @@ export default function AssignmentPage() {
               <ol className="space-y-2.5">
                 {assignment.instructions.map((inst, i) => (
                   <li key={i} className="flex gap-3">
-                    <span className="text-[12px] font-bold text-gray-300 dark:text-gray-600 mt-0.5 shrink-0 w-5 text-right">{i + 1}.</span>
+                    <span className="text-[12px] font-bold text-gray-300 dark:text-gray-500 mt-0.5 shrink-0 w-5 text-right">{i + 1}.</span>
                     <span className="text-[13px] text-gray-700 dark:text-gray-300 leading-relaxed">{inst}</span>
                   </li>
                 ))}
@@ -182,10 +182,10 @@ export default function AssignmentPage() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-gray-100 dark:border-[#2D3A52]">
-                    <th className="text-left px-5 py-2.5 text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">Criterion</th>
-                    <th className="text-center px-3 py-2.5 text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide w-20">Weight</th>
-                    <th className="text-center px-3 py-2.5 text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide w-20">Score</th>
-                    <th className="text-left px-5 py-2.5 text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">Feedback</th>
+                    <th className="text-left px-5 py-2.5 text-[11px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide">Criterion</th>
+                    <th className="text-center px-3 py-2.5 text-[11px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide w-20">Weight</th>
+                    <th className="text-center px-3 py-2.5 text-[11px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide w-20">Score</th>
+                    <th className="text-left px-5 py-2.5 text-[11px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide">Feedback</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100 dark:divide-[#232d42]">
@@ -213,14 +213,14 @@ export default function AssignmentPage() {
                               </div>
                             </div>
                           ) : (
-                            <span className="text-[12px] text-gray-400 dark:text-gray-500">—</span>
+                            <span className="text-[12px] text-gray-400 dark:text-gray-400">—</span>
                           )}
                         </td>
                         <td className="px-5 py-3.5">
                           {r.feedback ? (
                             <span className="text-[12px] text-gray-500 dark:text-gray-400 leading-relaxed">{r.feedback}</span>
                           ) : (
-                            <span className="text-[12px] text-gray-300 dark:text-gray-600">No comments</span>
+                            <span className="text-[12px] text-gray-300 dark:text-gray-500">No comments</span>
                           )}
                         </td>
                       </tr>
@@ -240,7 +240,7 @@ export default function AssignmentPage() {
             <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden">
               <div className="px-5 pt-5 pb-3">
                 <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Feedback Thread</h2>
-                <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">Instructor and student comments on this submission</p>
+                <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">Instructor and student comments on this submission</p>
               </div>
               <div className="px-5 pb-5 space-y-4">
                 {assignment.feedbackThread.map(msg => {
@@ -268,7 +268,7 @@ export default function AssignmentPage() {
                             {msg.body}
                           </p>
                         </div>
-                        <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1 px-1">{msg.date}</p>
+                        <p className="text-[10px] text-gray-400 dark:text-gray-400 mt-1 px-1">{msg.date}</p>
                       </div>
                     </div>
                   )
@@ -283,7 +283,7 @@ export default function AssignmentPage() {
                         <p className="text-[12px] font-semibold text-gray-900 dark:text-gray-100 mb-1">Kevin H.</p>
                         <p className="text-[13px] text-gray-700 dark:text-gray-300 leading-relaxed">{r}</p>
                       </div>
-                      <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1 px-1">Just now</p>
+                      <p className="text-[10px] text-gray-400 dark:text-gray-400 mt-1 px-1">Just now</p>
                     </div>
                   </div>
                 ))}
@@ -343,7 +343,7 @@ export default function AssignmentPage() {
                     {isGradedOrSubmitted && matched ? (
                       <CheckCircle size={14} className="text-emerald-500 shrink-0" />
                     ) : (
-                      <FileText size={14} className="text-gray-400 dark:text-gray-500 shrink-0" />
+                      <FileText size={14} className="text-gray-400 dark:text-gray-400 shrink-0" />
                     )}
                     <span className="text-[12px] text-gray-700 dark:text-gray-300 flex-1">{d}</span>
                     {isGradedOrSubmitted && matched && (
@@ -372,7 +372,7 @@ export default function AssignmentPage() {
                 <p className="text-[13px] font-medium text-gray-700 dark:text-gray-300">
                   {assignment.status === 'graded' ? 'Submitted & Graded' : 'Submitted'}
                 </p>
-                <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">
+                <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">
                   {submitted ? 'Just now' : assignment.submittedDate}
                 </p>
                 <button
@@ -403,15 +403,15 @@ export default function AssignmentPage() {
                   onClick={() => fileInputRef.current?.click()}
                   className="w-full border-2 border-dashed border-gray-200 dark:border-[#2D3A52] rounded-xl p-6 text-center hover:border-gray-300 dark:hover:border-gray-500 transition-colors block"
                 >
-                  <Download size={24} className="text-gray-300 dark:text-gray-600 mx-auto mb-2" aria-hidden="true" />
+                  <Download size={24} className="text-gray-300 dark:text-gray-500 mx-auto mb-2" aria-hidden="true" />
                   <p className="text-[13px] text-gray-500 dark:text-gray-400">Click to upload files</p>
-                  <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1">PDF, DOCX, ZIP up to 25MB</p>
+                  <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-1">PDF, DOCX, ZIP up to 25MB</p>
                 </button>
 
                 {/* Staged files — what the student has chosen but not yet submitted */}
                 {stagedFiles.length > 0 && (
                   <div className="mt-3 space-y-1.5">
-                    <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">
+                    <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide">
                       Ready to submit ({stagedFiles.length})
                     </p>
                     {stagedFiles.map((f, i) => (
@@ -419,7 +419,7 @@ export default function AssignmentPage() {
                         <FileText size={12} className="text-gray-400 shrink-0" aria-hidden="true" />
                         <div className="flex-1 min-w-0">
                           <p className="text-[12px] font-medium text-gray-800 dark:text-gray-200 truncate">{f.name}</p>
-                          <p className="text-[10px] text-gray-400 dark:text-gray-500">{formatFileSize(f.size)}</p>
+                          <p className="text-[10px] text-gray-400 dark:text-gray-400">{formatFileSize(f.size)}</p>
                         </div>
                         <button
                           type="button"
@@ -448,7 +448,7 @@ export default function AssignmentPage() {
                     ? `Submit ${stagedFiles.length} file${stagedFiles.length === 1 ? '' : 's'}`
                     : 'Submit Assignment'}
                 </button>
-                <p className="text-[11px] text-gray-400 dark:text-gray-500 text-center mt-2">
+                <p className="text-[11px] text-gray-400 dark:text-gray-400 text-center mt-2">
                   Prototype — files stay on your device only.
                 </p>
               </div>
@@ -475,7 +475,7 @@ export default function AssignmentPage() {
                       <div className="space-y-0.5 mt-1">
                         {sub.files.map(f => (
                           <div key={f} className="flex items-center gap-1.5">
-                            <FileText size={11} className="text-gray-400 dark:text-gray-500 shrink-0" />
+                            <FileText size={11} className="text-gray-400 dark:text-gray-400 shrink-0" />
                             <span className="text-[11px] text-gray-500 dark:text-gray-400 truncate">{f}</span>
                           </div>
                         ))}
@@ -507,7 +507,7 @@ export default function AssignmentPage() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-[13px] font-semibold text-gray-800 dark:text-gray-200 group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors">{course.name}</p>
-              <p className="text-[11px] text-gray-400 dark:text-gray-500">{course.instructor}</p>
+              <p className="text-[11px] text-gray-400 dark:text-gray-400">{course.instructor}</p>
             </div>
           </Link>
         </div>

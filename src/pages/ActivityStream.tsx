@@ -56,7 +56,7 @@ export default function ActivityStream() {
       <div className="flex items-start justify-between mb-5">
         <div>
           <h1 className="text-[24px] font-bold text-gray-900 dark:text-gray-100 tracking-tight">Activity Stream</h1>
-          <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-0.5">
+          <p className="text-[13px] text-gray-400 dark:text-gray-400 mt-0.5">
             {filteredItems.length} {filteredItems.length === 1 ? 'item' : 'items'}
             {hasFilters && ' · filtered'}
           </p>
@@ -76,7 +76,7 @@ export default function ActivityStream() {
 
         {/* Type chips */}
         <div className="flex items-center gap-3 flex-wrap">
-          <span className="text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide shrink-0 w-12">Type</span>
+          <span className="text-[11px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide shrink-0 w-12">Type</span>
           <div className="flex gap-1.5 flex-wrap">
             {(Object.entries(typeConfig) as [ActivityItem['type'], typeof typeConfig[ActivityItem['type']]][]).map(([type, cfg]) => {
               const active = typeFilter === type
@@ -87,7 +87,7 @@ export default function ActivityStream() {
                   className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-medium border transition-all duration-150 ${
                     active
                       ? ''
-                      : 'border-gray-200 dark:border-[#2D3A52] text-gray-400 dark:text-gray-500 hover:bg-gray-50 dark:hover:bg-[#232d42] hover:text-gray-600 dark:hover:text-gray-300'
+                      : 'border-gray-200 dark:border-[#2D3A52] text-gray-400 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#232d42] hover:text-gray-600 dark:hover:text-gray-300'
                   }`}
                   style={active ? { background: cfg.bg, borderColor: cfg.color, color: cfg.color } : undefined}
                 >
@@ -101,7 +101,7 @@ export default function ActivityStream() {
 
         {/* Course chips — includes a "College" chip for school-wide items */}
         <div className="flex items-center gap-3 flex-wrap">
-          <span className="text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide shrink-0 w-12">Course</span>
+          <span className="text-[11px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide shrink-0 w-12">Course</span>
           <div className="flex gap-1.5 flex-wrap">
 
             {/* College-wide filter chip */}
@@ -146,10 +146,10 @@ export default function ActivityStream() {
       {filteredItems.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 px-6">
           <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-[#232d42] flex items-center justify-center mb-4">
-            <Filter size={26} className="text-gray-400 dark:text-gray-500" />
+            <Filter size={26} className="text-gray-400 dark:text-gray-400" />
           </div>
           <p className="text-[15px] font-semibold text-gray-700 dark:text-gray-300">No activity matches your filters</p>
-          <p className="text-[13px] text-gray-400 dark:text-gray-500 mt-1 text-center max-w-[240px]">
+          <p className="text-[13px] text-gray-400 dark:text-gray-400 mt-1 text-center max-w-[240px]">
             Try a different type or course, or clear all filters.
           </p>
           <button
@@ -211,14 +211,14 @@ export default function ActivityStream() {
                             </span>
                           </div>
                           {/* Subtitle: source name + date + time */}
-                          <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">
+                          <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">
                             {sourceName} · {item.date} · {item.timeRange}
                           </p>
                         </div>
 
                         <ChevronDown
                           size={15}
-                          className={`shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                          className={`shrink-0 text-gray-400 dark:text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
                         />
                       </div>
                     </div>

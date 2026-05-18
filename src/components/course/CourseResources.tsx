@@ -44,17 +44,17 @@ export default function CourseResources({ resources, courseColor }: Props) {
                   >
                     {fileTypeLabel[r.type] ?? r.type.toUpperCase()}
                   </span>
-                  <span className="text-[11px] text-gray-400 dark:text-gray-500">{r.filename}</span>
+                  <span className="text-[11px] text-gray-400 dark:text-gray-400">{r.filename}</span>
                   {r.size && (
                     <>
-                      <span className="text-[11px] text-gray-300 dark:text-gray-600">·</span>
-                      <span className="text-[11px] text-gray-400 dark:text-gray-500">{r.size}</span>
+                      <span className="text-[11px] text-gray-300 dark:text-gray-500">·</span>
+                      <span className="text-[11px] text-gray-400 dark:text-gray-400">{r.size}</span>
                     </>
                   )}
                 </div>
               </div>
               <div className="flex items-center gap-3 shrink-0">
-                <span className="text-[11px] text-gray-400 dark:text-gray-500">{r.uploadedOn}</span>
+                <span className="text-[11px] text-gray-400 dark:text-gray-400">{r.uploadedOn}</span>
                 <button
                   className="text-[11px] font-semibold px-3 py-1.5 rounded-lg border transition-colors hover:opacity-80 focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:ring-offset-1"
                   style={{ borderColor: courseColor, color: courseColor }}
@@ -77,8 +77,8 @@ export default function CourseResources({ resources, courseColor }: Props) {
         </div>
       ) : (
         <div className="text-center py-10 px-5">
-          <FileText size={28} className="text-gray-300 dark:text-gray-600 mx-auto mb-2" />
-          <p className="text-[13px] text-gray-400 dark:text-gray-500">No resources have been posted yet.</p>
+          <FileText size={28} className="text-gray-300 dark:text-gray-500 mx-auto mb-2" />
+          <p className="text-[13px] text-gray-400 dark:text-gray-400">No resources have been posted yet.</p>
         </div>
       )}
     </div>
