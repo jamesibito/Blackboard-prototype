@@ -52,12 +52,12 @@ export default function ProfilePage() {
 
           <div className="flex items-center gap-4 mt-3 flex-wrap">
             <a
-              href="mailto:kevin.h@georgebrown.ca"
+              href="mailto:kevin.hutchinson@georgebrown.ca"
               className="flex items-center gap-1.5 text-[13px] text-gray-500 dark:text-gray-400 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors"
               title="Open in mail client"
             >
               <Mail size={13} />
-              kevin.h@georgebrown.ca
+              kevin.hutchinson@georgebrown.ca
             </a>
             <button
               type="button"

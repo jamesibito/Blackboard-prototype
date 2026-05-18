@@ -54,7 +54,7 @@ export default function Sidebar() {
     <aside aria-label="Primary" className="fixed left-0 top-0 bottom-0 w-[220px] bg-[#131825] border-r border-[#1E2A3F] flex flex-col z-30">
 
       {/* GBC Logo Header — navy background, logo inverted to white */}
-      <div className="h-[104px] flex items-center justify-center border-b border-[#1E2A3F] bg-[#1B3F89] relative overflow-hidden shrink-0">
+      <div className="h-[88px] flex items-center justify-center border-b border-[#1E2A3F] bg-[#1B3F89] relative overflow-hidden shrink-0">
         {/* Real GBC rainbow stripe — 7 segments matching the brand palette */}
         <div className="absolute left-0 top-0 bottom-0 w-[5px] flex flex-col">
           <div className="flex-1" style={{ background: '#3DAA35' }} />
@@ -70,7 +70,7 @@ export default function Sidebar() {
             src="/gbc-logo.png"
             alt="George Brown Polytechnic"
             className="w-auto object-contain"
-            style={{ filter: 'brightness(0) invert(1)', height: 80, maxWidth: 195 }}
+            style={{ filter: 'brightness(0) invert(1)', height: 66, maxWidth: 180 }}
           />
         </div>
       </div>

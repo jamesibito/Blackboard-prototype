@@ -16,12 +16,17 @@ import Communities from './pages/Communities'
 import Tools from './pages/Tools'
 import ProfilePage from './pages/ProfilePage'
 import NotFound from './pages/NotFound'
+import Changelog from './pages/Changelog'
 
 export default function App() {
   return (
     <ThemeProvider>
       <ToastProvider>
         <Routes>
+          {/* Standalone changelog page (no app chrome) — accessible via /changelog.
+              Documents every version, design decision, and visual example. */}
+          <Route path="/changelog" element={<Changelog />} />
+
           <Route element={<Layout />}>
             <Route path="/"                                    element={<Dashboard />} />
             <Route path="/courses"                             element={<Courses />} />

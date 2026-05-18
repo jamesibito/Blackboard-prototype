@@ -1053,7 +1053,7 @@ export function getAssignment(id: string) {
 
 export const notifications: Notification[] = [
   // ── Today ──
-  { id: 'n1', title: 'Assignment 5 – Branded Design graded', body: 'Your grade has been posted. Score: 18/25 (72%). Review the rubric feedback from Jaron Stewart.', time: '2 hours ago', timeGroup: 'today', type: 'grade', courseId: '2D', unread: true, linkTo: '/courses/2D/assignments/asgn-2d-5' },
+  { id: 'n1', title: 'Assignment 5 – Branded Design graded', body: 'Your grade has been posted. Score: 18/25 (72%). Review the rubric feedback from Jaron Stewart.', time: 'Yesterday', timeGroup: 'today', type: 'grade', courseId: '2D', unread: true, linkTo: '/courses/2D/assignments/asgn-2d-5' },
   { id: 'n2', title: 'New resource: Figma Prototyping Starter Kit', body: 'Michael Holland posted a new resource to Interactive Systems. Download it from the course page.', time: '5 hours ago', timeGroup: 'today', type: 'resource', courseId: 'IS', unread: true, linkTo: '/courses/IS' },
   // ── This Week ──
   { id: 'n3', title: 'Reminder: Final Presentation due tomorrow', body: 'Your Interactive Systems Final Presentation is due Dec 15. Slides must be shared as a view-only Figma link by 11:59 PM.', time: 'Yesterday at 3 PM', timeGroup: 'this-week', type: 'assignment', courseId: 'IS', unread: false, linkTo: '/courses/IS' },
