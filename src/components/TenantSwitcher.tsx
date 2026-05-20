@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { ChevronDown } from './Icons'
 import { useTenant } from '../context/TenantContext'
+import { useToast } from '../context/ToastContext'
 
 /**
  * TenantSwitcher
@@ -23,6 +24,7 @@ const STATE_KEY = 'gbc-bb-tenant-switcher-state'   // 'expanded' | 'collapsed'
 
 export default function TenantSwitcher() {
   const { tenant, tenantId, setTenantId, tenants } = useTenant()
+  const { toast } = useToast()
   const [open, setOpen] = useState(false)
   const [collapsed, setCollapsed] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false
@@ -63,8 +65,8 @@ export default function TenantSwitcher() {
         type="button"
         data-tour="tenant-switcher"
         onClick={() => setCollapsedPersist(false)}
-        aria-label={`Expand tenant switcher — currently viewing as ${tenant.shortName}`}
-        title={`Currently: ${tenant.shortName} · click to switch institution`}
+        aria-label={`Expand school switcher — currently viewing as ${tenant.shortName}`}
+        title={`Currently: ${tenant.shortName} · click to switch school`}
         className="fixed bottom-4 right-4 z-[60] w-12 h-12 rounded-full bg-[#0F1623] border border-[#2D3A52] shadow-2xl hover:scale-105 transition-transform flex items-center justify-center"
       >
         <span
@@ -89,7 +91,7 @@ export default function TenantSwitcher() {
           type="button"
           onClick={() => setOpen(o => !o)}
           aria-expanded={open}
-          aria-label="Choose institution"
+          aria-label="Choose school"
           className="flex items-center gap-2.5 px-4 py-2.5 hover:bg-[#1A2236] transition-colors"
         >
           <span
@@ -116,7 +118,7 @@ export default function TenantSwitcher() {
         <button
           type="button"
           onClick={() => setCollapsedPersist(true)}
-          aria-label="Minimise tenant switcher to a chip"
+          aria-label="Minimise school switcher to a chip"
           title="Minimise (you can expand it again from the chip)"
           className="px-3 border-l border-[#2D3A52] hover:bg-[#1A2236] text-gray-500 hover:text-gray-300 transition-colors text-[10px] font-medium"
         >
@@ -127,15 +129,15 @@ export default function TenantSwitcher() {
         {open && (
           <div
             role="dialog"
-            aria-label="Institutions"
+            aria-label="Schools"
             className="absolute bottom-full right-0 mb-2 w-[300px] bg-[#0F1623] border border-[#2D3A52] rounded-2xl shadow-2xl p-2"
           >
             <div className="px-3 pt-2 pb-3 border-b border-[#2D3A52] mb-2">
               <p className="text-[10px] font-bold uppercase tracking-[1.4px] text-gray-400">
-                Multi-tenant demo
+                Multi-school demo
               </p>
               <p className="text-[11.5px] text-gray-300 mt-1 leading-relaxed">
-                Same redesign — different institution. See how the design system holds up across brand identities.
+                Same redesign — different school. See how the design system holds up across brand identities.
               </p>
             </div>
             <div className="flex flex-col gap-0.5" role="radiogroup">
@@ -144,15 +146,24 @@ export default function TenantSwitcher() {
                 return (
                   <button
                     key={t.id}
-                    onClick={() => { setTenantId(t.id); setOpen(false) }}
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      if (!active) {
+                        setTenantId(t.id)
+                        toast(`Now viewing as ${t.shortName}`, 'success')
+                      }
+                      setOpen(false)
+                    }}
                     role="radio"
                     aria-checked={active}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-left
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-left cursor-pointer
                       ${active ? 'bg-[#1A2236]' : 'hover:bg-[#1A2236]/60'}`}
                   >
-                    {/* Branded swatch — preview of the tenant's primary colour */}
+                    {/* Branded swatch — preview of the school's primary colour */}
                     <div
-                      className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-[10px] font-bold shrink-0"
+                      className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-[10px] font-bold shrink-0 pointer-events-none"
                       style={{
                         background: t.primary,
                         boxShadow: active ? `0 0 0 2px ${t.primary}50` : undefined,
@@ -160,12 +171,12 @@ export default function TenantSwitcher() {
                     >
                       {t.abbr}
                     </div>
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 pointer-events-none">
                       <p className="text-[12.5px] font-semibold text-white truncate">{t.shortName}</p>
                       <p className="text-[10.5px] text-gray-400 truncate">{t.name}</p>
                     </div>
                     {active && (
-                      <span className="text-[10px] font-bold text-[#60A5FA]">✓</span>
+                      <span className="text-[10px] font-bold text-[#60A5FA] pointer-events-none">✓ Active</span>
                     )}
                   </button>
                 )

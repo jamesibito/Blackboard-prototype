@@ -105,9 +105,9 @@ const makeSteps = (tenantShortName: string): TourStep[] => [
   {
     type: 'spotlight',
     target: 'tenant-switcher',
-    eyebrow: "Multi-tenant demo",
+    eyebrow: "Multi-school demo",
     title: "Try this redesign at other schools.",
-    body: "Bonus: this is the same product reskinned for four institutions — George Brown, York, Laurier, and McMaster. Click to see how the design system holds up.",
+    body: "Bonus: this is the same product reskinned for four schools — George Brown, York, Laurier, and McMaster. Click to see how the design system holds up.",
     placement: 'left',
   },
   {
