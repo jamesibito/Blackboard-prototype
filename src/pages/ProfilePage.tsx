@@ -44,7 +44,7 @@ export default function ProfilePage() {
         <div className="px-6 pb-6">
           {/* Avatar */}
           <div className="-mt-10 mb-4">
-            <div className="w-20 h-20 rounded-2xl border-4 border-white dark:border-[#1A2236] bg-[var(--tenant-primary)] flex items-center justify-center text-white font-bold text-[24px] shadow-sm">
+            <div className="w-20 h-20 rounded-full border-4 border-white dark:border-[#1A2236] bg-[var(--tenant-primary)] flex items-center justify-center text-white font-bold text-[24px] shadow-sm">
               <svg viewBox="0 0 32 32" width="80" height="80" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <clipPath id="profile-avatar-clip">

@@ -75,15 +75,22 @@ export const MicrosoftLogo = ({ size, className }: LogoProps) =>
     </>
   ))
 
-/** Adobe Creative Cloud — red square with path-drawn "Cc" mark. */
+/** Adobe Creative Cloud — red square with "Cc" mark. */
 export const AdobeLogo = ({ size, className }: LogoProps) =>
   svg('0 0 24 24', size, className, (
     <>
       <rect x="1" y="1" width="22" height="22" rx="3" fill="#FA0F00" />
-      {/* Large C */}
-      <path d="M13.5 8A4.5 4 0 1 0 13.5 16" stroke="white" strokeWidth="2.1" fill="none" strokeLinecap="round" />
-      {/* Small c */}
-      <path d="M20 10A2.6 2.5 0 1 0 20 14" stroke="white" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+      <text
+        x="12"
+        y="17"
+        textAnchor="middle"
+        fontSize="13"
+        fontWeight="700"
+        fill="white"
+        fontFamily="system-ui, sans-serif"
+      >
+        Cc
+      </text>
     </>
   ))
 
@@ -115,47 +122,61 @@ export const LinkedInLogo = ({ size, className }: LogoProps) =>
 
 // ─── Letter monograms (brands without distinct shape marks) ───────────────────
 
-/** Turnitin — circular dark-blue T mark built from rectangles. */
+/** Turnitin — circular dark-blue T mark. */
 export const TurnitinLogo = ({ size, className }: LogoProps) =>
   svg('0 0 24 24', size, className, (
     <>
       <circle cx="12" cy="12" r="11" fill="#1B4D89" />
-      {/* Horizontal bar */}
-      <rect x="5.5" y="6.5" width="13" height="2.4" rx="1.2" fill="white" />
-      {/* Vertical stem */}
-      <rect x="10.3" y="8.9" width="3.4" height="9" rx="1.2" fill="white" />
+      <text
+        x="12"
+        y="17"
+        textAnchor="middle"
+        fontSize="14"
+        fontWeight="700"
+        fill="white"
+        fontFamily="Georgia, serif"
+        fontStyle="italic"
+      >
+        t
+      </text>
     </>
   ))
 
-/** Grammarly — green circle with stroke-drawn G mark. */
+/** Grammarly — green circle with G mark. */
 export const GrammarlyLogo = ({ size, className }: LogoProps) =>
   svg('0 0 24 24', size, className, (
     <>
       <circle cx="12" cy="12" r="11" fill="#15C39A" />
-      {/* G: large arc (open right) then horizontal arm */}
-      <path
-        d="M15 8.2 A4.2 4.2 0 1 0 16.2 12.8 H12.5"
-        stroke="white"
-        strokeWidth="2.1"
-        fill="none"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <text
+        x="12"
+        y="17"
+        textAnchor="middle"
+        fontSize="14"
+        fontWeight="700"
+        fill="white"
+        fontFamily="system-ui, sans-serif"
+      >
+        G
+      </text>
     </>
   ))
 
-/** Respondus — grey square with lock icon (lockdown browser). */
+/** Respondus — grey square with R mark (inactive-feeling, matches its status). */
 export const RespondusLogo = ({ size, className }: LogoProps) =>
   svg('0 0 24 24', size, className, (
     <>
       <rect x="1" y="1" width="22" height="22" rx="4" fill="#475569" />
-      {/* Lock body */}
-      <rect x="7.5" y="11.5" width="9" height="7" rx="1.5" fill="white" />
-      {/* Lock shackle */}
-      <path d="M9.5 11.5V9.5a2.5 2.5 0 0 1 5 0v2" stroke="white" strokeWidth="1.9" fill="none" strokeLinecap="round" />
-      {/* Keyhole */}
-      <circle cx="12" cy="14.8" r="1.1" fill="#475569" />
-      <rect x="11.45" y="15.6" width="1.1" height="1.5" rx="0.3" fill="#475569" />
+      <text
+        x="12"
+        y="17"
+        textAnchor="middle"
+        fontSize="14"
+        fontWeight="700"
+        fill="white"
+        fontFamily="system-ui, sans-serif"
+      >
+        R
+      </text>
     </>
   ))
 

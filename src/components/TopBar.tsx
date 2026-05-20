@@ -340,7 +340,7 @@ export default function TopBar() {
           >
             <div
               aria-hidden="true"
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0 overflow-hidden"
+              className="w-8 h-8 rounded-full flex items-center justify-center text-white shrink-0 overflow-hidden"
               style={{ background: user.avatarColor }}
             >
               {/* Person silhouette — circle-clipped so body has no flat edge */}
