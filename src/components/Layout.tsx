@@ -3,7 +3,7 @@ import Sidebar from './Sidebar'
 import TopBar from './TopBar'
 import ToastContainer from './ToastContainer'
 import DemoBanner from './DemoBanner'
-import OnboardingModal from './OnboardingModal'
+import Tour from './Tour'
 import TenantSwitcher from './TenantSwitcher'
 
 /**
@@ -20,6 +20,9 @@ import TenantSwitcher from './TenantSwitcher'
 function resetDemo() {
   localStorage.removeItem('gbc-bb-demo-banner-dismissed-v1')
   localStorage.removeItem('gbc-bb-onboarding-seen-v1')
+  localStorage.removeItem('gbc-bb-onboarding-seen-v2')
+  localStorage.removeItem('gbc-bb-onboarding-seen-v3')
+  localStorage.removeItem('gbc-bb-tour-completed-v1')
   window.location.reload()
 }
 
@@ -87,8 +90,9 @@ export default function Layout() {
         </footer>
       </div>
       <ToastContainer />
-      {/* First-visit onboarding overlay — gated on localStorage inside the component */}
-      <OnboardingModal />
+      {/* First-visit onboarding tour — spotlight + tooltip walkthrough of
+          the Dashboard. Gated on localStorage inside the component. */}
+      <Tour />
       {/* Multi-tenant institution skin switcher — floating bottom-right.
           Lives on Layout (not on standalone pages like /changelog or /font-vote). */}
       <TenantSwitcher />

@@ -54,7 +54,7 @@ export default function Sidebar() {
   }
 
   return (
-    <aside aria-label="Primary" className="fixed left-0 top-0 bottom-0 w-[220px] bg-[#131825] border-r border-[#1E2A3F] flex flex-col z-30">
+    <aside data-tour="sidebar" aria-label="Primary" className="fixed left-0 top-0 bottom-0 w-[220px] bg-[#131825] border-r border-[#1E2A3F] flex flex-col z-30">
 
       {/* Tenant header — colour, wordmark, and accent stripe driven by the
           active tenant. GBC keeps the rainbow stripe for brand fidelity;

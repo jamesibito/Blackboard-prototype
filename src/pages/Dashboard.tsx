@@ -132,6 +132,7 @@ export default function Dashboard() {
 
         {/* Welcome Banner — fills remaining width */}
         <div
+          data-tour="welcome-banner"
           className="relative flex-1 rounded-2xl p-6 text-white overflow-hidden min-w-0"
           style={{
             backgroundImage: `linear-gradient(to bottom right, ${tenant.gradient.from}, ${tenant.gradient.via}, ${tenant.gradient.to})`,
@@ -184,19 +185,21 @@ export default function Dashboard() {
         </div>
 
         {/* Today's Schedule — fixed width sidebar */}
-        <div className="w-[280px] shrink-0">
+        <div data-tour="today-schedule" className="w-[280px] shrink-0">
           <TodaySchedule />
         </div>
       </div>
 
       {/* ── Deadline Timeline ── */}
-      <DeadlineTimeline />
+      <div data-tour="deadline-timeline">
+        <DeadlineTimeline />
+      </div>
 
       {/* ── Main grid: Courses | Recent Grades | Calendar + Activity ── */}
       <div className="grid grid-cols-[1fr_minmax(260px,0.65fr)_minmax(280px,0.75fr)] gap-5">
 
         {/* Courses */}
-        <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden">
+        <div data-tour="courses-list" className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden">
           <div className="flex items-center justify-between px-5 pt-5 pb-3">
             <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Courses</h2>
             <Link to="/courses" className="text-[12px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline">

@@ -1,40 +1,46 @@
 import { useState, useEffect, useRef } from 'react'
-import { ChevronDown, X } from './Icons'
+import { ChevronDown } from './Icons'
 import { useTenant } from '../context/TenantContext'
 
 /**
  * TenantSwitcher
  * ──────────────
- * Floating bottom-right pill that lets a viewer reskin the entire prototype
+ * Floating bottom-right control that lets a viewer reskin the entire prototype
  * for a different Canadian post-secondary institution (Blackboard Learn is
  * multi-tenant — every school skins their own instance).
  *
  * Demonstrates the design system holding up across brand identities without
  * needing to rebuild the UI for each.
  *
- * Always visible on every Layout page. Hidden on standalone pages like
- * /changelog and /font-vote (which aren't part of the in-app experience).
- *
- * Dismissable for the session via the × — persists in localStorage so a
- * reviewer who's done exploring can hide it.
+ * UX detail (fix from v4.15.0): the previous version had a × that hid the
+ * switcher to localStorage permanently — once dismissed, no way back without
+ * clearing storage. Replaced with a reversible "collapse to chip" — click the
+ * chevron and the full pill collapses to a tiny coloured dot you can click
+ * to expand again. State persists in localStorage so it survives navigation.
  */
 
-const DISMISSED_KEY = 'gbc-bb-tenant-switcher-dismissed'
+const STATE_KEY = 'gbc-bb-tenant-switcher-state'   // 'expanded' | 'collapsed'
 
 export default function TenantSwitcher() {
   const { tenant, tenantId, setTenantId, tenants } = useTenant()
   const [open, setOpen] = useState(false)
-  const [dismissed, setDismissed] = useState<boolean>(() => {
+  const [collapsed, setCollapsed] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false
-    return localStorage.getItem(DISMISSED_KEY) === '1'
+    return localStorage.getItem(STATE_KEY) === 'collapsed'
   })
-  const popoverRef = useRef<HTMLDivElement>(null)
+  const wrapperRef = useRef<HTMLDivElement>(null)
 
-  // Close on outside click
+  function setCollapsedPersist(next: boolean) {
+    setCollapsed(next)
+    localStorage.setItem(STATE_KEY, next ? 'collapsed' : 'expanded')
+    setOpen(false)
+  }
+
+  // Close popover on outside click
   useEffect(() => {
     if (!open) return
     function onDocClick(e: MouseEvent) {
-      if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
         setOpen(false)
       }
     }
@@ -42,7 +48,7 @@ export default function TenantSwitcher() {
     return () => document.removeEventListener('mousedown', onDocClick)
   }, [open])
 
-  // ESC closes
+  // ESC closes popover
   useEffect(() => {
     if (!open) return
     function onKey(e: KeyboardEvent) { if (e.key === 'Escape') setOpen(false) }
@@ -50,12 +56,32 @@ export default function TenantSwitcher() {
     return () => window.removeEventListener('keydown', onKey)
   }, [open])
 
-  if (dismissed) return null
+  // ─── Collapsed state — a small floating chip in the bottom-right ────────────
+  if (collapsed) {
+    return (
+      <button
+        type="button"
+        data-tour="tenant-switcher"
+        onClick={() => setCollapsedPersist(false)}
+        aria-label={`Expand tenant switcher — currently viewing as ${tenant.shortName}`}
+        title={`Currently: ${tenant.shortName} · click to switch institution`}
+        className="fixed bottom-4 right-4 z-[60] w-12 h-12 rounded-full bg-[#0F1623] border border-[#2D3A52] shadow-2xl hover:scale-105 transition-transform flex items-center justify-center"
+      >
+        <span
+          className="w-6 h-6 rounded-full flex items-center justify-center text-white text-[10px] font-bold"
+          style={{ background: tenant.primary, boxShadow: `0 0 0 3px ${tenant.primary}40` }}
+        >
+          {tenant.abbr}
+        </span>
+      </button>
+    )
+  }
 
+  // ─── Expanded state — full pill with toggle + collapse ──────────────────────
   return (
-    <div className="fixed bottom-4 right-4 z-[60]">
+    <div data-tour="tenant-switcher" className="fixed bottom-4 right-4 z-[60]">
       <div
-        ref={popoverRef}
+        ref={wrapperRef}
         className="relative flex items-stretch bg-[#0F1623] text-white rounded-2xl shadow-2xl border border-[#2D3A52] backdrop-blur-md overflow-hidden"
       >
         {/* Pill trigger — shows current tenant with its primary color dot */}
@@ -84,17 +110,17 @@ export default function TenantSwitcher() {
           />
         </button>
 
-        {/* Dismiss */}
+        {/* Collapse to chip — reversible (was the × dismiss before, but that
+            was a one-way trap. The new chevron icon and "Minimise" hint make
+            it clear this hides to a chip rather than killing the feature.) */}
         <button
           type="button"
-          onClick={() => {
-            localStorage.setItem(DISMISSED_KEY, '1')
-            setDismissed(true)
-          }}
-          aria-label="Hide tenant switcher for this session"
-          className="px-2 border-l border-[#2D3A52] hover:bg-[#1A2236] text-gray-500 hover:text-gray-300 transition-colors"
+          onClick={() => setCollapsedPersist(true)}
+          aria-label="Minimise tenant switcher to a chip"
+          title="Minimise (you can expand it again from the chip)"
+          className="px-3 border-l border-[#2D3A52] hover:bg-[#1A2236] text-gray-500 hover:text-gray-300 transition-colors text-[10px] font-medium"
         >
-          <X size={14} />
+          −
         </button>
 
         {/* Popover */}
@@ -102,7 +128,7 @@ export default function TenantSwitcher() {
           <div
             role="dialog"
             aria-label="Institutions"
-            className="absolute bottom-full right-0 mb-2 w-[280px] bg-[#0F1623] border border-[#2D3A52] rounded-2xl shadow-2xl p-2"
+            className="absolute bottom-full right-0 mb-2 w-[300px] bg-[#0F1623] border border-[#2D3A52] rounded-2xl shadow-2xl p-2"
           >
             <div className="px-3 pt-2 pb-3 border-b border-[#2D3A52] mb-2">
               <p className="text-[10px] font-bold uppercase tracking-[1.4px] text-gray-400">

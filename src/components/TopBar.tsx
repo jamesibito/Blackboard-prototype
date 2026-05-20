@@ -86,7 +86,7 @@ export default function TopBar() {
     <header className="h-[64px] flex items-center justify-between px-6 bg-[#E8EBF0] dark:bg-[#131825] border-b border-[#D4D8E0] dark:border-[#1E2A3F] shrink-0 relative z-20">
 
       {/* Search */}
-      <div ref={searchRef} role="search" className="relative w-[380px]">
+      <div data-tour="topbar-search" ref={searchRef} role="search" className="relative w-[380px]">
         <label htmlFor="global-search" className="sr-only">Search courses, resources, and activities</label>
         <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-400 pointer-events-none" aria-hidden="true" />
         <input

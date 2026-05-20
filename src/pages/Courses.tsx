@@ -137,9 +137,30 @@ export default function Courses() {
                   <X size={16} />
                 </button>
               </div>
+
+              {/* Primary actions — pinned to the panel header so they never
+                  scroll off-screen. Previously these sat below modules + info
+                  and were invisible on shorter laptop viewports. */}
+              <div className="grid grid-cols-[1fr_auto] gap-2 mt-4">
+                <Link
+                  to={`/courses/${selected.id}`}
+                  className="block py-2.5 rounded-xl text-[13px] font-semibold text-white transition-opacity hover:opacity-90 active:scale-[0.98] text-center"
+                  style={{ background: selected.color }}
+                >
+                  Open Full Course →
+                </Link>
+                <Link
+                  to="/grades"
+                  className="px-4 py-2.5 rounded-xl text-[13px] font-semibold text-center border-2 transition-colors hover:opacity-80 whitespace-nowrap"
+                  style={{ borderColor: selected.color, color: selected.color }}
+                  title="Jump to the Grades page"
+                >
+                  Grades
+                </Link>
+              </div>
             </div>
 
-            <div className="p-5 space-y-4 overflow-y-auto max-h-[calc(100vh-200px)]">
+            <div className="p-5 space-y-4 overflow-y-auto max-h-[calc(100vh-260px)]">
               <p className="text-[13px] text-gray-600 dark:text-gray-400 leading-relaxed">{selected.description}</p>
 
               <div className="grid grid-cols-2 gap-2.5">
@@ -192,24 +213,6 @@ export default function Courses() {
                   </div>
                 )}
               </div>
-
-              {/* Primary action: full course page with modules, assignments, resources */}
-              <Link
-                to={`/courses/${selected.id}`}
-                className="block w-full py-2.5 rounded-xl text-[13px] font-semibold text-white transition-opacity hover:opacity-90 active:scale-[0.98] text-center"
-                style={{ background: selected.color }}
-              >
-                Open Full Course →
-              </Link>
-
-              {/* Secondary: jump straight to grades detail */}
-              <Link
-                to="/grades"
-                className="block w-full py-2 rounded-xl text-[13px] font-medium text-center border transition-colors hover:opacity-80"
-                style={{ borderColor: selected.color, color: selected.color }}
-              >
-                View Grades
-              </Link>
             </div>
           </div>
         )}

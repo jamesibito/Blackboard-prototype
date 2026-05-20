@@ -166,6 +166,7 @@ export default function ProfilePage() {
                 { label: 'Change Password',        action: () => { toast('Redirecting to MyGBC account settings…', 'info'); window.open('https://georgebrown.ca/portal', '_blank', 'noopener,noreferrer') } },
                 { label: 'Accessibility Settings', action: () => setA11yOpen(true) },
                 { label: 'Download Transcript',    action: () => { toast('Opening STU-VIEW — select Unofficial Transcript', 'info'); window.open('https://stuview.georgebrown.ca/', '_blank', 'noopener,noreferrer') } },
+                { label: 'Replay product tour',    action: () => { localStorage.removeItem('gbc-bb-tour-completed-v1'); window.location.href = '/' } },
                 { label: 'Help Centre',            action: () => { toast('Opening GBC IT Help…', 'info'); window.open('https://www.georgebrown.ca/current-students/services/it-help-index', '_blank', 'noopener,noreferrer') } },
               ].map(item => (
                 <button

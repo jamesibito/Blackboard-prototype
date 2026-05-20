@@ -30,6 +30,22 @@ interface ChangelogVersion {
 
 const VERSIONS: ChangelogVersion[] = [
   {
+    version: 'v4.16.0',
+    theme: 'Spotlight product tour + Courses CTA fix + tenant switcher reversible',
+    era: 'Latest',
+    what: [
+      'New Tour component — spotlight + tooltip walkthrough replaces the modal-only onboarding (Notion / Linear / Figma pattern)',
+      '9 steps: welcome → Priority Card → Today\'s Schedule → Deadline Timeline → Courses → Sidebar → Search → Tenant switcher → done',
+      'Smart tooltip placement adapts to viewport edges; auto-scrolls target into view if off-screen',
+      'Box-shadow cutout effect with a tenant-coloured glow ring around each spotlighted element',
+      'Courses slide-out: primary CTAs ("Open Full Course" + "Grades") moved into the pinned header so they never scroll off-screen',
+      'TenantSwitcher: replaced permanent × dismiss with reversible "collapse to chip" — click the chip in bottom-right to expand back',
+      '"Replay product tour" added to ProfilePage Account section; resetDemo() footer link clears the tour key too',
+    ],
+    why: 'The modal-based onboarding (v4.10) was a step in the right direction but it didn\'t SHOW the UI — it described it. The spotlight pattern is what every modern product (Notion, Linear, Figma) uses for first-run because it teaches by pointing. The Courses CTA was a real bug surfaced by testing: on shorter laptop viewports the "Open Full Course" button sat below the modules list and got pushed off-screen. The tenant switcher needed the reversible-collapse fix because the permanent dismiss was a one-way trap — once hit, no way back without clearing localStorage.',
+    highlight: true,
+  },
+  {
     version: 'v4.15.0',
     theme: 'Multi-tenant skin — same redesign, four institutions',
     era: 'Latest',
