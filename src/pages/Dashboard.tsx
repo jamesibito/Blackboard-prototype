@@ -115,10 +115,12 @@ export default function Dashboard() {
   const overallGPA = getOverallGPA()
   const nextClass  = getNextClass()
 
-  // Simulate a brief loading state so the skeleton is visible on first paint.
+  // Brief loading state so the skeleton is visible on first paint —
+  // 700ms is enough to register the polish without making the prototype
+  // feel sluggish for portfolio reviewers clicking around quickly.
   const [loading, setLoading] = useState(true)
   useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 1400)
+    const t = setTimeout(() => setLoading(false), 700)
     return () => clearTimeout(t)
   }, [])
 

@@ -18,11 +18,11 @@ export default function NotFound() {
     <div className="flex items-center justify-center min-h-[60vh] px-4">
       <div className="text-center max-w-[440px]">
 
-        {/* Big 404 — uses the GBC navy → blue gradient as a watermark */}
+        {/* Big 404 — gradient watermark follows the active tenant */}
         <p
           className="text-[120px] font-bold leading-none tracking-tighter mb-2"
           style={{
-            background: 'linear-gradient(135deg, #1B3F89 0%, #2563EB 100%)',
+            background: 'linear-gradient(135deg, var(--tenant-gradient-from) 0%, var(--tenant-gradient-to) 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
@@ -46,7 +46,7 @@ export default function NotFound() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
           <Link
             to="/"
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[13px] font-semibold transition-colors"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--tenant-primary)] hover:brightness-90 text-white text-[13px] font-semibold transition-all"
           >
             <Home size={14} aria-hidden="true" />
             Back to Dashboard
