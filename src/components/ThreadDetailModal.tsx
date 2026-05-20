@@ -258,11 +258,9 @@ export default function ThreadDetailModal({ thread, sessionReplies, onClose, onR
                 {/* This session's replies (locally tracked) */}
                 {sessionReplies.map((r, i) => (
                   <div key={`session-${i}`} className="flex gap-3 flex-row-reverse">
-                    <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-[11px] font-bold shrink-0 bg-[#2563EB]">
-                      KH
-                    </div>
+                    <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white shrink-0 bg-[var(--tenant-primary)] overflow-hidden"><svg viewBox="0 0 32 32" width="32" height="32" fill="none"><circle cx="16" cy="12" r="5.5" fill="white" fillOpacity="0.92"/><path d="M5 30c0-6.075 4.925-11 11-11s11 4.925 11 11" fill="white" fillOpacity="0.92"/></svg></div>
                     <div className="flex-1 min-w-0 flex flex-col items-end">
-                      <div className="rounded-2xl rounded-tr-sm px-4 py-2.5 bg-[#2563EB]/[0.08] dark:bg-[#2563EB]/[0.12] max-w-[88%]">
+                      <div className="rounded-2xl rounded-tr-sm px-4 py-2.5 bg-[var(--tenant-primary)]/[0.08] dark:bg-[var(--tenant-primary)]/[0.12] max-w-[88%]">
                         <p className="text-[12px] font-semibold text-gray-900 dark:text-gray-100 mb-0.5">Kevin H.</p>
                         <p className="text-[13px] text-gray-700 dark:text-gray-300 leading-relaxed">{r}</p>
                       </div>
@@ -278,9 +276,7 @@ export default function ThreadDetailModal({ thread, sessionReplies, onClose, onR
         {/* ── Composer ── */}
         <footer className="px-6 py-4 border-t border-gray-100 dark:border-[#2D3A52] bg-gray-50/50 dark:bg-[#131825]/40">
           <div className="flex gap-2 items-end">
-            <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-[11px] font-bold shrink-0 bg-[#2563EB]">
-              KH
-            </div>
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white shrink-0 bg-[var(--tenant-primary)] overflow-hidden"><svg viewBox="0 0 32 32" width="32" height="32" fill="none"><circle cx="16" cy="12" r="5.5" fill="white" fillOpacity="0.92"/><path d="M5 30c0-6.075 4.925-11 11-11s11 4.925 11 11" fill="white" fillOpacity="0.92"/></svg></div>
             <textarea
               ref={composerRef}
               value={draft}
@@ -295,7 +291,7 @@ export default function ThreadDetailModal({ thread, sessionReplies, onClose, onR
               disabled={!draft.trim()}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-semibold transition-all shrink-0 ${
                 draft.trim()
-                  ? 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white'
+                  ? 'bg-[var(--tenant-primary)] hover:brightness-90 text-white'
                   : 'bg-gray-100 dark:bg-[#232d42] text-gray-400 dark:text-gray-400 cursor-not-allowed'
               }`}
             >

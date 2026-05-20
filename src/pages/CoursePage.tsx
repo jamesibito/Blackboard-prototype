@@ -38,7 +38,7 @@ export default function CoursePage() {
           </p>
           <Link
             to="/courses"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[13px] font-semibold transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--tenant-primary)] hover:brightness-90 text-white text-[13px] font-semibold transition-colors"
           >
             Back to Courses
           </Link>

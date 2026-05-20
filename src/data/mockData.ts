@@ -1234,7 +1234,7 @@ You're in a strong position heading into the final. Keep it up.
 
 export const user = {
   displayName: 'Kevin H.',
-  avatarColor: '#2563EB',
+  avatarColor: 'var(--tenant-primary)',
 }
 
 // ─── Semester registry ────────────────────────────────────────────────────────

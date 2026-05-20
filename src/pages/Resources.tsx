@@ -64,7 +64,7 @@ export default function Resources() {
             onClick={() => setActiveType('all')}
             className={`px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-colors ${
               activeType === 'all'
-                ? 'bg-[#2563EB] text-white'
+                ? 'bg-[var(--tenant-primary)] text-white'
                 : 'bg-gray-100 dark:bg-[#232d42] text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-[#2a354d]'
             }`}
           >
@@ -146,7 +146,7 @@ export default function Resources() {
 
                       {/* Title + meta */}
                       <div className="flex-1 min-w-0">
-                        <p className="text-[13px] font-semibold text-gray-900 dark:text-gray-100 truncate group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors">
+                        <p className="text-[13px] font-semibold text-gray-900 dark:text-gray-100 truncate group-hover:text-[var(--tenant-link)] dark:group-hover:text-[var(--tenant-link-dark)] transition-colors">
                           {r.title}
                         </p>
                         <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">
@@ -201,7 +201,7 @@ export default function Resources() {
           {(query || activeType !== 'all') && (
             <button
               onClick={() => { setQuery(''); setActiveType('all') }}
-              className="mt-4 px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[13px] font-semibold transition-colors"
+              className="mt-4 px-4 py-2 rounded-xl bg-[var(--tenant-primary)] hover:brightness-90 text-white text-[13px] font-semibold transition-colors"
             >
               Clear filters
             </button>

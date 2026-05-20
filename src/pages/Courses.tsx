@@ -38,7 +38,7 @@ export default function Courses() {
                 onClick={() => setSelectedCourse(isSelected ? null : c.id)}
                 className={`bg-white dark:bg-[#1A2236] rounded-2xl border overflow-hidden cursor-pointer transition-all duration-150 hover:shadow-md dark:hover:shadow-[0_4px_24px_rgba(0,0,0,0.25)] ${
                   isSelected
-                    ? 'border-[#2563EB]/40 dark:border-[#60A5FA]/30 ring-1 ring-[#2563EB]/20'
+                    ? 'border-[var(--tenant-primary)]/40 dark:border-[var(--tenant-link-dark)]/30 ring-1 ring-[var(--tenant-primary)]/20'
                     : 'border-gray-100 dark:border-[#2D3A52]'
                 }`}
               >

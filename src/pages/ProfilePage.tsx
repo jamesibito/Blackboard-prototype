@@ -37,13 +37,16 @@ export default function ProfilePage() {
       {/* ── Header card ── */}
       <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden mb-6">
         {/* GBC navy accent */}
-        <div className="h-24 bg-gradient-to-r from-[#1B3F89] to-[#2563EB]" />
+        <div className="h-24" style={{ background: 'linear-gradient(to right, var(--tenant-gradient-from), var(--tenant-gradient-to))' }} />
 
         <div className="px-6 pb-6">
           {/* Avatar */}
           <div className="-mt-10 mb-4">
-            <div className="w-20 h-20 rounded-2xl border-4 border-white dark:border-[#1A2236] bg-[#2563EB] flex items-center justify-center text-white font-bold text-[24px] shadow-sm">
-              KH
+            <div className="w-20 h-20 rounded-2xl border-4 border-white dark:border-[#1A2236] bg-[var(--tenant-primary)] flex items-center justify-center text-white font-bold text-[24px] shadow-sm">
+              <svg viewBox="0 0 32 32" width="80" height="80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="16" cy="12" r="6" fill="white" fillOpacity="0.92" />
+                <path d="M4 32c0-6.627 5.373-12 12-12s12 5.373 12 12" fill="white" fillOpacity="0.92" />
+              </svg>
             </div>
           </div>
 
@@ -53,7 +56,7 @@ export default function ProfilePage() {
           <div className="flex items-center gap-4 mt-3 flex-wrap">
             <a
               href="mailto:kevin.hutchinson@georgebrown.ca"
-              className="flex items-center gap-1.5 text-[13px] text-gray-500 dark:text-gray-400 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors"
+              className="flex items-center gap-1.5 text-[13px] text-gray-500 dark:text-gray-400 hover:text-[var(--tenant-link)] dark:hover:text-[var(--tenant-link-dark)] transition-colors"
               title="Open in mail client"
             >
               <Mail size={13} />
@@ -65,7 +68,7 @@ export default function ProfilePage() {
                 navigator.clipboard?.writeText('101-847-293')
                 toast('Student ID copied to clipboard', 'success')
               }}
-              className="flex items-center gap-1.5 text-[13px] text-gray-500 dark:text-gray-400 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors"
+              className="flex items-center gap-1.5 text-[13px] text-gray-500 dark:text-gray-400 hover:text-[var(--tenant-link)] dark:hover:text-[var(--tenant-link-dark)] transition-colors"
               title="Copy student ID"
             >
               <CheckCircle size={13} />
@@ -96,7 +99,7 @@ export default function ProfilePage() {
               {[
                 { label: 'Fall 2022 GPA',   value: hideGPA ? '—' : `${fallGPA}%`,   sub: fallLetter,   color: fallColor },
                 { label: 'Winter 2022 GPA', value: hideGPA ? '—' : `${winterGPA}%`, sub: winterLetter, color: winterColor },
-                { label: 'Credits (Fall)',  value: `${totalCredits}`,                sub: 'enrolled',   color: '#2563EB' },
+                { label: 'Credits (Fall)',  value: `${totalCredits}`,                sub: 'enrolled',   color: 'var(--tenant-link)' },
               ].map(stat => (
                 <div key={stat.label} className="bg-gray-50 dark:bg-[#131825] rounded-xl p-3.5">
                   <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-400 uppercase tracking-wide">{stat.label}</p>
@@ -122,7 +125,7 @@ export default function ProfilePage() {
                       {c.abbr}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-[13px] font-medium text-gray-800 dark:text-gray-200 truncate group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors">{c.name}</p>
+                      <p className="text-[13px] font-medium text-gray-800 dark:text-gray-200 truncate group-hover:text-[var(--tenant-link)] dark:group-hover:text-[var(--tenant-link-dark)] transition-colors">{c.name}</p>
                       <p className="text-[11px] text-gray-400 dark:text-gray-400">{c.code}</p>
                     </div>
                     <span className="text-[11px] font-bold shrink-0" style={{ color: lc }}>{hideGPA ? '—' : letter}</span>
@@ -149,7 +152,7 @@ export default function ProfilePage() {
                   <span className="text-[13px] text-gray-700 dark:text-gray-300 capitalize">{key}</span>
                   <button
                     onClick={() => togglePref(key)}
-                    className={`relative w-9 h-5 rounded-full transition-colors duration-200 ${enabled ? 'bg-[#2563EB]' : 'bg-gray-200 dark:bg-[#2D3A52]'}`}
+                    className={`relative w-9 h-5 rounded-full transition-colors duration-200 ${enabled ? 'bg-[var(--tenant-primary)]' : 'bg-gray-200 dark:bg-[#2D3A52]'}`}
                   >
                     <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-all duration-200 ${enabled ? 'left-[18px]' : 'left-0.5'}`} />
                   </button>
@@ -174,7 +177,7 @@ export default function ProfilePage() {
                   onClick={item.action}
                   className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors group"
                 >
-                  <span className="text-[13px] text-gray-700 dark:text-gray-300 group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors">{item.label}</span>
+                  <span className="text-[13px] text-gray-700 dark:text-gray-300 group-hover:text-[var(--tenant-link)] dark:group-hover:text-[var(--tenant-link-dark)] transition-colors">{item.label}</span>
                   <ChevronRight size={13} className="text-gray-300 dark:text-gray-500" />
                 </button>
               ))}

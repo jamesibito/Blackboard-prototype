@@ -154,7 +154,7 @@ export default function ActivityStream() {
           </p>
           <button
             onClick={() => { setCourseFilter(null); setTypeFilter(null) }}
-            className="mt-4 px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[13px] font-semibold transition-colors"
+            className="mt-4 px-4 py-2 rounded-xl bg-[var(--tenant-primary)] hover:brightness-90 text-white text-[13px] font-semibold transition-colors"
           >
             Clear filters
           </button>
@@ -235,7 +235,7 @@ export default function ActivityStream() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={e => e.stopPropagation()}
-                                className="inline-flex items-center gap-1.5 mt-3 text-[12px] font-semibold text-[#2563EB] dark:text-[#60A5FA] hover:underline"
+                                className="inline-flex items-center gap-1.5 mt-3 text-[12px] font-semibold text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)] hover:underline"
                               >
                                 View on GBC site ↗
                                 <ArrowRight size={12} />
@@ -244,7 +244,7 @@ export default function ActivityStream() {
                               <Link
                                 to={item.linkTo}
                                 onClick={e => e.stopPropagation()}
-                                className="inline-flex items-center gap-1.5 mt-3 text-[12px] font-semibold text-[#2563EB] dark:text-[#60A5FA] hover:underline"
+                                className="inline-flex items-center gap-1.5 mt-3 text-[12px] font-semibold text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)] hover:underline"
                               >
                                 {item.type === 'grade' ? 'View feedback' : item.type === 'assignment' ? 'View assignment' : 'View details'}
                                 <ArrowRight size={12} />

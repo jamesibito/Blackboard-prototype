@@ -68,7 +68,7 @@ export default function Grades() {
           <p className="text-[13px] text-gray-400 dark:text-gray-400 mt-0.5">
             {semester.label} · George Brown College
             {semester.isCurrent && (
-              <span className="ml-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#2563EB]/10 text-[#2563EB] dark:bg-[#2563EB]/20 dark:text-[#60A5FA] align-middle">
+              <span className="ml-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-[var(--tenant-primary)]/10 text-[var(--tenant-link)] dark:bg-[var(--tenant-primary)]/20 dark:text-[var(--tenant-link-dark)] align-middle">
                 Current
               </span>
             )}
@@ -176,7 +176,7 @@ export default function Grades() {
           </span>
           <button
             onClick={() => navigate(1)}
-            className="ml-auto text-[12px] font-semibold text-[#2563EB] dark:text-[#60A5FA] hover:underline shrink-0"
+            className="ml-auto text-[12px] font-semibold text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)] hover:underline shrink-0"
           >
             Back to current →
           </button>
@@ -206,7 +206,7 @@ export default function Grades() {
               key={g.courseId}
               className={`bg-white dark:bg-[#1A2236] rounded-2xl border overflow-hidden cursor-pointer transition-all duration-150 hover:shadow-sm dark:hover:shadow-[0_2px_16px_rgba(0,0,0,0.2)] ${
                 isExpanded
-                  ? 'border-[#2563EB]/30 dark:border-[#60A5FA]/20 ring-1 ring-[#2563EB]/20 dark:ring-[#60A5FA]/10'
+                  ? 'border-[var(--tenant-primary)]/30 dark:border-[var(--tenant-link-dark)]/20 ring-1 ring-[var(--tenant-primary)]/20 dark:ring-[var(--tenant-link-dark)]/10'
                   : 'border-gray-100 dark:border-[#2D3A52]'
               }`}
               onClick={() => setExpandedId(isExpanded ? null : g.courseId)}
@@ -313,7 +313,7 @@ function PriorityAssignmentsCard() {
         <div className="flex items-center gap-2">
           <div
             className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"
-            style={{ background: '#2563EB15', color: '#2563EB' }}
+            style={{ background: 'color-mix(in srgb, var(--tenant-link) 8%, transparent)', color: 'var(--tenant-link)' }}
           >
             <TrendingUp size={15} />
           </div>
@@ -359,7 +359,7 @@ function PriorityRow({ item }: { item: PriorityAssignment }) {
       {/* Title + current course grade context */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <p className="text-[13px] font-semibold text-gray-900 dark:text-gray-100 truncate group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors">
+          <p className="text-[13px] font-semibold text-gray-900 dark:text-gray-100 truncate group-hover:text-[var(--tenant-link)] dark:group-hover:text-[var(--tenant-link-dark)] transition-colors">
             {assignment.title}
           </p>
           <span

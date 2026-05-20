@@ -54,7 +54,7 @@ export default function Layout() {
             href="https://jamesibitoye.framer.website"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-500 dark:text-gray-400 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors font-medium"
+            className="text-gray-500 dark:text-gray-400 hover:text-[var(--tenant-link)] dark:hover:text-[var(--tenant-link-dark)] transition-colors font-medium"
           >
             James Ibitoye
           </a>
@@ -63,7 +63,7 @@ export default function Layout() {
             href="https://blackboard.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-400 dark:text-gray-500 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors"
+            className="text-gray-400 dark:text-gray-500 hover:text-[var(--tenant-link)] dark:hover:text-[var(--tenant-link-dark)] transition-colors"
           >
             Blackboard
           </a>
@@ -72,7 +72,7 @@ export default function Layout() {
             href="https://georgebrown.ca"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-400 dark:text-gray-500 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors"
+            className="text-gray-400 dark:text-gray-500 hover:text-[var(--tenant-link)] dark:hover:text-[var(--tenant-link-dark)] transition-colors"
           >
             George Brown College
           </a>
@@ -82,7 +82,7 @@ export default function Layout() {
           <button
             type="button"
             onClick={resetDemo}
-            className="text-gray-400 dark:text-gray-500 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors cursor-pointer"
+            className="text-gray-400 dark:text-gray-500 hover:text-[var(--tenant-link)] dark:hover:text-[var(--tenant-link-dark)] transition-colors cursor-pointer"
             aria-label="Reset demo — restores the first-visit onboarding modal and demo banner"
           >
             Reset demo

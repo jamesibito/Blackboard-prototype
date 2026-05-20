@@ -21,7 +21,7 @@ export default function Breadcrumbs({ items }: { items: Crumb[] }) {
             ) : (
               <Link
                 to={crumb.to}
-                className="text-gray-400 dark:text-gray-400 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors"
+                className="text-gray-400 dark:text-gray-400 hover:text-[var(--tenant-link)] dark:hover:text-[var(--tenant-link-dark)] transition-colors"
               >
                 {crumb.label}
               </Link>

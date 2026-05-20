@@ -107,7 +107,7 @@ export default function Communities() {
         <button
           onClick={() => setComposerOpen(o => !o)}
           aria-expanded={composerOpen}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[13px] font-semibold transition-colors"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--tenant-primary)] hover:brightness-90 text-white text-[13px] font-semibold transition-colors"
         >
           <Plus size={14} className={`transition-transform ${composerOpen ? 'rotate-45' : ''}`} aria-hidden="true" />
           {composerOpen ? 'Close' : 'New Thread'}
@@ -119,7 +119,7 @@ export default function Communities() {
           published here are added to local state and appear at the top of the
           list immediately. */}
       {composerOpen && (
-        <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-[#2563EB]/30 dark:border-[#60A5FA]/20 shadow-sm p-5 mb-5 ring-1 ring-[#2563EB]/10">
+        <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-[var(--tenant-primary)]/30 dark:border-[var(--tenant-link-dark)]/20 shadow-sm p-5 mb-5 ring-1 ring-[var(--tenant-primary)]/10">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-[14px] font-bold text-gray-900 dark:text-gray-100">Start a new thread</h2>
             <button
@@ -181,8 +181,8 @@ export default function Communities() {
               disabled={!canPublish}
               className={`ml-auto flex items-center gap-1.5 h-9 px-4 rounded-lg text-[12px] font-semibold text-white transition-colors ${
                 canPublish
-                  ? 'bg-[#2563EB] hover:bg-[#1D4ED8]'
-                  : 'bg-[#2563EB]/40 cursor-not-allowed'
+                  ? 'bg-[var(--tenant-primary)] hover:brightness-90'
+                  : 'bg-[var(--tenant-primary)]/40 cursor-not-allowed'
               }`}
             >
               <Send size={11} aria-hidden="true" />
@@ -261,7 +261,7 @@ export default function Communities() {
           </p>
           <button
             onClick={() => { setCourseFilter(null); setTagFilter(null) }}
-            className="mt-4 px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[13px] font-semibold transition-colors"
+            className="mt-4 px-4 py-2 rounded-xl bg-[var(--tenant-primary)] hover:brightness-90 text-white text-[13px] font-semibold transition-colors"
           >
             Clear filters
           </button>
@@ -292,7 +292,7 @@ export default function Communities() {
                 className={`bg-white dark:bg-[#1A2236] rounded-2xl border transition-all cursor-pointer hover:shadow-sm dark:hover:shadow-[0_2px_16px_rgba(0,0,0,0.2)] focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:outline-none ${
                   isRead
                     ? 'border-gray-100 dark:border-[#2D3A52]'
-                    : 'border-[#2563EB]/20 dark:border-[#60A5FA]/15'
+                    : 'border-[var(--tenant-primary)]/20 dark:border-[var(--tenant-link-dark)]/15'
                 }`}
               >
                 {/* Pinned banner */}
@@ -307,7 +307,7 @@ export default function Communities() {
                   {/* Unread dot + avatar */}
                   <div className="relative shrink-0 mt-0.5">
                     {!isRead && (
-                      <div className="absolute -left-2 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[#2563EB]" />
+                      <div className="absolute -left-2 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[var(--tenant-primary)]" />
                     )}
                     <div
                       className="w-9 h-9 rounded-xl flex items-center justify-center text-white text-[11px] font-bold"

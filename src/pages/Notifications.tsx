@@ -55,7 +55,7 @@ export default function Notifications() {
         {unreadCount > 0 && (
           <button
             onClick={markAllRead}
-            className="mt-1 text-[12px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline transition-colors"
+            className="mt-1 text-[12px] font-medium text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)] hover:underline transition-colors"
           >
             Mark all as read
           </button>
@@ -77,7 +77,7 @@ export default function Notifications() {
                   : 'border-gray-200 dark:border-[#2D3A52] text-gray-400 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#232d42] hover:text-gray-700 dark:hover:text-gray-300'
               }`}
               style={active && cfg ? { background: cfg.bg, borderColor: cfg.color, color: cfg.color }
-                : active ? { background: '#2563EB18', borderColor: '#2563EB', color: '#2563EB' }
+                : active ? { background: 'color-mix(in srgb, var(--tenant-link) 9%, transparent)', borderColor: 'var(--tenant-link)', color: 'var(--tenant-link)' }
                 : undefined}
             >
               {cfg && <cfg.icon size={11} />}
@@ -231,7 +231,7 @@ export default function Notifications() {
             </p>
             <button
               onClick={() => setTypeFilter('All')}
-              className="mt-4 px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[13px] font-semibold transition-colors"
+              className="mt-4 px-4 py-2 rounded-xl bg-[var(--tenant-primary)] hover:brightness-90 text-white text-[13px] font-semibold transition-colors"
             >
               Show all notifications
             </button>

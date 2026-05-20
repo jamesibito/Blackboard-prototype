@@ -64,7 +64,7 @@ export default function AssignmentPage() {
       <div className="flex items-center justify-center h-[60vh]">
         <div className="text-center">
           <h1 className="text-[20px] font-bold text-gray-900 dark:text-gray-100 mb-2">Assignment not found</h1>
-          <Link to="/courses" className="text-[13px] text-[#2563EB] dark:text-[#60A5FA] hover:underline">Back to Courses</Link>
+          <Link to="/courses" className="text-[13px] text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)] hover:underline">Back to Courses</Link>
         </div>
       </div>
     )
@@ -77,7 +77,7 @@ export default function AssignmentPage() {
 
   const statusConfig = {
     graded:    { label: 'Graded',    color: '#22C55E', bg: '#22C55E15' },
-    submitted: { label: 'Submitted', color: '#2563EB', bg: '#2563EB15' },
+    submitted: { label: 'Submitted', color: 'var(--tenant-link)', bg: 'color-mix(in srgb, var(--tenant-link) 8%, transparent)' },
     upcoming:  { label: 'Upcoming',  color: '#F59E0B', bg: '#F59E0B15' },
     late:      { label: 'Late',      color: '#EF4444', bg: '#EF444415' },
   }
@@ -259,7 +259,7 @@ export default function AssignmentPage() {
                         <div className={`rounded-2xl px-4 py-3 ${
                           isInstructor
                             ? 'bg-gray-50 dark:bg-[#131825] rounded-tl-sm'
-                            : 'bg-[#2563EB]/[0.08] dark:bg-[#2563EB]/[0.12] rounded-tr-sm'
+                            : 'bg-[var(--tenant-primary)]/[0.08] dark:bg-[var(--tenant-primary)]/[0.12] rounded-tr-sm'
                         }`}>
                           <p className="text-[12px] font-semibold text-gray-900 dark:text-gray-100 mb-1">
                             {msg.author}
@@ -277,9 +277,9 @@ export default function AssignmentPage() {
                 {/* Replies added this session */}
                 {extraReplies.map((r, i) => (
                   <div key={i} className="flex gap-3 flex-row-reverse">
-                    <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-[11px] font-bold shrink-0 bg-[#2563EB]">KH</div>
+                    <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white shrink-0 bg-[var(--tenant-primary)] overflow-hidden"><svg viewBox="0 0 32 32" width="32" height="32" fill="none"><circle cx="16" cy="12" r="5.5" fill="white" fillOpacity="0.92"/><path d="M5 30c0-6.075 4.925-11 11-11s11 4.925 11 11" fill="white" fillOpacity="0.92"/></svg></div>
                     <div className="flex-1 max-w-[85%] flex flex-col items-end">
-                      <div className="rounded-2xl rounded-tr-sm px-4 py-3 bg-[#2563EB]/[0.08] dark:bg-[#2563EB]/[0.12]">
+                      <div className="rounded-2xl rounded-tr-sm px-4 py-3 bg-[var(--tenant-primary)]/[0.08] dark:bg-[var(--tenant-primary)]/[0.12]">
                         <p className="text-[12px] font-semibold text-gray-900 dark:text-gray-100 mb-1">Kevin H.</p>
                         <p className="text-[13px] text-gray-700 dark:text-gray-300 leading-relaxed">{r}</p>
                       </div>
@@ -290,7 +290,7 @@ export default function AssignmentPage() {
 
                 {/* Functional reply input */}
                 <div className="flex gap-2 pt-2 border-t border-gray-100 dark:border-[#2D3A52]">
-                  <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-[11px] font-bold shrink-0 bg-[#2563EB]">KH</div>
+                  <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white shrink-0 bg-[var(--tenant-primary)] overflow-hidden"><svg viewBox="0 0 32 32" width="32" height="32" fill="none"><circle cx="16" cy="12" r="5.5" fill="white" fillOpacity="0.92"/><path d="M5 30c0-6.075 4.925-11 11-11s11 4.925 11 11" fill="white" fillOpacity="0.92"/></svg></div>
                   <div className="flex-1 flex gap-2 items-end">
                     <textarea
                       value={feedbackText}
@@ -298,7 +298,7 @@ export default function AssignmentPage() {
                       onKeyDown={e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) sendFeedbackReply() }}
                       placeholder="Reply to instructor…"
                       rows={1}
-                      className="flex-1 px-3 py-2 rounded-xl bg-gray-50 dark:bg-[#131825] border border-gray-200 dark:border-[#2D3A52] text-[12px] text-gray-700 dark:text-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none focus:ring-2 focus:ring-[#2563EB]/20 transition resize-none"
+                      className="flex-1 px-3 py-2 rounded-xl bg-gray-50 dark:bg-[#131825] border border-gray-200 dark:border-[#2D3A52] text-[12px] text-gray-700 dark:text-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none focus:ring-2 focus:ring-[var(--tenant-primary)]/20 transition resize-none"
                       style={{ minHeight: 36, maxHeight: 100 }}
                     />
                     <button
@@ -349,7 +349,7 @@ export default function AssignmentPage() {
                     {isGradedOrSubmitted && matched && (
                       <button
                         onClick={() => toast(`Opening ${matched}`, 'info')}
-                        className="text-[11px] font-semibold text-[#2563EB] dark:text-[#60A5FA] hover:underline shrink-0"
+                        className="text-[11px] font-semibold text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)] hover:underline shrink-0"
                         title={`Open ${matched}`}
                       >
                         Open
@@ -380,7 +380,7 @@ export default function AssignmentPage() {
                     const filename = assignment.previousSubmissions?.[0]?.files[0] ?? `${assignment.title}.pdf`
                     toast(`Opening ${filename}`, 'info')
                   }}
-                  className="flex items-center gap-1.5 mx-auto mt-3 text-[12px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline"
+                  className="flex items-center gap-1.5 mx-auto mt-3 text-[12px] font-medium text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)] hover:underline"
                 >
                   <Download size={12} />
                   View submission
@@ -484,7 +484,7 @@ export default function AssignmentPage() {
                     <button
                       type="button"
                       onClick={() => toast(`Opening ${sub.files[0] ?? 'submission'}`, 'info')}
-                      className="text-[10px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline shrink-0"
+                      className="text-[10px] font-medium text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)] hover:underline shrink-0"
                     >
                       View
                     </button>
@@ -497,7 +497,7 @@ export default function AssignmentPage() {
           {/* Course info */}
           <Link
             to={`/courses/${course.id}`}
-            className="flex items-center gap-3 bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] p-4 hover:border-[#2563EB]/30 dark:hover:border-[#60A5FA]/20 transition-colors group"
+            className="flex items-center gap-3 bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] p-4 hover:border-[var(--tenant-primary)]/30 dark:hover:border-[var(--tenant-link-dark)]/20 transition-colors group"
           >
             <div
               className="w-9 h-9 rounded-xl flex items-center justify-center text-white font-bold text-[12px] shrink-0"
@@ -506,7 +506,7 @@ export default function AssignmentPage() {
               {course.abbr}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[13px] font-semibold text-gray-800 dark:text-gray-200 group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors">{course.name}</p>
+              <p className="text-[13px] font-semibold text-gray-800 dark:text-gray-200 group-hover:text-[var(--tenant-link)] dark:group-hover:text-[var(--tenant-link-dark)] transition-colors">{course.name}</p>
               <p className="text-[11px] text-gray-400 dark:text-gray-400">{course.instructor}</p>
             </div>
           </Link>

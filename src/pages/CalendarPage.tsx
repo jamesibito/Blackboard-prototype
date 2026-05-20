@@ -104,7 +104,7 @@ export default function CalendarPage() {
             {MONTHS[month]} {year}
           </h1>
           {year === 2022 && month === 11 && (
-            <span className="ml-2 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#2563EB]/10 text-[#2563EB] dark:bg-[#2563EB]/20 dark:text-[#60A5FA]">
+            <span className="ml-2 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[var(--tenant-primary)]/10 text-[var(--tenant-link)] dark:bg-[var(--tenant-primary)]/20 dark:text-[var(--tenant-link-dark)]">
               Current month
             </span>
           )}
@@ -120,7 +120,7 @@ export default function CalendarPage() {
               aria-expanded={filterOpen}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-medium transition border ${
                 typeFilter !== 'all'
-                  ? 'border-[#2563EB]/40 text-[#2563EB] dark:text-[#60A5FA] bg-[#2563EB]/[0.06]'
+                  ? 'border-[var(--tenant-primary)]/40 text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)] bg-[var(--tenant-primary)]/[0.06]'
                   : 'border-gray-200 dark:border-[#2D3A52] text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-[#232d42]'
               }`}
             >
@@ -140,7 +140,7 @@ export default function CalendarPage() {
                       onClick={() => { setTypeFilter(key); setFilterOpen(false) }}
                       className={`flex items-center justify-between w-full px-4 py-2 text-left text-[13px] transition-colors ${
                         active
-                          ? 'text-[#2563EB] dark:text-[#60A5FA] bg-[#2563EB]/[0.06] font-semibold'
+                          ? 'text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)] bg-[var(--tenant-primary)]/[0.06] font-semibold'
                           : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#232d42]'
                       }`}
                     >
@@ -161,7 +161,7 @@ export default function CalendarPage() {
                 onClick={() => setView(v)}
                 className={`px-4 py-1.5 text-[12px] font-medium transition-colors ${
                   view === v
-                    ? 'bg-[#2563EB] text-white'
+                    ? 'bg-[var(--tenant-primary)] text-white'
                     : 'bg-white dark:bg-[#1A2236] text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#232d42]'
                 }`}
               >
@@ -201,7 +201,7 @@ export default function CalendarPage() {
                       onClick={() => cell.isCurrentMonth && setSelectedDay(cell.day === selectedDay ? null : cell.day)}
                       className={`min-h-[100px] px-2 py-2 border-r border-gray-50 dark:border-[#1E2A3F] last:border-r-0 transition-colors cursor-pointer
                         ${cell.isCurrentMonth ? 'hover:bg-gray-50 dark:hover:bg-[#232d42]' : ''}
-                        ${isSelected ? 'bg-[#2563EB]/[0.04] dark:bg-[#2563EB]/[0.08]' : ''}
+                        ${isSelected ? 'bg-[var(--tenant-primary)]/[0.04] dark:bg-[var(--tenant-primary)]/[0.08]' : ''}
                         ${!cell.isCurrentMonth ? 'bg-gray-50/50 dark:bg-[#131825]/50' : ''}
                       `}
                     >
@@ -210,7 +210,7 @@ export default function CalendarPage() {
                         <div
                           className={`w-6 h-6 rounded-full flex items-center justify-center text-[12px] font-medium transition-colors
                             ${isToday
-                              ? 'bg-[#2563EB] text-white font-bold'
+                              ? 'bg-[var(--tenant-primary)] text-white font-bold'
                               : cell.isCurrentMonth
                                 ? 'text-gray-700 dark:text-gray-300'
                                 : 'text-gray-300 dark:text-gray-700'
@@ -239,7 +239,7 @@ export default function CalendarPage() {
                             <button
                               type="button"
                               onClick={e => { e.stopPropagation(); setSelectedDay(cell.day) }}
-                              className="text-[10px] text-gray-400 dark:text-gray-400 pl-1 hover:text-[#2563EB] dark:hover:text-[#60A5FA] transition-colors"
+                              className="text-[10px] text-gray-400 dark:text-gray-400 pl-1 hover:text-[var(--tenant-link)] dark:hover:text-[var(--tenant-link-dark)] transition-colors"
                             >
                               +{more} more
                             </button>
@@ -264,7 +264,7 @@ export default function CalendarPage() {
                       <p className="text-[28px] font-bold text-gray-900 dark:text-gray-100 leading-none">{selectedDay}</p>
                     </div>
                     {selectedDay === TODAY && (
-                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#2563EB]/10 text-[#2563EB] dark:bg-[#2563EB]/20 dark:text-[#60A5FA]">
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[var(--tenant-primary)]/10 text-[var(--tenant-link)] dark:bg-[var(--tenant-primary)]/20 dark:text-[var(--tenant-link-dark)]">
                         Today
                       </span>
                     )}
@@ -356,10 +356,10 @@ export default function CalendarPage() {
                       key={evt.id}
                       type="button"
                       onClick={() => handleEventClick(evt)}
-                      className={`flex items-center gap-4 w-full px-5 py-4 hover:bg-gray-50 dark:hover:bg-[#232d42] transition text-left ${isToday ? 'bg-[#2563EB]/[0.03] dark:bg-[#2563EB]/[0.06]' : ''}`}
+                      className={`flex items-center gap-4 w-full px-5 py-4 hover:bg-gray-50 dark:hover:bg-[#232d42] transition text-left ${isToday ? 'bg-[var(--tenant-primary)]/[0.03] dark:bg-[var(--tenant-primary)]/[0.06]' : ''}`}
                     >
                       <div className="text-center w-12 shrink-0">
-                        <div className={`text-[22px] font-bold leading-none ${isToday ? 'text-[#2563EB] dark:text-[#60A5FA]' : 'text-gray-900 dark:text-gray-100'}`}>
+                        <div className={`text-[22px] font-bold leading-none ${isToday ? 'text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)]' : 'text-gray-900 dark:text-gray-100'}`}>
                           {evt.day}
                         </div>
                         <div className="text-[10px] text-gray-400 dark:text-gray-400 uppercase font-medium mt-0.5">Dec</div>
@@ -370,7 +370,7 @@ export default function CalendarPage() {
                         <p className="text-[12px] text-gray-400 dark:text-gray-400 mt-0.5">{course.name} · {course.code}</p>
                       </div>
                       {isToday && (
-                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#2563EB]/10 text-[#2563EB] dark:text-[#60A5FA]">
+                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[var(--tenant-primary)]/10 text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)]">
                           Today
                         </span>
                       )}
@@ -433,7 +433,7 @@ function WeekView() {
             <div key={dow} className="py-3 text-center border-l border-gray-50 dark:border-[#1E2A3F] first:border-l-0">
               <p className="text-[11px] font-medium text-gray-400 dark:text-gray-400">{SHORT_DAYS[dow]}</p>
               <div className={`w-7 h-7 rounded-full flex items-center justify-center mx-auto mt-0.5 text-[13px] font-bold ${
-                isToday ? 'bg-[#2563EB] text-white' : 'text-gray-700 dark:text-gray-300'
+                isToday ? 'bg-[var(--tenant-primary)] text-white' : 'text-gray-700 dark:text-gray-300'
               }`}>
                 {date}
               </div>
@@ -494,7 +494,7 @@ function WeekView() {
             return (
               <div
                 key={dow}
-                className={`relative border-l border-gray-50 dark:border-[#1E2A3F] ${isToday ? 'bg-[#2563EB]/[0.02] dark:bg-[#2563EB]/[0.04]' : ''}`}
+                className={`relative border-l border-gray-50 dark:border-[#1E2A3F] ${isToday ? 'bg-[var(--tenant-primary)]/[0.02] dark:bg-[var(--tenant-primary)]/[0.04]' : ''}`}
                 style={{ height: HOUR_HEIGHT * hours.length }}
               >
                 {/* Hour grid lines */}
@@ -535,8 +535,8 @@ function WeekView() {
                     className="absolute left-0 right-0 flex items-center z-10 pointer-events-none"
                     style={{ top: (8.75 - DAY_START) * HOUR_HEIGHT }}
                   >
-                    <div className="w-2 h-2 rounded-full bg-[#2563EB] shrink-0 -ml-1" />
-                    <div className="flex-1 h-px bg-[#2563EB]" />
+                    <div className="w-2 h-2 rounded-full bg-[var(--tenant-primary)] shrink-0 -ml-1" />
+                    <div className="flex-1 h-px bg-[var(--tenant-primary)]" />
                   </div>
                 )}
               </div>
@@ -566,12 +566,12 @@ function DayView({ selectedDay, month, year }: { selectedDay: number; month: num
     <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden">
       {/* Header */}
       <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-100 dark:border-[#2D3A52]">
-        <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-[18px] ${isToday ? 'bg-[#2563EB] text-white' : 'bg-gray-100 dark:bg-[#232d42] text-gray-700 dark:text-gray-300'}`}>
+        <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-[18px] ${isToday ? 'bg-[var(--tenant-primary)] text-white' : 'bg-gray-100 dark:bg-[#232d42] text-gray-700 dark:text-gray-300'}`}>
           {selectedDay}
         </div>
         <div>
           <p className="text-[15px] font-bold text-gray-900 dark:text-gray-100">{SHORT_DAYS[dow]}, {MONTHS[month]} {selectedDay}</p>
-          {isToday && <span className="text-[11px] text-[#2563EB] dark:text-[#60A5FA] font-medium">Today</span>}
+          {isToday && <span className="text-[11px] text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)] font-medium">Today</span>}
         </div>
       </div>
 
@@ -630,8 +630,8 @@ function DayView({ selectedDay, month, year }: { selectedDay: number; month: num
 
           {isToday && (
             <div className="absolute left-0 right-0 flex items-center z-10 pointer-events-none" style={{ top: (8.75 - DAY_START) * HOUR_HEIGHT }}>
-              <div className="w-2 h-2 rounded-full bg-[#2563EB] shrink-0 -ml-1" />
-              <div className="flex-1 h-px bg-[#2563EB]" />
+              <div className="w-2 h-2 rounded-full bg-[var(--tenant-primary)] shrink-0 -ml-1" />
+              <div className="flex-1 h-px bg-[var(--tenant-primary)]" />
             </div>
           )}
 

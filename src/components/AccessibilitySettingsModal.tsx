@@ -105,7 +105,7 @@ export default function AccessibilitySettingsModal({ open, onClose }: Props) {
           <div className="flex items-start gap-3 mb-5">
             <div
               className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-              style={{ background: '#2563EB15', color: '#2563EB' }}
+              style={{ background: 'color-mix(in srgb, var(--tenant-link) 8%, transparent)', color: 'var(--tenant-link)' }}
             >
               <Eye size={18} />
             </div>
@@ -139,7 +139,7 @@ export default function AccessibilitySettingsModal({ open, onClose }: Props) {
           <button
             onClick={onClose}
             autoFocus
-            className="w-full mt-5 py-2.5 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[13px] font-semibold transition-colors"
+            className="w-full mt-5 py-2.5 rounded-xl bg-[var(--tenant-primary)] hover:brightness-90 text-white text-[13px] font-semibold transition-colors"
           >
             Done
           </button>
@@ -178,7 +178,7 @@ function ToggleRow({ title, description, checked, onChange }: ToggleRowProps) {
         aria-label={`${title}: ${checked ? 'on' : 'off'}`}
         onClick={() => onChange(!checked)}
         className={`relative w-10 h-5.5 mt-1 rounded-full shrink-0 transition-colors duration-200 ${
-          checked ? 'bg-[#2563EB]' : 'bg-gray-200 dark:bg-[#2D3A52]'
+          checked ? 'bg-[var(--tenant-primary)]' : 'bg-gray-200 dark:bg-[#2D3A52]'
         }`}
         style={{ height: 22 }}
       >

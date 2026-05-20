@@ -142,7 +142,7 @@ export default function Messages() {
         </div>
         <button
           onClick={() => setComposeOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[13px] font-semibold transition-colors"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--tenant-primary)] hover:brightness-90 text-white text-[13px] font-semibold transition-colors"
         >
           <Mail size={14} />
           Compose
@@ -158,7 +158,7 @@ export default function Messages() {
               <Inbox size={14} />
               Inbox
               {unreadCount > 0 && (
-                <span className="ml-auto bg-[#2563EB] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                <span className="ml-auto bg-[var(--tenant-primary)] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
                   {unreadCount}
                 </span>
               )}
@@ -178,13 +178,13 @@ export default function Messages() {
                   onClick={() => selectMessage(msg)}
                   className={`px-4 py-3.5 cursor-pointer transition-colors relative ${
                     isSelected
-                      ? 'bg-[#2563EB]/[0.06] dark:bg-[#2563EB]/[0.1]'
+                      ? 'bg-[var(--tenant-primary)]/[0.06] dark:bg-[var(--tenant-primary)]/[0.1]'
                       : 'hover:bg-gray-50 dark:hover:bg-[#232d42]'
                   }`}
                 >
                   {/* Unread dot */}
                   {!isRead && (
-                    <div className="absolute left-2 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[#2563EB]" />
+                    <div className="absolute left-2 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[var(--tenant-primary)]" />
                   )}
 
                   <div className="flex items-start gap-3 pl-1">
@@ -341,7 +341,7 @@ export default function Messages() {
               {/* Sent replies — appear inline below the original */}
               {(replies[selectedId] ?? []).map((r, i) => (
                 <div key={i} className="flex justify-end">
-                  <div className="max-w-[80%] bg-[#2563EB]/[0.08] dark:bg-[#2563EB]/[0.12] border border-[#2563EB]/20 rounded-2xl rounded-br-md px-4 py-3">
+                  <div className="max-w-[80%] bg-[var(--tenant-primary)]/[0.08] dark:bg-[var(--tenant-primary)]/[0.12] border border-[var(--tenant-primary)]/20 rounded-2xl rounded-br-md px-4 py-3">
                     <p className="text-[13px] text-gray-800 dark:text-gray-200 leading-relaxed whitespace-pre-line">{r}</p>
                     <p className="text-[10px] text-gray-400 dark:text-gray-400 mt-1.5 text-right">You · Just now</p>
                   </div>
@@ -368,7 +368,7 @@ export default function Messages() {
                 disabled={!replyText.trim()}
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-semibold transition-all shrink-0 ${
                   replyText.trim()
-                    ? 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white'
+                    ? 'bg-[var(--tenant-primary)] hover:brightness-90 text-white'
                     : 'bg-gray-100 dark:bg-[#232d42] text-gray-400 dark:text-gray-400 cursor-not-allowed'
                 }`}
               >

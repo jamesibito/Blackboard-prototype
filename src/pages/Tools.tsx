@@ -162,7 +162,7 @@ export default function Tools() {
         Need a tool added? Contact your instructor or{' '}
         <a
           href="mailto:gbcassist@georgebrown.ca?subject=Blackboard%20tool%20request"
-          className="text-[#2563EB] dark:text-[#60A5FA] hover:underline"
+          className="text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)] hover:underline"
         >
           GBC Assist
         </a>.
@@ -243,7 +243,7 @@ function ToolCard({ tool, expanded, onToggleExpand, onLaunch }: ToolCardProps) {
             onClick={onToggleExpand}
             aria-expanded={expanded}
             aria-controls={`details-${tool.id}`}
-            className="flex items-center gap-1 text-[11px] font-semibold text-[#2563EB] dark:text-[#60A5FA] hover:underline"
+            className="flex items-center gap-1 text-[11px] font-semibold text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)] hover:underline"
           >
             {expanded ? 'Show less' : 'Show more'}
             {expanded ? <ChevronUp size={11} /> : <ChevronDown size={11} />}

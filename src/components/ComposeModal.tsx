@@ -168,8 +168,8 @@ export default function ComposeModal({ onClose, prefillTo, prefillCourseId, pref
               disabled={!canSend}
               className={`flex items-center gap-2 px-5 py-2 rounded-xl text-white text-[13px] font-semibold transition-colors ${
                 canSend
-                  ? 'bg-[#2563EB] hover:bg-[#1D4ED8]'
-                  : 'bg-[#2563EB]/40 cursor-not-allowed'
+                  ? 'bg-[var(--tenant-primary)] hover:brightness-90'
+                  : 'bg-[var(--tenant-primary)]/40 cursor-not-allowed'
               }`}
             >
               <Send size={13} aria-hidden="true" />

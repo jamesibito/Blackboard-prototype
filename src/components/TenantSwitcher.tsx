@@ -187,7 +187,7 @@ export default function TenantSwitcher() {
                     <p className="text-[10.5px] text-gray-400 truncate">{t.name}</p>
                   </div>
                   {active && (
-                    <span className="text-[10px] font-bold text-[#60A5FA] pointer-events-none">✓ Active</span>
+                    <span className="text-[10px] font-bold text-[var(--tenant-nav-active)] pointer-events-none">✓ Active</span>
                   )}
                 </button>
               )
