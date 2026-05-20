@@ -343,12 +343,17 @@ export default function TopBar() {
               className="w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0 overflow-hidden"
               style={{ background: user.avatarColor }}
             >
-              {/* Person silhouette — more realistic than initials */}
+              {/* Person silhouette — circle-clipped so body has no flat edge */}
               <svg viewBox="0 0 32 32" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                {/* Head */}
-                <circle cx="16" cy="12" r="5.5" fill="white" fillOpacity="0.92" />
-                {/* Body / shoulders */}
-                <path d="M5 30c0-6.075 4.925-11 11-11s11 4.925 11 11" fill="white" fillOpacity="0.92" />
+                <defs>
+                  <clipPath id="avatar-clip">
+                    <circle cx="16" cy="16" r="16" />
+                  </clipPath>
+                </defs>
+                <g clipPath="url(#avatar-clip)">
+                  <circle cx="16" cy="11.5" r="5.5" fill="white" fillOpacity="0.92" />
+                  <ellipse cx="16" cy="30" rx="11.5" ry="8" fill="white" fillOpacity="0.92" />
+                </g>
               </svg>
             </div>
             <span className="text-[13px] font-medium text-gray-700 dark:text-gray-200 hidden sm:block">

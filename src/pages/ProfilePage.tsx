@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { courses, grades, getOverallGPA, getWinterGPA } from '../data/mockData'
 import { getLetterGrade } from '../utils/grades'
 import { useToast } from '../context/ToastContext'
+import { useTenant } from '../context/TenantContext'
 import { CheckCircle, Mail, Bell, Eye, EyeOff, ChevronRight } from '../components/Icons'
 import AccessibilitySettingsModal from '../components/AccessibilitySettingsModal'
 
@@ -10,6 +11,7 @@ import AccessibilitySettingsModal from '../components/AccessibilitySettingsModal
 
 export default function ProfilePage() {
   const { toast } = useToast()
+  const { tenant } = useTenant()
   const [notifPrefs, setNotifPrefs] = useState({
     grades:        true,
     assignments:   true,
@@ -44,14 +46,21 @@ export default function ProfilePage() {
           <div className="-mt-10 mb-4">
             <div className="w-20 h-20 rounded-2xl border-4 border-white dark:border-[#1A2236] bg-[var(--tenant-primary)] flex items-center justify-center text-white font-bold text-[24px] shadow-sm">
               <svg viewBox="0 0 32 32" width="80" height="80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="16" cy="12" r="6" fill="white" fillOpacity="0.92" />
-                <path d="M4 32c0-6.627 5.373-12 12-12s12 5.373 12 12" fill="white" fillOpacity="0.92" />
+                <defs>
+                  <clipPath id="profile-avatar-clip">
+                    <circle cx="16" cy="16" r="16" />
+                  </clipPath>
+                </defs>
+                <g clipPath="url(#profile-avatar-clip)">
+                  <circle cx="16" cy="11.5" r="5.5" fill="white" fillOpacity="0.92" />
+                  <ellipse cx="16" cy="30" rx="11.5" ry="8" fill="white" fillOpacity="0.92" />
+                </g>
               </svg>
             </div>
           </div>
 
           <h1 className="text-[22px] font-bold text-gray-900 dark:text-gray-100">Kevin H.</h1>
-          <p className="text-[14px] text-gray-500 dark:text-gray-400 mt-0.5">Interaction Design · Year 2 · George Brown College</p>
+          <p className="text-[14px] text-gray-500 dark:text-gray-400 mt-0.5">Interaction Design · Year 2 · {tenant.name}</p>
 
           <div className="flex items-center gap-4 mt-3 flex-wrap">
             <a
