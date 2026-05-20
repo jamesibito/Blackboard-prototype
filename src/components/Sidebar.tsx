@@ -87,9 +87,12 @@ export default function Sidebar() {
             </div>
           </>
         ) : (
-          /* Other institutions — thin white stripe + real logo rendered white */
+          /* Other institutions — school secondary colour stripe + logo rendered white */
           <>
-            <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-white/20" />
+            <div
+              className="absolute left-0 top-0 bottom-0 w-[4px]"
+              style={{ background: tenant.trimColor }}
+            />
             <div className="relative z-10 px-5 flex items-center justify-center w-full">
               <img
                 src={tenant.logo}
@@ -111,17 +114,22 @@ export default function Sidebar() {
             end={item.to === '/'}
             className={({ isActive }) =>
               `flex items-center gap-3 mx-2 px-4 py-2.5 rounded-xl text-[14px] font-medium transition-all duration-150 relative ${
-                isActive
-                  ? 'text-[#60A5FA] bg-[#2563EB]/[0.15]'
-                  : 'text-gray-400 hover:text-gray-200 hover:bg-white/[0.04]'
+                isActive ? '' : 'text-gray-400 hover:text-gray-200 hover:bg-white/[0.04]'
               }`
             }
+            style={({ isActive }) => isActive ? {
+              color: 'var(--tenant-nav-active)',
+              background: `${tenant.primary}26`,
+            } : {}}
           >
             {({ isActive }) => (
               <>
-                {/* Left pill — active state indicator */}
+                {/* Left pill — colour tracks the active tenant */}
                 {isActive && (
-                  <div className="absolute left-0 top-2 bottom-2 w-[3px] bg-[#60A5FA] rounded-r-full" />
+                  <div
+                    className="absolute left-0 top-2 bottom-2 w-[3px] rounded-r-full"
+                    style={{ background: 'var(--tenant-nav-active)' }}
+                  />
                 )}
                 <item.icon
                   size={18}
@@ -131,7 +139,13 @@ export default function Sidebar() {
                 <span className="truncate">{item.label}</span>
                 {item.badge ? (
                   <span
-                    className="ml-auto bg-[#2563EB] text-white text-[10px] font-bold min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center"
+                    className="ml-auto text-[10px] font-bold min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center"
+                    style={{
+                      background: 'var(--tenant-nav-active)',
+                      // navActive is chosen to be legible on the dark sidebar;
+                      // use dark text when the badge colour is light (gold, rose, violet)
+                      color: tenant.id === 'gbc' ? 'white' : '#111827',
+                    }}
                     aria-label={`${item.badge} unread`}
                   >
                     {item.badge}

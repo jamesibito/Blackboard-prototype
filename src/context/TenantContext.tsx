@@ -45,11 +45,15 @@ export interface Tenant {
   }
   logo: string           // Public path to the institutional logo (transparent PNG)
   logoHeight: number     // Rendered height in px — controls visual scale in the sidebar header
+  trimColor: string      // Sidebar header left-stripe colour (GBC uses rainbow instead)
+  navActive: string      // Active nav item text/pill colour — must read on dark bg (#131825)
+  link: string           // Light-mode action/link text colour (replaces #2563EB on white cards)
+  linkDark: string       // Dark-mode action/link text colour (replaces #60A5FA on dark cards)
 }
 
 export const TENANTS: Record<string, Tenant> = {
   gbc: {
-    id: 'gbc',
+    id:         'gbc',
     name:       'George Brown College',
     shortName:  'George Brown',
     abbr:       'GBC',
@@ -58,10 +62,14 @@ export const TENANTS: Record<string, Tenant> = {
     accent:     '#2563EB',
     gradient:   { from: '#1B3F89', via: '#1E4DA0', to: '#2563EB' },
     logo:       '/gbc-logo.png',
-    logoHeight: 66,
+    logoHeight: 76,
+    trimColor:  '#60A5FA',  // unused — GBC renders rainbow instead
+    navActive:  '#60A5FA',  // blue-400 on dark sidebar ✓
+    link:       '#2563EB',  // blue-600 on white cards ✓
+    linkDark:   '#60A5FA',  // blue-400 on dark cards ✓
   },
   york: {
-    id: 'york',
+    id:         'york',
     name:       'York University',
     shortName:  'York',
     abbr:       'YU',
@@ -70,10 +78,14 @@ export const TENANTS: Record<string, Tenant> = {
     accent:     '#C8102E',
     gradient:   { from: '#8B0F1F', via: '#C8102E', to: '#E31837' },
     logo:       '/Logo_York_University.svg.png',
-    logoHeight: 50,
+    logoHeight: 58,
+    trimColor:  '#FFFFFF',  // York white — clean contrast on red
+    navActive:  '#FCA5A5',  // rose-300: warm light red readable on dark sidebar
+    link:       '#B91C1C',  // red-700: dark enough for AA on white
+    linkDark:   '#FCA5A5',  // rose-300: readable on dark cards
   },
   laurier: {
-    id: 'laurier',
+    id:         'laurier',
     name:       'Wilfrid Laurier University',
     shortName:  'Laurier',
     abbr:       'WLU',
@@ -82,10 +94,14 @@ export const TENANTS: Record<string, Tenant> = {
     accent:     '#7B3FB7',
     gradient:   { from: '#3C1D5C', via: '#582C83', to: '#7B3FB7' },
     logo:       '/WLU_Primary_Logo.png',
-    logoHeight: 40,
+    logoHeight: 46,
+    trimColor:  '#F0C03E',  // Laurier gold — their official secondary
+    navActive:  '#A78BFA',  // violet-400: light purple readable on dark sidebar
+    link:       '#5B21B6',  // violet-800: dark enough for AA on white
+    linkDark:   '#C4B5FD',  // violet-300: readable on dark cards
   },
   mcmaster: {
-    id: 'mcmaster',
+    id:         'mcmaster',
     name:       'McMaster University',
     shortName:  'McMaster',
     abbr:       'Mac',
@@ -94,7 +110,11 @@ export const TENANTS: Record<string, Tenant> = {
     accent:     '#A2105E',
     gradient:   { from: '#5A002B', via: '#7A003C', to: '#A2105E' },
     logo:       '/McMaster_University_logo.svg.png',
-    logoHeight: 56,
+    logoHeight: 64,
+    trimColor:  '#F7A900',  // McMaster official gold — excellent on maroon
+    navActive:  '#FBBF24',  // amber-400: McMaster gold, pops on dark sidebar
+    link:       '#7A003C',  // maroon: dark enough for AA on white
+    linkDark:   '#FBBF24',  // amber-400: gold links in dark mode — distinctive
   },
 }
 
@@ -130,6 +150,9 @@ export function TenantProvider({ children }: { children: ReactNode }) {
     root.style.setProperty('--tenant-gradient-from', tenant.gradient.from)
     root.style.setProperty('--tenant-gradient-via',  tenant.gradient.via)
     root.style.setProperty('--tenant-gradient-to',   tenant.gradient.to)
+    root.style.setProperty('--tenant-nav-active',    tenant.navActive)
+    root.style.setProperty('--tenant-link',          tenant.link)
+    root.style.setProperty('--tenant-link-dark',     tenant.linkDark)
   }, [tenant, tenantId])
 
   return (

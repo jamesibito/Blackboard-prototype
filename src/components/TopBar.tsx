@@ -236,7 +236,7 @@ export default function TopBar() {
         >
           <Sun size={15} aria-hidden="true" className={theme === 'light' ? 'text-amber-500' : 'text-gray-400'} />
           {/* Toggle track */}
-          <div className="relative w-9 h-5 rounded-full bg-gray-300 dark:bg-[#2563EB] transition-colors duration-200 mx-0.5">
+          <div className="relative w-9 h-5 rounded-full bg-gray-300 transition-colors duration-200 mx-0.5" style={theme === 'dark' ? { background: 'var(--tenant-primary)' } : {}}>
             <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-all duration-200 ${theme === 'dark' ? 'left-[18px]' : 'left-0.5'}`} />
           </div>
           <Moon size={15} aria-hidden="true" className={theme === 'dark' ? 'text-[#60A5FA]' : 'text-gray-400'} />
@@ -268,7 +268,7 @@ export default function TopBar() {
                   <button
                     type="button"
                     onClick={markAllRead}
-                    className="text-[11px] text-[#2563EB] dark:text-[#60A5FA] font-medium hover:underline"
+                    className="text-[11px] text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)] font-medium hover:underline"
                   >
                     Mark all read
                   </button>
@@ -319,7 +319,7 @@ export default function TopBar() {
               {/* Footer: link to full Notifications page */}
               <div className="px-4 py-2.5 text-center border-t border-gray-100 dark:border-[#2D3A52]">
                 <button
-                  className="text-[12px] text-[#2563EB] dark:text-[#60A5FA] font-medium hover:underline"
+                  className="text-[12px] text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)] font-medium hover:underline"
                   onClick={() => { setNotifOpen(false); navigate('/notifications') }}
                 >
                   View all {notifications.length} notifications
@@ -340,10 +340,16 @@ export default function TopBar() {
           >
             <div
               aria-hidden="true"
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[11px] font-bold shrink-0"
+              className="w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0 overflow-hidden"
               style={{ background: user.avatarColor }}
             >
-              KH
+              {/* Person silhouette — more realistic than initials */}
+              <svg viewBox="0 0 32 32" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                {/* Head */}
+                <circle cx="16" cy="12" r="5.5" fill="white" fillOpacity="0.92" />
+                {/* Body / shoulders */}
+                <path d="M5 30c0-6.075 4.925-11 11-11s11 4.925 11 11" fill="white" fillOpacity="0.92" />
+              </svg>
             </div>
             <span className="text-[13px] font-medium text-gray-700 dark:text-gray-200 hidden sm:block">
               {user.displayName}

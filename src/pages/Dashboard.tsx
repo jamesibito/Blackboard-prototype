@@ -65,7 +65,7 @@ function RecentGrades() {
           <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Recent Grades</h2>
           <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">Latest returned work</p>
         </div>
-        <Link to="/grades" className="text-[12px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline">
+        <Link to="/grades" className="text-[12px] font-medium text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)] hover:underline">
           View all
         </Link>
       </div>
@@ -81,7 +81,7 @@ function RecentGrades() {
               className="flex items-center gap-3 px-5 py-3 hover:bg-gray-50 dark:hover:bg-[#232d42] transition-colors group"
             >
               <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-[13px] text-gray-900 dark:text-gray-100 truncate group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors">
+                <h3 className="font-semibold text-[13px] text-gray-900 dark:text-gray-100 truncate group-hover:text-[var(--tenant-link)] dark:group-hover:text-[#60A5FA] transition-colors">
                   {a.title}
                 </h3>
                 <div className="flex items-center gap-1.5 mt-1">
@@ -202,7 +202,7 @@ export default function Dashboard() {
         <div data-tour="courses-list" className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden">
           <div className="flex items-center justify-between px-5 pt-5 pb-3">
             <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Courses</h2>
-            <Link to="/courses" className="text-[12px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline">
+            <Link to="/courses" className="text-[12px] font-medium text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)] hover:underline">
               View all
             </Link>
           </div>
@@ -216,7 +216,7 @@ export default function Dashboard() {
                 <CourseAvatar abbr={c.abbr} color={c.color} size={38} />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-2">
-                    <h3 className="font-semibold text-[13px] text-gray-900 dark:text-gray-100 truncate group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors">
+                    <h3 className="font-semibold text-[13px] text-gray-900 dark:text-gray-100 truncate group-hover:text-[var(--tenant-link)] dark:group-hover:text-[#60A5FA] transition-colors">
                       {c.name}
                     </h3>
                     <span className="text-[11px] text-gray-400 dark:text-gray-400 shrink-0">{c.instructor.split(' ')[1]}</span>
@@ -252,7 +252,7 @@ export default function Dashboard() {
           <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] overflow-hidden">
             <div className="flex items-center justify-between px-5 pt-5 pb-3">
               <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Activity Stream</h2>
-              <Link to="/activity-stream" className="text-[12px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline">
+              <Link to="/activity-stream" className="text-[12px] font-medium text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)] hover:underline">
                 View all
               </Link>
             </div>
@@ -267,7 +267,7 @@ export default function Dashboard() {
                   <>
                     <CourseAvatar abbr={avatarAbbr} color={avatarColor} size={36} />
                     <div className="flex-1 min-w-0">
-                      <p className="text-[13px] font-medium text-gray-900 dark:text-gray-100 truncate group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors">
+                      <p className="text-[13px] font-medium text-gray-900 dark:text-gray-100 truncate group-hover:text-[var(--tenant-link)] dark:group-hover:text-[#60A5FA] transition-colors">
                         {a.title}
                       </p>
                       <p className="text-[11px] text-gray-400 dark:text-gray-400 truncate">{a.date}</p>
@@ -512,7 +512,7 @@ function PriorityCard({ compact = false }: { compact?: boolean }) {
               {course.abbr}
             </span>
           </div>
-          <p className="text-[14px] font-semibold text-gray-900 dark:text-gray-100 mt-0.5 group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors">
+          <p className="text-[14px] font-semibold text-gray-900 dark:text-gray-100 mt-0.5 group-hover:text-[var(--tenant-link)] dark:group-hover:text-[#60A5FA] transition-colors">
             {tomorrow.title}
           </p>
           <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">{tomorrow.dueDay} · {course.name}</p>
@@ -568,7 +568,7 @@ function PriorityCard({ compact = false }: { compact?: boolean }) {
         </div>
         <div className="flex-1 min-w-0">
           <span className="text-[10px] font-bold uppercase tracking-wide text-emerald-600 dark:text-emerald-400">New grade</span>
-          <p className="text-[14px] font-semibold text-gray-900 dark:text-gray-100 mt-0.5 group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors truncate">
+          <p className="text-[14px] font-semibold text-gray-900 dark:text-gray-100 mt-0.5 group-hover:text-[var(--tenant-link)] dark:group-hover:text-[#60A5FA] transition-colors truncate">
             {unreadGrade.title}
           </p>
           <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">{course.name}</p>
@@ -658,7 +658,7 @@ function TodaySchedule() {
           <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Today</h2>
           <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">Wed, Dec 14</p>
         </div>
-        <Link to="/calendar" className="text-[12px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline">
+        <Link to="/calendar" className="text-[12px] font-medium text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)] hover:underline">
           Full schedule
         </Link>
       </div>
@@ -679,7 +679,7 @@ function TodaySchedule() {
                   style={{ background: cls.status === 'done' ? '#94A3B8' : cls.course.color }}
                 />
                 <div className={`flex-1 min-w-0 ${cls.status === 'done' ? 'opacity-60' : ''}`}>
-                  <p className={`text-[13px] font-semibold leading-snug group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors truncate ${cls.status === 'done' ? 'text-gray-400 dark:text-gray-400' : 'text-gray-900 dark:text-gray-100'}`}>
+                  <p className={`text-[13px] font-semibold leading-snug group-hover:text-[var(--tenant-link)] dark:group-hover:text-[#60A5FA] transition-colors truncate ${cls.status === 'done' ? 'text-gray-400 dark:text-gray-400' : 'text-gray-900 dark:text-gray-100'}`}>
                     {cls.course.name}
                   </p>
                   <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">
@@ -694,7 +694,7 @@ function TodaySchedule() {
                       {sc.label}
                     </span>
                     <span
-                      className="absolute right-5 text-[10px] font-semibold px-2 py-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity bg-[#2563EB]/10 text-[#2563EB] dark:bg-[#2563EB]/20 dark:text-[#60A5FA] pointer-events-none"
+                      className="absolute right-5 text-[10px] font-semibold px-2 py-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity bg-[var(--tenant-link)]/10 text-[var(--tenant-link)] dark:bg-[var(--tenant-link-dark)]/20 dark:text-[var(--tenant-link-dark)] pointer-events-none"
                       aria-hidden="true"
                     >
                       Review →
@@ -733,7 +733,7 @@ function DeadlineTimeline() {
       {/* Header with divider */}
       <div className="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-[#2D3A52]">
         <h2 className="font-semibold text-[14px] text-gray-900 dark:text-gray-100">Upcoming Deadlines</h2>
-        <Link to="/calendar" className="text-[12px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline">
+        <Link to="/calendar" className="text-[12px] font-medium text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)] hover:underline">
           Open calendar
         </Link>
       </div>
@@ -746,7 +746,7 @@ function DeadlineTimeline() {
           {/* Today marker */}
           <div className="flex flex-col items-center gap-1 shrink-0">
             <div className="w-3.5 h-3.5 rounded-full bg-[#2563EB] ring-[3px] ring-[#2563EB]/20 relative z-10" />
-            <span className="text-[9px] font-bold text-[#2563EB] dark:text-[#60A5FA] uppercase tracking-wide mt-0.5">Today</span>
+            <span className="text-[9px] font-bold text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)] uppercase tracking-wide mt-0.5">Today</span>
             <span className="text-[9px] text-gray-400">Dec {TODAY_DAY}</span>
           </div>
 
@@ -765,7 +765,7 @@ function DeadlineTimeline() {
                   style={{ background: course.color, boxShadow: `0 0 0 3px ${course.color}25` }}
                 />
                 <span
-                  className="text-[10.5px] font-semibold text-gray-800 dark:text-gray-200 group-hover:text-[#2563EB] dark:group-hover:text-[#60A5FA] transition-colors text-center max-w-[80px] leading-tight mt-0.5"
+                  className="text-[10.5px] font-semibold text-gray-800 dark:text-gray-200 group-hover:text-[var(--tenant-link)] dark:group-hover:text-[#60A5FA] transition-colors text-center max-w-[80px] leading-tight mt-0.5"
                   style={{ minHeight: 28, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                 >
                   {d.title}
@@ -814,7 +814,7 @@ function MiniCalendar() {
     <div className="bg-white dark:bg-[#1A2236] rounded-2xl border border-gray-100 dark:border-[#2D3A52] p-5">
       <div className="flex items-center justify-between mb-4">
         <h2 className="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Calendar</h2>
-        <Link to="/calendar" className="text-[12px] font-medium text-[#2563EB] dark:text-[#60A5FA] hover:underline">
+        <Link to="/calendar" className="text-[12px] font-medium text-[var(--tenant-link)] dark:text-[var(--tenant-link-dark)] hover:underline">
           Dec 2022
         </Link>
       </div>
