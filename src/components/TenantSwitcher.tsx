@@ -30,7 +30,12 @@ export default function TenantSwitcher() {
     if (typeof window === 'undefined') return false
     return localStorage.getItem(STATE_KEY) === 'collapsed'
   })
-  const wrapperRef = useRef<HTMLDivElement>(null)
+  // outerRef wraps BOTH the pill and the popover so outside-click detection
+  // doesn't fire when the user clicks inside the popover. Previously the
+  // popover was a child of the pill wrapper — but that wrapper has
+  // `overflow-hidden` (to clip its own rounded corners), which was silently
+  // clipping the popover too. Hoisted popover out as a sibling.
+  const outerRef = useRef<HTMLDivElement>(null)
 
   function setCollapsedPersist(next: boolean) {
     setCollapsed(next)
@@ -42,7 +47,7 @@ export default function TenantSwitcher() {
   useEffect(() => {
     if (!open) return
     function onDocClick(e: MouseEvent) {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+      if (outerRef.current && !outerRef.current.contains(e.target as Node)) {
         setOpen(false)
       }
     }
@@ -81,12 +86,16 @@ export default function TenantSwitcher() {
 
   // ─── Expanded state — full pill with toggle + collapse ──────────────────────
   return (
-    <div data-tour="tenant-switcher" className="fixed bottom-4 right-4 z-[60]">
-      <div
-        ref={wrapperRef}
-        className="relative flex items-stretch bg-[#0F1623] text-white rounded-2xl shadow-2xl border border-[#2D3A52] backdrop-blur-md overflow-hidden"
-      >
-        {/* Pill trigger — shows current tenant with its primary color dot */}
+    <div
+      ref={outerRef}
+      data-tour="tenant-switcher"
+      className="fixed bottom-4 right-4 z-[60]"
+    >
+      {/* The pill (toggle + minimise) — overflow-hidden here keeps the
+          rounded corners clipping cleanly. The popover lives OUTSIDE this
+          wrapper as a sibling, so the overflow-hidden doesn't clip it. */}
+      <div className="relative flex items-stretch bg-[#0F1623] text-white rounded-2xl shadow-2xl border border-[#2D3A52] backdrop-blur-md overflow-hidden">
+        {/* Pill trigger — shows current school with its primary color dot */}
         <button
           type="button"
           onClick={() => setOpen(o => !o)}
@@ -112,9 +121,8 @@ export default function TenantSwitcher() {
           />
         </button>
 
-        {/* Collapse to chip — reversible (was the × dismiss before, but that
-            was a one-way trap. The new chevron icon and "Minimise" hint make
-            it clear this hides to a chip rather than killing the feature.) */}
+        {/* Collapse to chip — click the − to minimise to a tiny floating
+            handle; click the handle to expand back. Reversible. */}
         <button
           type="button"
           onClick={() => setCollapsedPersist(true)}
@@ -124,67 +132,69 @@ export default function TenantSwitcher() {
         >
           −
         </button>
-
-        {/* Popover */}
-        {open && (
-          <div
-            role="dialog"
-            aria-label="Schools"
-            className="absolute bottom-full right-0 mb-2 w-[300px] bg-[#0F1623] border border-[#2D3A52] rounded-2xl shadow-2xl p-2"
-          >
-            <div className="px-3 pt-2 pb-3 border-b border-[#2D3A52] mb-2">
-              <p className="text-[10px] font-bold uppercase tracking-[1.4px] text-gray-400">
-                Multi-school demo
-              </p>
-              <p className="text-[11.5px] text-gray-300 mt-1 leading-relaxed">
-                Same redesign — different school. See how the design system holds up across brand identities.
-              </p>
-            </div>
-            <div className="flex flex-col gap-0.5" role="radiogroup">
-              {Object.values(tenants).map(t => {
-                const active = t.id === tenantId
-                return (
-                  <button
-                    key={t.id}
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      e.stopPropagation()
-                      if (!active) {
-                        setTenantId(t.id)
-                        toast(`Now viewing as ${t.shortName}`, 'success')
-                      }
-                      setOpen(false)
-                    }}
-                    role="radio"
-                    aria-checked={active}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-left cursor-pointer
-                      ${active ? 'bg-[#1A2236]' : 'hover:bg-[#1A2236]/60'}`}
-                  >
-                    {/* Branded swatch — preview of the school's primary colour */}
-                    <div
-                      className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-[10px] font-bold shrink-0 pointer-events-none"
-                      style={{
-                        background: t.primary,
-                        boxShadow: active ? `0 0 0 2px ${t.primary}50` : undefined,
-                      }}
-                    >
-                      {t.abbr}
-                    </div>
-                    <div className="flex-1 min-w-0 pointer-events-none">
-                      <p className="text-[12.5px] font-semibold text-white truncate">{t.shortName}</p>
-                      <p className="text-[10.5px] text-gray-400 truncate">{t.name}</p>
-                    </div>
-                    {active && (
-                      <span className="text-[10px] font-bold text-[#60A5FA] pointer-events-none">✓ Active</span>
-                    )}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        )}
       </div>
+
+      {/* Popover — sibling of the pill (not a child) so the pill's
+          overflow-hidden doesn't clip it. Positioned absolute against
+          the outer fixed container. */}
+      {open && (
+        <div
+          role="dialog"
+          aria-label="Schools"
+          className="absolute bottom-[calc(100%+8px)] right-0 w-[300px] bg-[#0F1623] border border-[#2D3A52] rounded-2xl shadow-2xl p-2"
+        >
+          <div className="px-3 pt-2 pb-3 border-b border-[#2D3A52] mb-2">
+            <p className="text-[10px] font-bold uppercase tracking-[1.4px] text-gray-400">
+              Multi-school demo
+            </p>
+            <p className="text-[11.5px] text-gray-300 mt-1 leading-relaxed">
+              Same redesign — different school. See how the design system holds up across brand identities.
+            </p>
+          </div>
+          <div className="flex flex-col gap-0.5" role="radiogroup">
+            {Object.values(tenants).map(t => {
+              const active = t.id === tenantId
+              return (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    if (!active) {
+                      setTenantId(t.id)
+                      toast(`Now viewing as ${t.shortName}`, 'success')
+                    }
+                    setOpen(false)
+                  }}
+                  role="radio"
+                  aria-checked={active}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-left cursor-pointer
+                    ${active ? 'bg-[#1A2236]' : 'hover:bg-[#1A2236]/60'}`}
+                >
+                  {/* Branded swatch — preview of the school's primary colour */}
+                  <div
+                    className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-[10px] font-bold shrink-0 pointer-events-none"
+                    style={{
+                      background: t.primary,
+                      boxShadow: active ? `0 0 0 2px ${t.primary}50` : undefined,
+                    }}
+                  >
+                    {t.abbr}
+                  </div>
+                  <div className="flex-1 min-w-0 pointer-events-none">
+                    <p className="text-[12.5px] font-semibold text-white truncate">{t.shortName}</p>
+                    <p className="text-[10.5px] text-gray-400 truncate">{t.name}</p>
+                  </div>
+                  {active && (
+                    <span className="text-[10px] font-bold text-[#60A5FA] pointer-events-none">✓ Active</span>
+                  )}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
