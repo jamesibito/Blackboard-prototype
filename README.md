@@ -39,8 +39,18 @@ Every grade, comment, deadline, and notification is fictional but consistent. Th
 - Full feedback threads on graded assignments (instructor ↔ student back-and-forth)
 - Tone written to sound like a real college instructor — specific, constructive, occasionally direct
 
+### Multi-tenant design system
+- The same redesign skinned for **four Canadian post-secondary institutions** — George Brown, York, Wilfrid Laurier, McMaster
+- Floating switcher (bottom-right of the prototype) reskins in real time — sidebar logo, brand colours, gradient palettes, link colours all driven by CSS custom properties from `TenantContext`
+- Demonstrates the design system holding up across distinct brand identities; matches how real Blackboard ships to thousands of institutions
+
+### Spotlight product tour
+- 9-step in-app tour walks first-time visitors through the key surfaces (Priority Card → Today's Schedule → Deadline Timeline → Courses → Sidebar → Search → Tenant switcher)
+- Spotlight + tooltip pattern (Notion / Linear / Figma style) — teaches by pointing at real UI, not by describing it in a modal
+- Replayable from the Profile page
+
 ### Polished states
-- Loading skeletons on the Dashboard (1.4s simulated load that matches the real layout)
+- Loading skeletons on the Dashboard (700ms simulated load that matches the real layout)
 - Empty states with personality on Notifications, Messages, Course pages
 - 404 / "course not found" with a friendly recovery path
 
@@ -77,16 +87,30 @@ Course-specific colours: 2D=`#F97316` · IS=`#EC4899` · IA=`#EF4444` · VD=`#8B
 
 ```
 src/
-├── pages/              # Route-level components (one per nav item)
+├── pages/              # Route-level components — 15 pages including
+│                       #   Dashboard, Courses, CoursePage, AssignmentPage,
+│                       #   Grades, ActivityStream, Calendar, Messages,
+│                       #   Notifications, Communities, Resources, Tools,
+│                       #   Profile, NotFound, Changelog (standalone)
 ├── components/         # Shared UI primitives
-│   └── course/         # CoursePage sub-components (Header, Modules, etc.)
-├── context/            # Theme + Toast providers
+│   ├── Layout, Sidebar, TopBar, Tour       # App chrome
+│   ├── DemoBanner, TenantSwitcher          # Meta surfaces
+│   ├── ComposeModal, ThreadDetailModal,    # Overlays
+│   │   AccessibilitySettingsModal
+│   ├── course/                             # CoursePage sub-components
+│   └── tools/ToolLogos                     # Inline SVG brand marks
+├── context/
+│   ├── ThemeContext                        # Light/dark mode
+│   ├── TenantContext                       # Multi-tenant skin
+│   └── ToastContext                        # Action feedback
 ├── data/
-│   └── mockData.ts     # Single source of truth for all prototype data
+│   └── mockData.ts     # Single source of truth (~1700 lines)
 ├── utils/
 │   └── grades.ts       # Letter grade scale + score colour helpers
 └── App.tsx             # Route registration
 ```
+
+**See also:** [`DESIGN_DECISIONS.md`](DESIGN_DECISIONS.md) for design rationale organised by system, and **/changelog** inside the running prototype for version-by-version iteration history.
 
 ## Running it locally
 
@@ -101,13 +125,25 @@ npm run build    # production build to dist/
 Semantic versioning, with each version branched from `main`. Notable milestones:
 
 - **v2.5** — Realistic grade book + winter term history
-- **v2.6** — Realistic course structure (announcements, syllabus, office hours, all 6 courses fully populated)
-- **v2.7** — Student power features (Today's Schedule, Semester Stats, Smart Priority Card)
+- **v2.6** — Course structure deepened (announcements, syllabus, office hours; all 6 courses populated)
+- **v2.7** — Student power features (Today's Schedule, Semester Stats, **Smart Priority Card**)
 - **v2.8** — Empty states, error states, loading skeletons
 - **v2.9** — WCAG 2.2 AA accessibility pass
 - **v3.0** — Portfolio polish (README case study, demo banner)
+- **v4.0–v4.1** — Dashboard restructure, copy + privacy audit
+- **v4.4** — Tools page overhaul with real product logos
+- **v4.5–v4.6** — Dead-end audit + real GBC integrations (real URLs, real service copy)
+- **v4.8** — Dashboard rebalance — Recent Grades replaces aggregate Grades widget
+- **v4.9** — Puppeteer capture pipeline (14 PNGs + 6 hover videos for the Framer case study)
+- **v4.10** — Student-first onboarding rebuild + 21-fix audit pass
+- **v4.11** — Typography swap: Inter → **IBM Plex Sans**
+- **v4.12–v4.13** — Round 2 audit (Communities modal, Messages actions) + dark-mode contrast pass
+- **v4.14** — `/changelog` page documenting every version
+- **v4.15** — **Multi-tenant pivot** — same redesign skinned for 4 Canadian institutions
+- **v4.16** — Spotlight product tour replaces modal-based onboarding
+- **v4.17** — Per-tenant colour theming across nav, links, avatars, trim — full global sweep
 
-Full history lives on the branches at `github.com/jamesibito/Blackboard-prototype`.
+**Current:** v4.17.4. Full version history with screenshots and rationale lives at `/changelog` in the running prototype.
 
 ## Acknowledgements
 

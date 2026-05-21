@@ -1,7 +1,9 @@
 # Blackboard Prototype — Claude Instructions
 
 ## Project
-React 19 + TypeScript + Tailwind CSS v4 + Vite. Portfolio prototype of a Blackboard LMS redesign for George Brown College. Student persona: Kevin H. (Fall 2022).
+React 19 + TypeScript + Tailwind CSS v4 + Vite. Portfolio prototype of a Blackboard LMS redesign. Multi-tenant skin across 4 Canadian institutions (George Brown / York / Laurier / McMaster) — GBC is the case-study default. Student persona: Kevin H. (Fall 2022).
+
+**See [DESIGN_DECISIONS.md](DESIGN_DECISIONS.md)** for design rationale organised by system, and [/changelog](src/pages/Changelog.tsx) for version-by-version history with screenshots.
 
 ## Versioning
 

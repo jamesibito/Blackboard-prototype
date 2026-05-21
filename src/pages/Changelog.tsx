@@ -30,9 +30,101 @@ interface ChangelogVersion {
 
 const VERSIONS: ChangelogVersion[] = [
   {
+    version: 'v4.17.4',
+    theme: 'Revert tool logos, round avatar frame to circle',
+    era: 'Latest',
+    what: [
+      'Tool logos: restored original text-mark logos (Turnitin, Grammarly, Respondus, Adobe CC) — the path-based redraw from v4.17.3 looked worse than the originals',
+      'Avatar frame: rounded-lg → rounded-full in both the TopBar pill and the Profile page header so the container shape matches the circle-clipped silhouette inside',
+    ],
+    why: 'Path-drawing brand glyphs by hand was a misjudgement — the original SVG <text> approach reads cleaner at 28px than my approximations did. The square avatar frame holding a circular silhouette was a leftover from the "KH" letters era; once the avatar became circle-clipped it needed a circular container to match.',
+  },
+  {
+    version: 'v4.17.3',
+    theme: 'Refined avatar, dynamic profile school name',
+    era: 'Latest',
+    what: [
+      'Avatar: replaced flat-bottom person silhouette with a circle-clipped version (head + body ellipse masked to the avatar circle, no visible flat edge)',
+      'Profile page subtitle: hardcoded "George Brown College" → uses useTenant().tenant.name so it tracks the active institution',
+      'Side-by-side avatar comparison page lived in /public temporarily to let me pick between three options before committing',
+    ],
+    why: 'The previous avatar silhouette had a hard horizontal line where the body met the bottom edge — fine in isolation, ugly in context. Circle-clipping is how Notion/Linear/GitHub handle the same shape and works at every size. The profile bug was the obvious "I switched tenants — why does it still say George Brown" moment that any reviewer would notice within 10 seconds.',
+  },
+  {
+    version: 'v4.17.2',
+    theme: '404 page tenant theming + dashboard loading delay tuned',
+    era: 'Final audit',
+    what: [
+      'NotFound (404) gradient watermark now uses --tenant-gradient-from/to instead of hardcoded blue',
+      'NotFound primary CTA ("Back to Dashboard") uses --tenant-primary',
+      'Dashboard skeleton loading delay 1400ms → 700ms — still visible enough to register but no longer feels like the prototype hangs',
+    ],
+    why: 'A final pre-merge audit caught the 404 page as the last unthemed surface and the 1.4s artificial dashboard delay as feeling too long now that I had to wait through it on every navigation during testing.',
+  },
+  {
+    version: 'v4.17.1',
+    theme: 'Global tenant colour sweep — every page',
+    era: 'Final audit',
+    what: [
+      '20 files swept for hardcoded #2563EB / #60A5FA / text-blue-* / bg-blue-* → CSS variable replacements',
+      'Compose button, Inbox unread badges, Mark all read, new-thread + buttons, calendar month chip, View all links, Open Calendar — all now respect the active tenant',
+      'Inline-style hex tints (e.g. `#2563EB15`) replaced with `color-mix(in srgb, var(--tenant-link) 8%, transparent)` so they recolour too',
+    ],
+    why: 'v4.17.0 introduced the per-tenant colour vars but only the top-level chrome opted in. Once you actually used the prototype on York or Laurier you saw blue everywhere — the compose button on Messages, the avatar background, the inbox unread count. The sweep made the theming consistent across every page.',
+  },
+  {
+    version: 'v4.17.0',
+    theme: 'Per-tenant colour theming — nav, links, avatars, trim',
+    era: 'Final audit',
+    what: [
+      'Tenant interface extended with navActive, link, linkDark, trimColor, logo, logoHeight fields',
+      'CSS custom properties driven from useEffect: --tenant-primary, --tenant-accent, --tenant-gradient-*, --tenant-nav-active, --tenant-link, --tenant-link-dark',
+      'Sidebar nav active state: solid fill + left pill in tenant accent for non-GBC schools (kept GBC blue as-is)',
+      'Sidebar header left stripe: GBC keeps its rainbow; York, Laurier, McMaster get their secondary brand colour (white, gold, gold)',
+      'Avatar mockData.ts avatarColor: var(--tenant-primary) — so the KH initials background tracks tenant',
+      'Per-tenant nav badge contrast pass: light backgrounds (rose/violet/gold) get dark text instead of white',
+    ],
+    why: 'v4.15 demonstrated multi-tenant existed but the schools all looked mostly blue because only the welcome banner gradient and the sidebar wordmark changed. To prove the design system actually holds across brand identities, the navigation chrome and link colour needed to follow the tenant too. Real Blackboard does this — every institution\'s instance feels distinctly theirs.',
+    highlight: true,
+  },
+  {
+    version: 'v4.16.3',
+    theme: 'Real institutional logos + proper "Bb" favicon',
+    era: 'Identity pass',
+    what: [
+      'Replaced typeset wordmarks with real transparent-PNG logos for York, Laurier, McMaster (GBC already had one from v2.1)',
+      'Each logo gets its own logoHeight (76/58/46/64px) — tuned per-mark so visual weight balances against the sidebar header height',
+      'Logo files filtered with brightness(0) invert(1) so dark marks render white on the dark sidebar header',
+      'Favicon replaced with a real "Bb" SVG mark — was a generic placeholder',
+    ],
+    why: 'A multi-tenant demo that uses typeset wordmarks for everyone but GBC undercuts its own pitch — institutions are recognised by their marks, not by their names in Inter Bold. Sourced official transparent PNGs from each university\'s brand pages so the sidebar header looks like the real product would.',
+  },
+  {
+    version: 'v4.16.2',
+    theme: 'School switcher popover invisible — overflow-hidden was clipping it',
+    era: 'Bug fix',
+    what: [
+      'TenantSwitcher: detached the popover from the overflow-hidden pill wrapper — popover is now a sibling element, not a child',
+      'Verified popover visible across all four tenants',
+    ],
+    why: 'After v4.16.1 the popover opened but was invisible — the rounded pill had overflow-hidden clipping it. The fix was structural: pill and popover at the same DOM level, not nested.',
+  },
+  {
+    version: 'v4.16.1',
+    theme: 'Tenant switcher reliability + rename tenant → school',
+    era: 'Polish',
+    what: [
+      'TenantSwitcher rewritten as a compact pill with expand-to-popover behaviour',
+      'User-facing copy: "tenant" → "school" everywhere (chip label, modal copy, profile section)',
+      'Switcher position lowered and padded for less interference with bottom-of-page content',
+      'Active-state animation tightened (250ms ease-out, no overshoot)',
+    ],
+    why: '"Tenant" is internal-engineering language. Real students would never call their institution a tenant. The pill-with-popover form factor also reads more like a real product surface (bottom-right corner control) and less like a dev-tool debug widget.',
+  },
+  {
     version: 'v4.16.0',
     theme: 'Spotlight product tour + Courses CTA fix + tenant switcher reversible',
-    era: 'Latest',
+    era: 'Earlier',
     what: [
       'New Tour component — spotlight + tooltip walkthrough replaces the modal-only onboarding (Notion / Linear / Figma pattern)',
       '9 steps: welcome → Priority Card → Today\'s Schedule → Deadline Timeline → Courses → Sidebar → Search → Tenant switcher → done',
@@ -48,7 +140,7 @@ const VERSIONS: ChangelogVersion[] = [
   {
     version: 'v4.15.0',
     theme: 'Multi-tenant skin — same redesign, four institutions',
-    era: 'Latest',
+    era: 'Multi-tenant pivot',
     what: [
       'TenantContext provider — 4 Canadian post-secondary institutions ship-ready (George Brown, York, Wilfrid Laurier, McMaster)',
       'Floating TenantSwitcher (bottom-right) reskins the prototype in real-time',
@@ -406,9 +498,10 @@ export default function Changelog() {
         <div className="flex items-center gap-3 mt-8 flex-wrap">
           {[
             { value: VERSIONS.length, label: 'documented versions' },
-            { value: '~8,700', label: 'lines of TypeScript' },
-            { value: '14', label: 'interactive pages' },
+            { value: '~10,500', label: 'lines of TypeScript' },
+            { value: '15', label: 'interactive pages' },
             { value: '12', label: 'real GBC integrations' },
+            { value: '4', label: 'institution skins' },
           ].map(s => (
             <div key={s.label} className="px-4 py-2 rounded-full bg-white border border-gray-200 flex items-center gap-2 shadow-sm">
               <span className="text-[16px] font-bold text-[#1B3F89] tabular-nums">{s.value}</span>
